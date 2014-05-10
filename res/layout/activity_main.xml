@@ -1,0 +1,30 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.revo21.gotguide.MainActivity"
+    tools:ignore="MergeRootFrame">
+     
+    <WebView
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:id="@+id/main_webview"
+        />
+    
+    <View 
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:id="@+id/progress_bar"
+        android:background="#5bc8ff"/>
+    
+    <com.revo21.gotguide.utils.FitWidthImage
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"  
+        android:src="@drawable/splash"      
+        android:id="@+id/main_splash"
+        android:visibility="visible"
+        />
+    
+</FrameLayout>
+

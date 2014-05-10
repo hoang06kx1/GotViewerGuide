@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Game of Thrones Viewer\'s Guide</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="network_require">All roads lead to King\'s Landing...\n\nNot really, please check if you are on one with good Internet connection. Try again when your internet connection is ready!</string>
+    <string name="network_require_title">Internet required</string>
+    <string name="hint">Sometimes the app may look unresponsive, like a White Walker... but don\'t worry, try a double tap instead of single tap.</string>
+    <!-- 
+    <string name="be_patient">When you play a game of thrones you win or you die. When you use this app it connects to Westeros to fetch data so please be patient... or you die.</string>
+    <string name="be_patient_title">Be patient... or you die</string>
+    -->
+</resources>
