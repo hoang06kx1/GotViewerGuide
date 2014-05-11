@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"    
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:clickable="true"
+    android:gravity="center_vertical"
+    android:id="@+id/action_bar_home_area">
+    <ImageView
+        android:id="@+id/drawer_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_navigation_drawer" />
+    
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:src="@drawable/ic_action_home"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        />
+</LinearLayout>

@@ -1,10 +1,14 @@
 package com.revo21.gotguide;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebChromeClient;
@@ -20,8 +24,7 @@ public class MainActivity extends Activity {
 	private WebView mWebView;
 	private ImageView mSplashImage;
 	private static final String URL = "http://viewers-guide.hbo.com/";
-	// private static final String URL = "http://beta.html5test.com/";
-	// private static final String URL = "http://google.com";
+
 	private static final String FAILED_URL = "file:///android_asset/error/error-screen.html";
 	private static final String FIRST_TIME_KEY = "first_time";
 	private static final int _firstTimeCount = 3;
@@ -33,11 +36,22 @@ public class MainActivity extends Activity {
 	private boolean _canLoadURL = false;
 	private boolean _pageNotFound = false;
 	private long _startTime = 0;
+	
+	private ActionBar mActionBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);		
+		
+		// first hide action bar on splash screen
+		mActionBar = getActionBar(); 
+		mActionBar.hide();
+		
+		// init action bar
+		mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);		
+		mActionBar.setCustomView(R.layout.action_bar_custom_home);
+		
+		setContentView(R.layout.activity_main);
 		_canLoadURL = checkNetworkConnection();
 		if (_canLoadURL) {
 			initControlViews();
@@ -51,6 +65,7 @@ public class MainActivity extends Activity {
 				public void run() {
 					if (mSplashImage != null) {
 						hideSplash();
+						getActionBar().show();
 					}
 				}
 			}, SPLASH_TIME);
@@ -200,5 +215,28 @@ public class MainActivity extends Activity {
 		if (mWebView != null) {
 			// mWebView.clearCache(true);
 		}		
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    // Inflate the menu items for use in the action bar
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.main_activity_actions, menu);
+	    return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle presses on the action bar items
+	    switch (item.getItemId()) {
+	        case R.id.action_refresh:
+	            mWebView.reload();
+	            return true;
+	        case R.id.action_episode:
+	            // TODO openRightDrawer();
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
 	}
 }
