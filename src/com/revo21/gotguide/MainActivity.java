@@ -37,9 +37,9 @@ public class MainActivity extends Activity {
 
 	private static final String FAILED_URL = "file:///android_asset/error/error-screen.html";
 	private static final String FIRST_TIME_KEY = "first_time";
-	private static final String JS_TOGGLE_MENU = "javascript:$('body').toggleClass('side-nav-opened');Chaplin.mediator.publish('nav:closeEpisodeSelector');Chaplin.mediator.publish('app:hidenav');void(0);";
+	private static final String JS_TOGGLE_MENU = "javascript:$('body').toggleClass('side-nav-opened');Chaplin.mediator.publish('app:hidenav');void(0);";
 	private static final String JS_REMOVE_NAV_BAR = "javascript:document.querySelector('.global-nav').style.display='none';document.querySelector('.page-container>div:first-child').style.marginTop=0;void(0);";
-
+	private static final String JS_REMOVE_NAV_BAR_MAP = "javascript:document.querySelector('.page-container>div:first-child').style.top=0;$('#map').height($(window).height());void(0);";
 	// flags
 	private static final int _firstTimeCount = 3;
 	private boolean _triggerHint = false;
@@ -198,6 +198,10 @@ public class MainActivity extends Activity {
 				
 				if (url.startsWith(EPISODE_URL_PREFIX)) {
 					view.loadUrl(JS_REMOVE_NAV_BAR);
+				}
+				
+				if (url.endsWith("/map")) {
+					view.loadUrl(JS_REMOVE_NAV_BAR_MAP);
 				}
 			}
 
