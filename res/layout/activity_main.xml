@@ -1,30 +1,42 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.revo21.gotguide.MainActivity"
-    tools:ignore="MergeRootFrame">
-     
-    <WebView
-         android:layout_width="match_parent"
-         android:layout_height="match_parent"
-         android:id="@+id/main_webview"
-        />
-    
-    <View 
-        android:layout_width="0dp"
-        android:layout_height="2dp"
-        android:id="@+id/progress_bar"
-        android:background="#5bc8ff"/>
-    
-    <com.revo21.gotguide.utils.FitWidthImage
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"  
-        android:src="@drawable/splash"      
-        android:id="@+id/main_splash"
-        android:visibility="visible"
-        />
-    
-</FrameLayout>
+    android:layout_height="match_parent" >
 
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.revo21.gotguide.MainActivity"
+        tools:ignore="MergeRootFrame" >
+
+        <WebView
+            android:id="@+id/main_webview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <View
+            android:id="@+id/progress_bar"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:background="#5bc8ff" />
+
+        <com.revo21.gotguide.utils.FitWidthImage
+            android:id="@+id/main_splash"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/splash"
+            android:visibility="visible" />
+    </FrameLayout>
+
+    <ExpandableListView
+        android:id="@+id/right_drawer"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:choiceMode="singleChoice" 
+        />
+    
+
+</android.support.v4.widget.DrawerLayout>

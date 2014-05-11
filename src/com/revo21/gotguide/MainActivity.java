@@ -10,6 +10,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 
 import com.revo21.gotguide.utils.Callback;
@@ -30,16 +31,16 @@ public class MainActivity extends Activity {
 	private LayoutParams mProgressBarLayoutParams;
 	private boolean _triggerHint = false;
 	private boolean _urlLoaded = false;
-	private boolean _canLoadURL = false;
 	private boolean _pageNotFound = false;
 	private long _startTime = 0;
+	private ExpandableListView mExpandableListView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);		
-		_canLoadURL = checkNetworkConnection();
-		if (_canLoadURL) {
+		setContentView(R.layout.activity_main);
+		
+		if (isNetWorkAvailable()) {
 			initControlViews();
 			checkFirstTime();
 			_startTime = System.currentTimeMillis();
@@ -57,27 +58,26 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	private boolean checkNetworkConnection() {
+	private boolean isNetWorkAvailable() {
 		boolean canLoadUrl = Utils.isNetworkEnabled(getApplicationContext());
 		if (!canLoadUrl) {
-			final CustomDialog errorDialog = new CustomDialog(this, getResources()
-					.getString(R.string.network_require),
+			final CustomDialog errorDialog = new CustomDialog(this,
+					getResources().getString(R.string.network_require),
 					R.drawable.error_pop_up_bg, null);
 			errorDialog.setCallback(new Callback.AlertCallback() {
 
-						@Override
-						public void onPressButton() {
-							errorDialog.dismiss();
-							finish();
-						}
-					});
+				@Override
+				public void onPressButton() {
+					errorDialog.dismiss();
+					finish();
+				}
+			});
 			errorDialog.show();
 		}
-		return canLoadUrl; 
+		return canLoadUrl;
 	}
 
 	private void checkFirstTime() {
-		if (_canLoadURL) {
 			SharedPreferences preferences = getPreferences(MODE_PRIVATE);
 			int firstTime = preferences.getInt(FIRST_TIME_KEY, 0);
 			if (firstTime < _firstTimeCount) {
@@ -89,7 +89,6 @@ public class MainActivity extends Activity {
 			} else {
 				mSplashImage.setImageResource(R.drawable.splash);
 			}
-		}
 	}
 
 	private void hideSplash() {
@@ -106,10 +105,11 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	private void showHint() {		
-		final CustomDialog hintDialog = new CustomDialog(this, getResources().getString(R.string.hint), R.drawable.hint_pop_up_bg, null);
+	private void showHint() {
+		final CustomDialog hintDialog = new CustomDialog(this, getResources()
+				.getString(R.string.hint), R.drawable.hint_pop_up_bg, null);
 		hintDialog.setCallback(new Callback.AlertCallback() {
-			
+
 			@Override
 			public void onPressButton() {
 				hintDialog.dismiss();
@@ -120,12 +120,13 @@ public class MainActivity extends Activity {
 
 	private void setProgressBarPercent(int percent) {
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		int screenWidth = metrics.widthPixels;		
-		mProgressBarLayoutParams.width = (int)((float)screenWidth * (float)percent/100);
+		int screenWidth = metrics.widthPixels;
+		mProgressBarLayoutParams.width = (int) ((float) screenWidth
+				* (float) percent / 100);
 		mProgressView.setLayoutParams(mProgressBarLayoutParams);
-		
+
 	}
-	
+
 	private void initControlViews() {
 		mSplashImage = (ImageView) findViewById(R.id.main_splash);
 		mProgressView = (View) findViewById(R.id.progress_bar);
@@ -139,21 +140,18 @@ public class MainActivity extends Activity {
 				setProgressBarPercent(0);
 				mProgressView.setVisibility(View.VISIBLE);
 			}
+
 			@Override
 			public void onPageFinished(WebView view, String url) {
-				
+
 				mProgressView.setVisibility(View.INVISIBLE);
-				
+
 				// removed feature!
 				/*
-				_urlLoaded = true;
-				long currentTime = System.currentTimeMillis();
-				if (mSplashImage != null
-						&& (currentTime - _startTime > SPLASH_TIME)) {
-					hideSplash();
-				}
-				
-				*/
+				 * _urlLoaded = true; long currentTime =
+				 * System.currentTimeMillis(); if (mSplashImage != null &&
+				 * (currentTime - _startTime > SPLASH_TIME)) { hideSplash(); }
+				 */
 			}
 
 			@Override
@@ -199,6 +197,22 @@ public class MainActivity extends Activity {
 		super.onDestroy();
 		if (mWebView != null) {
 			// mWebView.clearCache(true);
-		}		
+		}
+	}
+
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		// TODO Auto-generated method stub
+		if (mExpandableListView != null
+				&& android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
+			mExpandableListView.setIndicatorBounds(
+					mExpandableListView.getRight() - 40,
+					mExpandableListView.getWidth());
+		} else {
+			mExpandableListView.setIndicatorBounds(
+					mExpandableListView.getRight() - 40,
+					mExpandableListView.getWidth());
+		}
+		super.onWindowFocusChanged(hasFocus);
 	}
 }
