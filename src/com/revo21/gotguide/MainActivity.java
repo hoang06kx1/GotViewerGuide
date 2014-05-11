@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,6 +33,8 @@ public class MainActivity extends Activity {
 	// const
 	private static final long SPLASH_TIME = 7000;
 	private static final String URL = "http://viewers-guide.hbo.com/";
+	private static final String EPISODE_URL_PREFIX = "http://viewers-guide.hbo.com/game-of-thrones/";
+
 	private static final String FAILED_URL = "file:///android_asset/error/error-screen.html";
 	private static final String FIRST_TIME_KEY = "first_time";
 	private static final String JS_TOGGLE_MENU = "javascript:$('body').toggleClass('side-nav-opened');Chaplin.mediator.publish('nav:closeEpisodeSelector');Chaplin.mediator.publish('app:hidenav');void(0);";
@@ -85,7 +88,9 @@ public class MainActivity extends Activity {
 		actionBarHomeArea.findViewById(R.id.action_bar_home_area).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				mWebView.loadUrl(JS_TOGGLE_MENU);
+				if (mWebView.getUrl().startsWith(EPISODE_URL_PREFIX)) {
+					mWebView.loadUrl(JS_TOGGLE_MENU);
+				}
 			}
 		});
 		
@@ -178,7 +183,7 @@ public class MainActivity extends Activity {
 			}
 			@Override
 			public void onPageFinished(WebView view, String url) {
-				
+				Log.d("webview", "page finished");
 				mProgressView.setVisibility(View.INVISIBLE);
 				
 				// removed feature!
@@ -189,8 +194,11 @@ public class MainActivity extends Activity {
 						&& (currentTime - _startTime > SPLASH_TIME)) {
 					hideSplash();
 				}
-				
 				*/
+				
+				if (url.startsWith(EPISODE_URL_PREFIX)) {
+					view.loadUrl(JS_REMOVE_NAV_BAR);
+				}
 			}
 
 			@Override
