@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,37 +22,39 @@ import com.revo21.gotguide.utils.CustomDialog;
 import com.revo21.gotguide.utils.Utils;
 
 public class MainActivity extends Activity {
+	// controls
 	private WebView mWebView;
 	private ImageView mSplashImage;
-	private static final String URL = "http://viewers-guide.hbo.com/";
-
-	private static final String FAILED_URL = "file:///android_asset/error/error-screen.html";
-	private static final String FIRST_TIME_KEY = "first_time";
-	private static final int _firstTimeCount = 3;
-	private static final long SPLASH_TIME = 7000;
+	private ActionBar mActionBar;
 	private View mProgressView;
 	private LayoutParams mProgressBarLayoutParams;
+	
+	// const
+	private static final long SPLASH_TIME = 7000;
+	private static final String URL = "http://viewers-guide.hbo.com/";
+	private static final String FAILED_URL = "file:///android_asset/error/error-screen.html";
+	private static final String FIRST_TIME_KEY = "first_time";
+	private static final String JS_TOGGLE_MENU = "javascript:$('body').toggleClass('side-nav-opened');Chaplin.mediator.publish('nav:closeEpisodeSelector');Chaplin.mediator.publish('app:hidenav');void(0);";
+	private static final String JS_REMOVE_NAV_BAR = "javascript:document.querySelector('.global-nav').style.display='none';document.querySelector('.page-container>div:first-child').style.marginTop=0;void(0);";
+
+	// flags
+	private static final int _firstTimeCount = 3;
 	private boolean _triggerHint = false;
 	private boolean _urlLoaded = false;
 	private boolean _canLoadURL = false;
 	private boolean _pageNotFound = false;
 	private long _startTime = 0;
 	
-	private ActionBar mActionBar;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		// first hide action bar on splash screen
-		mActionBar = getActionBar(); 
-		mActionBar.hide();
-		
-		// init action bar
-		mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);		
-		mActionBar.setCustomView(R.layout.action_bar_custom_home);
-		
 		setContentView(R.layout.activity_main);
+		
+		initActionBar();
+		
 		_canLoadURL = checkNetworkConnection();
 		if (_canLoadURL) {
 			initControlViews();
@@ -70,6 +73,25 @@ public class MainActivity extends Activity {
 				}
 			}, SPLASH_TIME);
 		}
+	}
+	
+	private void initActionBar() {
+		// first hide action bar (will display again afer splash)
+		mActionBar = getActionBar(); 
+		mActionBar.hide();
+		
+		// handle home click
+		View actionBarHomeArea = LayoutInflater.from(this).inflate(R.layout.action_bar_custom_home, null);
+		actionBarHomeArea.findViewById(R.id.action_bar_home_area).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mWebView.loadUrl(JS_TOGGLE_MENU);
+			}
+		});
+		
+		// set custom home area into view
+		mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM); 
+		mActionBar.setCustomView(actionBarHomeArea);
 	}
 
 	private boolean checkNetworkConnection() {
