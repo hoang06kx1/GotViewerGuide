@@ -5,7 +5,8 @@
     android:orientation="horizontal"
     android:clickable="true"
     android:gravity="center_vertical"
-    android:id="@+id/action_bar_home_area">
+    android:id="@+id/action_bar_home_area"
+    android:background="@drawable/action_bar_home_bg">
     <ImageView
         android:id="@+id/drawer_indicator"
         android:layout_width="wrap_content"
