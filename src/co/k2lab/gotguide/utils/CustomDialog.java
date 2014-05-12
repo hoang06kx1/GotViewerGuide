@@ -1,4 +1,4 @@
-package com.revo21.gotguide.utils;
+package co.k2lab.gotguide.utils;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -8,8 +8,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.revo21.gotguide.R;
+import co.k2lab.gotguide.R;
 
 public class CustomDialog extends Dialog {
 	private TextView mTextView;

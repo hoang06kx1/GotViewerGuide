@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="56dp"
+    android:layout_height="wrap_content"
     android:orientation="horizontal" 
-    android:gravity="center_vertical">    
+    android:gravity="center_vertical"
+    android:background="@drawable/list_item_background">
 	<TextView 
-	    android:id="@+id/group_textview"
+	    android:gravity="center_vertical"
+	    android:drawablePadding="8dp"
+	    android:id="@+id/item_textview"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:textSize="22sp"
+	    android:textSize="15sp"
 	    android:fontFamily="sans-serif"
 	    android:textStyle="bold"
 	    android:textColor="@android:color/white"
-	    android:paddingLeft="18dp"
+	    android:paddingLeft="8dp"
+	    android:minHeight="65dp"
 	    />
-	<View 
-	    android:layout_width="0dp"
+	<!-- 
+	<View
 	    android:layout_height="match_parent"
+	    android:layout_width="0dp"
 	    android:layout_weight="1"
 	    />
-	<ImageView 
-	    android:id="@+id/group_indicator"
+	<ImageView
+	    android:id="@+id/item_new_icon"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:src="@drawable/ic_action_collapse"
-	    android:layout_marginRight="12dp"/>
+	    android:visibility="invisible"
+	    />
+ -->	    
+	    
 </LinearLayout>

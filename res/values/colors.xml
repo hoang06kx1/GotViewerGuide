@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <color name="list_item_background">#3a3a3c</color>
+    <color name="child_divider">#4f4f4f</color>
+    <color name="feedback">#66FFFFFF</color>
+</resources>

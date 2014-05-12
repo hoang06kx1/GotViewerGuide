@@ -1,4 +1,4 @@
-package com.revo21.gotguide.utils;
+package co.k2lab.gotguide.utils;
 public interface Callback {
 	public interface AlertCallback {
 		public void onPressButton();

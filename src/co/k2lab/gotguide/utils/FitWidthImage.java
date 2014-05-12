@@ -1,4 +1,4 @@
-package com.revo21.gotguide.utils;
+package co.k2lab.gotguide.utils;
 
 import android.content.Context;
 import android.util.AttributeSet;

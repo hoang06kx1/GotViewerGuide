@@ -1,10 +1,9 @@
-package com.revo21.gotguide.utils;
+package co.k2lab.gotguide.utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-
-import com.revo21.gotguide.R;
+import co.k2lab.gotguide.R;
 
 public class Alert {
 	/**

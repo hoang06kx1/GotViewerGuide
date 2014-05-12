@@ -1,4 +1,4 @@
-package com.revo21.gotguide.utils;
+package co.k2lab.gotguide.utils;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -102,6 +102,12 @@ public class Utils {
 		return (pixel / metrics.densityDpi) * 160;
 	}
 
+	public static int convertDpToPixel(Context context, int dp) {
+		DisplayMetrics metrics = context.getResources()
+				.getDisplayMetrics();
+		return (int)(((float)dp / 160) * metrics.densityDpi);
+	}
+	
 	public static Long getCurrentUnixTime() {
 		return System.currentTimeMillis() / 1000;
 	}
