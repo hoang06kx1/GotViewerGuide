@@ -12,6 +12,13 @@
          android:id="@+id/main_webview"
         />
     
+    <WebView
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:id="@+id/error_webview"
+         android:visibility="invisible"
+        />
+    
     <View 
         android:layout_width="0dp"
         android:layout_height="2dp"

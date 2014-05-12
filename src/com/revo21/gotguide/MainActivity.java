@@ -24,7 +24,7 @@ import com.revo21.gotguide.utils.Utils;
 
 public class MainActivity extends Activity {
 	// controls
-	private WebView mWebView;
+	private WebView mWebView, mErrorWebview;
 	private ImageView mSplashImage;
 	private ActionBar mActionBar;
 	private View mProgressView;
@@ -173,6 +173,8 @@ public class MainActivity extends Activity {
 		mProgressView = (View) findViewById(R.id.progress_bar);
 		mProgressBarLayoutParams = mProgressView.getLayoutParams();
 		mWebView = (WebView) findViewById(R.id.main_webview);
+		mErrorWebview = (WebView) findViewById(R.id.error_webview);
+		mErrorWebview.loadUrl(FAILED_URL);
 		mWebView.getSettings().setJavaScriptEnabled(true);
 		mWebView.setWebViewClient(new WebViewClient() {
 			@Override
@@ -180,6 +182,10 @@ public class MainActivity extends Activity {
 				super.onPageStarted(view, url, favicon);
 				setProgressBarPercent(0);
 				mProgressView.setVisibility(View.VISIBLE);
+				if (mErrorWebview.getVisibility() == View.VISIBLE) {
+					mErrorWebview.setVisibility(View.INVISIBLE);
+					mErrorWebview.loadUrl("about:blank");
+				}
 			}
 			@Override
 			public void onPageFinished(WebView view, String url) {
@@ -210,11 +216,15 @@ public class MainActivity extends Activity {
 					String description, String failingUrl) {
 				mProgressView.setVisibility(View.INVISIBLE);
 				view.stopLoading();
-				view.loadUrl(FAILED_URL);
+				if (mErrorWebview.getVisibility() == View.INVISIBLE) {
+					mErrorWebview.setVisibility(View.VISIBLE);
+					mErrorWebview.loadUrl(FAILED_URL);
+				}
 			}
 		});
 
 		mWebView.setWebChromeClient(new WebChromeClient() {
+			/*
 			@Override
 			public void onReceivedTitle(WebView view, String title) {
 				super.onReceivedTitle(view, title);
@@ -225,7 +235,7 @@ public class MainActivity extends Activity {
 					view.stopLoading();
 					view.loadUrl(FAILED_URL);
 				}
-			}
+			}*/
 
 			public void onProgressChanged(WebView view, int progress) {
 				setProgressBarPercent(progress);
@@ -246,9 +256,11 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		/*
 		if (mWebView != null) {
-			// mWebView.clearCache(true);
-		}		
+			mWebView.clearCache(true);
+		}
+		*/		
 	}
 	
 	@Override
@@ -264,7 +276,7 @@ public class MainActivity extends Activity {
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
 	        case R.id.action_refresh:
-	            mWebView.reload();
+	        	mWebView.reload();
 	            return true;
 	        case R.id.action_episode:
 	            // TODO openRightDrawer();
