@@ -64,15 +64,15 @@ public class NavigationAdapter extends BaseExpandableListAdapter {
 			View convertView, ViewGroup parent) {
 		if (convertView == null) {
 			LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			convertView = inflater.inflate(R.layout.list_group, null);
-			convertView.setBackgroundResource(((Season)getGroup(groupPosition)).getBackgroundId());
+			convertView = inflater.inflate(R.layout.list_group, null);			
 		}
 		((TextView) convertView.findViewById(R.id.group_textview)).setText(seasons.get(groupPosition).getName());
 		if (((Season)getGroup(groupPosition)).isExpanded()) {
-			((ImageView) convertView.findViewById(R.id.group_indicator)).setImageResource(R.drawable.ic_action_expand);
-		} else {
 			((ImageView) convertView.findViewById(R.id.group_indicator)).setImageResource(R.drawable.ic_action_collapse);
+		} else {
+			((ImageView) convertView.findViewById(R.id.group_indicator)).setImageResource(R.drawable.ic_action_expand);
 		}
+		convertView.setBackgroundResource(((Season)getGroup(groupPosition)).getBackgroundId());
 		return convertView;
 	}
 	
