@@ -308,7 +308,10 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 					// _pageNotFound = true;
 					mProgressView.setVisibility(View.INVISIBLE);
 					view.stopLoading();
-					view.loadUrl(FAILED_URL);
+					if (mErrorWebview.getVisibility() == View.INVISIBLE) {
+						mErrorWebview.setVisibility(View.VISIBLE);
+						mErrorWebview.loadUrl(FAILED_URL);
+					}
 				}
 			}
 			public void onProgressChanged(WebView view, int progress) {
