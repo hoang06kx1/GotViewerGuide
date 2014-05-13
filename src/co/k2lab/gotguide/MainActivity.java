@@ -275,19 +275,7 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 
 			@Override
 			public void onPageFinished(WebView view, String url) {
-
 				mProgressView.setVisibility(View.INVISIBLE);
-
-				// removed feature!
-				/*
-				_urlLoaded = true;
-				long currentTime = System.currentTimeMillis();
-				if (mSplashImage != null
-						&& (currentTime - _startTime > SPLASH_TIME)) {
-					hideSplash();
-				}
-				*/
-				
 				if (url.startsWith(EPISODE_URL_PREFIX)) {
 					view.loadUrl(JS_REMOVE_NAV_BAR);
 				}
@@ -310,19 +298,19 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 		});
 
 		mWebView.setWebChromeClient(new WebChromeClient() {
-			/*
+			
 			@Override
 			public void onReceivedTitle(WebView view, String title) {
 				super.onReceivedTitle(view, title);
+				Log.e("Site title", title);
 				CharSequence pnotfound = "The page cannot be found";
 				if (title.contains(pnotfound)) {
-					_pageNotFound = true;
+					// _pageNotFound = true;
 					mProgressView.setVisibility(View.INVISIBLE);
 					view.stopLoading();
 					view.loadUrl(FAILED_URL);
 				}
-			}*/
-
+			}
 			public void onProgressChanged(WebView view, int progress) {
 				setProgressBarPercent(progress);
 			}
@@ -401,6 +389,7 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 	
 	// TODO implement
 	private void toggleRightDrawer() {
+		mWebView.loadUrl(JS_REMOVE_NAV_BAR);
 		if (mDrawerLayout != null) {
 			if (!mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
 				mDrawerLayout.openDrawer(Gravity.RIGHT);
