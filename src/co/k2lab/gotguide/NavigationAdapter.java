@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import co.k2lab.gotguide.model.Episode;
 import co.k2lab.gotguide.model.Season;
 import co.k2lab.gotguide.utils.Utils;
 
@@ -76,11 +77,10 @@ public class NavigationAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
-		if (convertView == null) {
-			LayoutInflater inflater = (LayoutInflater) this.context
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			convertView = inflater.inflate(R.layout.list_group, null);
-		}
+		LayoutInflater inflater = (LayoutInflater) this.context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		convertView = inflater.inflate(R.layout.list_group, null);
+
 		if (groupPosition < getGroupCount() - 2) {
 			((TextView) convertView.findViewById(R.id.group_textview))
 					.setText(seasons.get(groupPosition).getName());
@@ -136,6 +136,9 @@ public class NavigationAdapter extends BaseExpandableListAdapter {
 		v.setVisibility(groupPosition == mCurrentGroupSelected
 				&& childPosition == mCurrentChildSelected ? View.VISIBLE
 				: View.INVISIBLE);
+		((View) convertView.findViewById(R.id.item_new_icon))
+				.setVisibility(((Episode) getChild(groupPosition, childPosition))
+						.isNewEpisose() ? View.VISIBLE : View.GONE);
 		return convertView;
 	}
 

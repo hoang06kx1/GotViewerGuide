@@ -208,10 +208,10 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 		episodes2[3] = new Episode("4. Garden of Bones", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-4/home/14", R.drawable.s2_e4, false, true);
 		episodes2[4] = new Episode("5. The Ghost of Harrenhal", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-5/home/15", R.drawable.s2_e5, false, true);
 		episodes2[5] = new Episode("6. The Old Gods and the New", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-6/home/16", R.drawable.s2_e6, false, true);
-		episodes2[6] = new Episode("7. A Man Without Honor", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-7/home/17", R.drawable.s2_e7, false, true);
+		episodes2[6] = new Episode("7. A Man Without Honor", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-7/home/17", R.drawable.s2_e7, true, true);
 		episodes2[7] = new Episode("8. The Prince of Winterfell", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-8/home/18", R.drawable.s2_e8, false, true);
 		episodes2[8] = new Episode("9. Blackwater", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-9/home/19", R.drawable.s2_e9, false, true);
-		episodes2[9] = new Episode("10. Valar Morghulis", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-10/home/20", R.drawable.s2_e10, false, true);
+		episodes2[9] = new Episode("10. Valar Morghulis", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-10/home/20", R.drawable.s2_e10, true, true);
 		ArrayList<Episode> episodes2List = new ArrayList<>();
 		episodes2List.addAll(Arrays.asList(episodes2));
 		seasons[1] = new Season("Season 2", episodes2List, R.drawable.bg_season_2);
@@ -415,11 +415,12 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 			int groupPosition, int childPosition, long id) {
 		if (mNavigationAdapter != null) {
 			mNavigationAdapter.setCurrentSelected(groupPosition, childPosition);
-			mNavigationAdapter.notifyDataSetChanged();
+			mNavigationAdapter.notifyDataSetChanged();			
 		}
 		if (mDrawerLayout != null) {
 			mDrawerLayout.closeDrawers();
 		}
+		mWebView.loadUrl(mSeasons.get(groupPosition).getEpisodes().get(childPosition).getUrl());
 		return true;
 	}
 	
