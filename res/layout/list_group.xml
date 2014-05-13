@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:minHeight="48dp"
-    android:orientation="horizontal" 
+    android:orientation="horizontal"
     android:gravity="center_vertical"
     android:background="@drawable/list_group_background">    
 	<TextView 
@@ -20,7 +20,7 @@
 	    android:layout_height="match_parent"
 	    android:layout_weight="1"
 	    />
-	<ImageView 
+	<ImageView
 	    android:id="@+id/group_indicator"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
