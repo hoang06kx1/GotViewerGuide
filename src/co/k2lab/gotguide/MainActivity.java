@@ -55,10 +55,9 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 
 	private static final String FAILED_URL = "file:///android_asset/error/error-screen.html";
 	private static final String FIRST_TIME_KEY = "first_time";
-	private static final String JS_TOGGLE_MENU = "javascript:$('body').toggleClass('side-nav-opened');Chaplin.mediator.publish('nav:closeEpisodeSelector');Chaplin.mediator.publish('app:hidenav');void(0)";
-	private static final String JS_REMOVE_NAV_BAR = "javascript:(function(){function e(){var t=document.querySelector('.global-nav');if(t){t.style.display='none';document.querySelector('.page-container>div:first-child').style.marginTop=0;document.querySelector('.close-icon.sprites-close').style.display='none'}else setTimeout(e,1e3)}e()})()";
-	private static final String JS_REMOVE_NAV_BAR_MAP = "javascript:(function(){function e(){var t=document.querySelector('.page-container>div:first-child');if(t){t.style.top=0;$('#map').height($(window).height())}else setTimeout(e,1e3)}e()})()";
-	
+	private static final String JS_TOGGLE_MENU = "javascript:$('body').toggleClass('side-nav-opened');Chaplin.mediator.publish('nav:closeEpisodeSelector');Chaplin.mediator.publish('app:hidenav');void 0";
+	public  static final String JS_REMOVE_NAV_BAR = "javascript:if(typeof removeNavBar!='function'){function removeNavBar(){var e=10;var t=document.querySelector('.global-nav');if(t){if(!t.style.display){t.style.display='none';document.querySelector('.page-container>div:first-child').style.marginTop=0;document.querySelector('.close-icon.sprites-close').style.display='none'}}else if(e--)setTimeout(removeNavBar,1e3)}}removeNavBar();void 0";
+	private static final String JS_ADD_URL_CHANGE_LISTENER = "javascript:if(typeof removeNavBar!='function'){function removeNavBar(){var e=10;var t=document.querySelector('.global-nav');if(t){if(!t.style.display){t.style.display='none';document.querySelector('.page-container>div:first-child').style.marginTop=0;document.querySelector('.close-icon.sprites-close').style.display='none'}}else if(e--)setTimeout(removeNavBar,1e3)}}if(typeof removePaddingMap!='function'){function removePaddingMap(){var e=10;var t=document.querySelector('.page-container>div:first-child');if(t){if(t.style.top){t.style.top=0;$('#map').height($(window).height())}}else if(e--)setTimeout(removePaddingMap,1e3)}}var lastLocation;if(typeof checkUrl!='function'){function checkUrl(){if(window.location.href!=lastLocation){lastLocation=window.location.href;removeNavBar();if(lastLocation.indexOf('/map')>-1)removePaddingMap()}}}window.setInterval(checkUrl,1000);void 0";
 	// flags
 	private static final int _firstTimeCount = 3;
 	private boolean _triggerHint = false;
@@ -261,14 +260,19 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 		mErrorWebview = (WebView) findViewById(R.id.error_webview);
 		
 		mWebView = (WebView) findViewById(R.id.main_webview);
-		// don't know why I include these
+		
+		// nonsense flags for a better performance I hope
 		mWebView.getSettings().setRenderPriority(RenderPriority.HIGH);
 		mWebView.getSettings().setPluginState(android.webkit.WebSettings.PluginState.ON_DEMAND);
+		
 		mWebView.getSettings().setJavaScriptEnabled(true);
 		mWebView.setWebViewClient(new WebViewClient() {
 			@Override
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
 				super.onPageStarted(view, url, favicon);
+				
+				Log.d("webview started url", url);
+				
 				setProgressBarPercent(0);
 				mProgressView.setVisibility(View.VISIBLE);
 				if (mErrorWebview.getVisibility() == View.VISIBLE) {
@@ -280,16 +284,14 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 			@Override
 			public void onPageFinished(WebView view, String url) {
 				mProgressView.setVisibility(View.INVISIBLE);
-				Log.d("webview url", url);
+				
+				Log.d("webview finished url", url);
 				
 				if (url.startsWith(URL)) {
 					Log.d("webview", "trying to remove nav bar");
-					view.loadUrl(JS_REMOVE_NAV_BAR);
-				}
-				
-				if (url.endsWith("/map")) {
-					Log.d("webview", "trying to remove top padding in map");
-					view.loadUrl(JS_REMOVE_NAV_BAR_MAP);
+					//view.loadUrl(JS_REMOVE_NAV_BAR);  // enable this for a little faster trigger, but we choose
+														// to disable it for slightly better performance
+					view.loadUrl(JS_ADD_URL_CHANGE_LISTENER); // the real deal
 				}
 			}
 
@@ -322,7 +324,7 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 					}
 				}
 			}
-
+			
 			public void onProgressChanged(WebView view, int progress) {
 				setProgressBarPercent(progress);
 			}
