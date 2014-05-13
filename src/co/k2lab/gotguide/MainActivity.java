@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings.RenderPriority;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ExpandableListView;
@@ -54,9 +55,9 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 
 	private static final String FAILED_URL = "file:///android_asset/error/error-screen.html";
 	private static final String FIRST_TIME_KEY = "first_time";
-	private static final String JS_TOGGLE_MENU = "javascript:$('body').toggleClass('side-nav-opened');Chaplin.mediator.publish('nav:closeEpisodeSelector');Chaplin.mediator.publish('app:hidenav');void(0);";
-	private static final String JS_REMOVE_NAV_BAR = "javascript:document.querySelector('.global-nav').style.display='none';document.querySelector('.page-container>div:first-child').style.marginTop=0;document.querySelector('.close-icon.sprites-close').style.display='none';void(0);";
-	private static final String JS_REMOVE_NAV_BAR_MAP = "javascript:document.querySelector('.page-container>div:first-child').style.top=0;$('#map').height($(window).height());void(0);";
+	private static final String JS_TOGGLE_MENU = "javascript:$('body').toggleClass('side-nav-opened');Chaplin.mediator.publish('nav:closeEpisodeSelector');Chaplin.mediator.publish('app:hidenav');void(0)";
+	private static final String JS_REMOVE_NAV_BAR = "javascript:(function(){function e(){var t=document.querySelector('.global-nav');if(t){t.style.display='none';document.querySelector('.page-container>div:first-child').style.marginTop=0;document.querySelector('.close-icon.sprites-close').style.display='none'}else setTimeout(e,1e3)}e()})()";
+	private static final String JS_REMOVE_NAV_BAR_MAP = "javascript:document.querySelector('.page-container>div:first-child').style.top=0;$('#map').height($(window).height());void(0)";
 	
 	// flags
 	private static final int _firstTimeCount = 3;
@@ -99,7 +100,7 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 		actionBarHomeArea.findViewById(R.id.action_bar_home_area).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (mWebView.getUrl().startsWith(URL)) {
+				if (mWebView.getUrl().contains("/game-of-thrones/")) {
 					mWebView.loadUrl(JS_TOGGLE_MENU);
 				}
 			}
@@ -134,7 +135,7 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 		int firstTime = preferences.getInt(FIRST_TIME_KEY, 0);
 		if (firstTime < _firstTimeCount) {
 			if (firstTime == 0) {
-				// _triggerHint = true; // H.NH: remove hint
+				_triggerHint = true;
 			}
 			mSplashImage.setImageResource(R.drawable.splash_first_time);
 			preferences.edit().putInt(FIRST_TIME_KEY, ++firstTime).commit();
@@ -257,8 +258,12 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 		mSplashImage = (ImageView) findViewById(R.id.main_splash);
 		mProgressView = (View) findViewById(R.id.progress_bar);
 		mProgressBarLayoutParams = mProgressView.getLayoutParams();
-		mWebView = (WebView) findViewById(R.id.main_webview);
 		mErrorWebview = (WebView) findViewById(R.id.error_webview);
+		
+		mWebView = (WebView) findViewById(R.id.main_webview);
+		// don't know why I include these
+		mWebView.getSettings().setRenderPriority(RenderPriority.HIGH);
+		mWebView.getSettings().setPluginState(android.webkit.WebSettings.PluginState.ON_DEMAND);
 		mWebView.getSettings().setJavaScriptEnabled(true);
 		mWebView.setWebViewClient(new WebViewClient() {
 			@Override
@@ -395,7 +400,6 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 	
 	
 	private void toggleRightDrawer() {
-		mWebView.loadUrl(JS_REMOVE_NAV_BAR);
 		if (mDrawerLayout != null) {
 			if (!mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
 				mDrawerLayout.openDrawer(Gravity.RIGHT);
