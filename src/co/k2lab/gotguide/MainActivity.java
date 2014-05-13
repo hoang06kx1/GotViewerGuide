@@ -57,7 +57,7 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 	private static final String FIRST_TIME_KEY = "first_time";
 	private static final String JS_TOGGLE_MENU = "javascript:$('body').toggleClass('side-nav-opened');Chaplin.mediator.publish('nav:closeEpisodeSelector');Chaplin.mediator.publish('app:hidenav');void(0)";
 	private static final String JS_REMOVE_NAV_BAR = "javascript:(function(){function e(){var t=document.querySelector('.global-nav');if(t){t.style.display='none';document.querySelector('.page-container>div:first-child').style.marginTop=0;document.querySelector('.close-icon.sprites-close').style.display='none'}else setTimeout(e,1e3)}e()})()";
-	private static final String JS_REMOVE_NAV_BAR_MAP = "javascript:document.querySelector('.page-container>div:first-child').style.top=0;$('#map').height($(window).height());void(0)";
+	private static final String JS_REMOVE_NAV_BAR_MAP = "javascript:(function(){function e(){var t=document.querySelector('.page-container>div:first-child');if(t){t.style.top=0;$('#map').height($(window).height())}else setTimeout(e,1e3)}e()})()";
 	
 	// flags
 	private static final int _firstTimeCount = 3;
@@ -279,16 +279,16 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 
 			@Override
 			public void onPageFinished(WebView view, String url) {
-				Log.e("webview url", url);
-				
 				mProgressView.setVisibility(View.INVISIBLE);
-
+				Log.d("webview url", url);
+				
 				if (url.startsWith(URL)) {
-					Log.e("webview", "removed nav bar");
+					Log.d("webview", "trying to remove nav bar");
 					view.loadUrl(JS_REMOVE_NAV_BAR);
 				}
 				
 				if (url.endsWith("/map")) {
+					Log.d("webview", "trying to remove top padding in map");
 					view.loadUrl(JS_REMOVE_NAV_BAR_MAP);
 				}
 			}
@@ -309,7 +309,7 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 			@Override
 			public void onReceivedTitle(WebView view, String title) {
 				super.onReceivedTitle(view, title);
-				Log.e("webview title", title);
+				Log.d("webview title", title);
 				if (title.contains("error") || 
 						title.contains("404") || 
 						title.contains("not found") || 
@@ -427,7 +427,7 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 	public boolean onGroupClick(ExpandableListView parent, View v,
 			int groupPosition, long id) {
 		if (groupPosition >= mNavigationAdapter.getGroupCount() - 2)	{
-			Log.d("CLICK", "Group clicked");
+			Log.d("drawer", "group item clicked");
 			return true;
 		} else { 
 			return false;
