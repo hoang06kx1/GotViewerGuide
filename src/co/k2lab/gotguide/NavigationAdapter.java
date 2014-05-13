@@ -2,9 +2,9 @@ package co.k2lab.gotguide;
 
 import java.util.ArrayList;
 
-import android.R.style;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,8 +95,8 @@ public class NavigationAdapter extends BaseExpandableListAdapter {
 					.setBackgroundResource(((Season) getGroup(groupPosition))
 							.getBackgroundId());
 		} else {
-			convertView.setBackgroundColor(context.getResources().getColor(
-					R.color.list_group_background));
+			convertView.setBackgroundResource(R.drawable.list_group_background);
+			convertView.findViewById(R.id.group_seperator).setVisibility(View.INVISIBLE);
 			((ImageView) convertView.findViewById(R.id.group_indicator))
 					.setVisibility(View.INVISIBLE);
 			TextView tv = (TextView) convertView
@@ -105,12 +105,12 @@ public class NavigationAdapter extends BaseExpandableListAdapter {
 			tv.setAllCaps(true);
 			tv.setCompoundDrawablePadding(12);
 			if (groupPosition == getGroupCount() - 2) {
-				tv.setTextSize(Utils.convertDpToPixel(context, 12));
+				tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f);
 				tv.setText("FEEDBACK");
 				tv.setCompoundDrawablesWithIntrinsicBounds(
 						R.drawable.ic_drawer_mail, 0, 0, 0);
 			} else {
-				tv.setTextSize(Utils.convertDpToPixel(context, 12));
+				tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f);
 				tv.setText("BUY US A BEER");
 				tv.setCompoundDrawablesWithIntrinsicBounds(
 						R.drawable.ic_drawer_beer, 0, 0, 0);
@@ -132,13 +132,19 @@ public class NavigationAdapter extends BaseExpandableListAdapter {
 				.getName());
 		tv.setCompoundDrawablesWithIntrinsicBounds(seasons.get(groupPosition)
 				.getEpisodes().get(childPosition).getIconId(), 0, 0, 0);
+		
+		
+		if (((Episode)getChild(groupPosition, childPosition)).isNewEpisose()) {
+			tv.setMaxWidth(Utils.convertDpToPixel(context, 250));
+		}
+		((View) convertView.findViewById(R.id.item_new_icon))
+				.setVisibility(((Episode) getChild(groupPosition, childPosition))
+						.isNewEpisose() ? View.VISIBLE : View.GONE);
+		
 		View v = (View) convertView.findViewById(R.id.item_selected_view);
 		v.setVisibility(groupPosition == mCurrentGroupSelected
 				&& childPosition == mCurrentChildSelected ? View.VISIBLE
 				: View.INVISIBLE);
-		((View) convertView.findViewById(R.id.item_new_icon))
-				.setVisibility(((Episode) getChild(groupPosition, childPosition))
-						.isNewEpisose() ? View.VISIBLE : View.GONE);
 		return convertView;
 	}
 

@@ -134,7 +134,7 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 		int firstTime = preferences.getInt(FIRST_TIME_KEY, 0);
 		if (firstTime < _firstTimeCount) {
 			if (firstTime == 0) {
-				_triggerHint = true;
+				// _triggerHint = true; // H.NH: remove hint
 			}
 			mSplashImage.setImageResource(R.drawable.splash_first_time);
 			preferences.edit().putInt(FIRST_TIME_KEY, ++firstTime).commit();
@@ -185,8 +185,8 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 		// season1
 		Episode episode1_1 = new Episode("1. Winter Is Coming", "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-1/home/21", R.drawable.s1_e1, false, true);
 		Episode episode1_2 = new Episode("2. The Kingsroad", "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-2/home/22", R.drawable.s1_e2, false, true);
-		Episode episode1_3 = new Episode("3. Lord Snow", "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-3/home/23", R.drawable.s1_e3, false, true);
-		Episode episode1_4 = new Episode("4. Cripples, Bastards, and Broken Things", "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-4/home/24", R.drawable.s1_e4, false, true);
+		Episode episode1_3 = new Episode("3. Lord Snow", "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-3/home/23", R.drawable.s1_e3, true, true);
+		Episode episode1_4 = new Episode("4. Cripples, Bastards, and Broken Things", "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-4/home/24", R.drawable.s1_e4, true, true);
 		Episode episode1_5 = new Episode("5. The Wolf and the Lion", "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-5/home/25", R.drawable.s1_e5, false, true);
 		Episode episode1_6 = new Episode("6. A Golden Crown", "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-6/home/26", R.drawable.s1_e6, false, true);
 		Episode episode1_7 = new Episode("7. You Win or You Die", "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-7/home/27", R.drawable.s1_e7, false, true);
@@ -237,10 +237,10 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 		episodes4[2] = new Episode("3. Breaker of Chains", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-3/home/33", R.drawable.s4_e3, false, true);
 		episodes4[3] = new Episode("4. Oathkeeper", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-4/home/34", R.drawable.s4_e4, false, true);
 		episodes4[4] = new Episode("5. First of His Name", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-5/home/35", R.drawable.s4_e5, false, true);
-		episodes4[5] = new Episode("6. The Laws of Gods and Men", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-6/home/36", R.drawable.s4_e6, false, true);
+		episodes4[5] = new Episode("6. The Laws of Gods and Men", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-6/home/36", R.drawable.s4_e6, true, true);
 		episodes4[6] = new Episode("7. Mockingbird", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-7/home/37", R.drawable.s4_e7, false, true);
-		episodes4[7] = new Episode("8. The Mountain and the Viper", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-8/home/38", R.drawable.s4_e8, false, true);
-		episodes4[8] = new Episode("9. The Watchers on the Wall", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-9/home/39", R.drawable.s4_e9, false, true);
+		episodes4[7] = new Episode("8. The Mountain and the Viper", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-8/home/38", R.drawable.s4_e8, true, true);
+		episodes4[8] = new Episode("9. The Watchers on the Wall", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-9/home/39", R.drawable.s4_e9, true, true);
 		episodes4[9] = new Episode("10. The Children", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-10/home/40", R.drawable.s4_e10, false, true);
 		ArrayList<Episode> episodes4List = new ArrayList<>();
 		episodes4List.addAll(Arrays.asList(episodes4));
@@ -277,16 +277,7 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 				Log.e("webview url", url);
 				
 				mProgressView.setVisibility(View.INVISIBLE);
-				// removed feature!
-				/*
-				_urlLoaded = true;
-				long currentTime = System.currentTimeMillis();
-				if (mSplashImage != null
-						&& (currentTime - _startTime > SPLASH_TIME)) {
-					hideSplash();
-				}
-				*/
-				
+
 				if (url.startsWith(URL)) {
 					Log.e("webview", "removed nav bar");
 					view.loadUrl(JS_REMOVE_NAV_BAR);
@@ -309,12 +300,15 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 			}
 		});
 
-		mWebView.setWebChromeClient(new WebChromeClient() {
+		mWebView.setWebChromeClient(new WebChromeClient() {		
 			@Override
 			public void onReceivedTitle(WebView view, String title) {
 				super.onReceivedTitle(view, title);
 				Log.e("webview title", title);
-				if (title.contains("Webpage not available")) {
+				if (title.contains("error") || 
+						title.contains("404") || 
+						title.contains("not found") || 
+						title.contains("not available")) {
 					mProgressView.setVisibility(View.INVISIBLE);
 					view.stopLoading();
 					if (mErrorWebview.getVisibility() == View.INVISIBLE) {
@@ -401,6 +395,7 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 	
 	
 	private void toggleRightDrawer() {
+		mWebView.loadUrl(JS_REMOVE_NAV_BAR);
 		if (mDrawerLayout != null) {
 			if (!mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
 				mDrawerLayout.openDrawer(Gravity.RIGHT);
