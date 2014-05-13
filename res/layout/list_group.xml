@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="56dp"
     android:orientation="horizontal" 
-    android:gravity="center_vertical">    
+    android:gravity="center_vertical">
 	<TextView 
 	    android:id="@+id/group_textview"
 	    android:layout_width="wrap_content"
@@ -19,7 +19,7 @@
 	    android:layout_height="match_parent"
 	    android:layout_weight="1"
 	    />
-	<ImageView 
+	<ImageView
 	    android:id="@+id/group_indicator"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"

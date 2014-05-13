@@ -28,7 +28,7 @@
         <View
             android:id="@+id/progress_bar"
             android:layout_width="0dp"
-            android:layout_height="2dp"
+            android:layout_height="3dp"
             android:background="#5bc8ff" />
 
         <co.k2lab.gotguide.utils.FitWidthImage
@@ -41,7 +41,7 @@
 
     <ExpandableListView
         android:id="@+id/right_drawer"
-        android:layout_width="310dp"
+        android:layout_width="@dimen/right_drawer_witdh"
         android:layout_height="match_parent"
         android:layout_gravity="right"
         android:choiceMode="singleChoice"
