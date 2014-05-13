@@ -5,6 +5,14 @@
     android:orientation="horizontal" 
     android:gravity="center_vertical"
     android:background="@drawable/list_item_background">
+    <View 
+        android:id="@+id/item_selected_view"
+        android:layout_height="match_parent"
+        android:layout_width="3dp"
+        android:background="@color/item_selected"
+        android:visibility="invisible"
+        />
+        
 	<TextView 
 	    android:gravity="center_vertical"
 	    android:drawablePadding="8dp"

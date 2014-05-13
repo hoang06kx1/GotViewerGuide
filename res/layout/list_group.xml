@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="56dp"
+    android:minHeight="48dp"
     android:orientation="horizontal" 
-    android:gravity="center_vertical">    
+    android:gravity="center_vertical"
+    android:background="@drawable/list_group_background">    
 	<TextView 
 	    android:id="@+id/group_textview"
 	    android:layout_width="wrap_content"

@@ -2,7 +2,9 @@ package co.k2lab.gotguide;
 
 import java.util.ArrayList;
 
+import android.R.style;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +12,13 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import co.k2lab.gotguide.model.Season;
+import co.k2lab.gotguide.utils.Utils;
 
 public class NavigationAdapter extends BaseExpandableListAdapter {
 	private ArrayList<Season> seasons;
 	private Context context;
-	
+	private int mCurrentGroupSelected = -1, mCurrentChildSelected = -1;
+
 	public NavigationAdapter(Context context, ArrayList<Season> seasons) {
 		this.context = context;
 		if (seasons != null) {
@@ -24,14 +28,24 @@ public class NavigationAdapter extends BaseExpandableListAdapter {
 		}
 	}
 
+	public void setCurrentSelected(int group, int child) {
+		mCurrentGroupSelected = group;
+		mCurrentChildSelected = child;
+	}
+
 	@Override
-	public int getGroupCount() {		
-		return seasons.size();
+	public int getGroupCount() {
+		return seasons.size() + 2;
 	}
 
 	@Override
 	public int getChildrenCount(int groupPosition) {
-		return seasons.get(groupPosition).AiredEpisodesCount();
+		if (groupPosition < getGroupCount() - 2) {
+			return seasons.get(groupPosition).AiredEpisodesCount();
+		} else {
+			return 0;
+		}
+
 	}
 
 	@Override
@@ -63,30 +77,65 @@ public class NavigationAdapter extends BaseExpandableListAdapter {
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
 		if (convertView == null) {
-			LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			convertView = inflater.inflate(R.layout.list_group, null);			
+			LayoutInflater inflater = (LayoutInflater) this.context
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			convertView = inflater.inflate(R.layout.list_group, null);
 		}
-		((TextView) convertView.findViewById(R.id.group_textview)).setText(seasons.get(groupPosition).getName());
-		if (((Season)getGroup(groupPosition)).isExpanded()) {
-			((ImageView) convertView.findViewById(R.id.group_indicator)).setImageResource(R.drawable.ic_action_collapse);
+		if (groupPosition < getGroupCount() - 2) {
+			((TextView) convertView.findViewById(R.id.group_textview))
+					.setText(seasons.get(groupPosition).getName());
+			if (((Season) getGroup(groupPosition)).isExpanded()) {
+				((ImageView) convertView.findViewById(R.id.group_indicator))
+						.setImageResource(R.drawable.ic_action_collapse);
+			} else {
+				((ImageView) convertView.findViewById(R.id.group_indicator))
+						.setImageResource(R.drawable.ic_action_expand);
+			}
+			convertView
+					.setBackgroundResource(((Season) getGroup(groupPosition))
+							.getBackgroundId());
 		} else {
-			((ImageView) convertView.findViewById(R.id.group_indicator)).setImageResource(R.drawable.ic_action_expand);
+			convertView.setBackgroundColor(context.getResources().getColor(
+					R.color.list_group_background));
+			((ImageView) convertView.findViewById(R.id.group_indicator))
+					.setVisibility(View.INVISIBLE);
+			TextView tv = (TextView) convertView
+					.findViewById(R.id.group_textview);
+			tv.setTypeface(null, Typeface.NORMAL);
+			tv.setAllCaps(true);
+			tv.setCompoundDrawablePadding(12);
+			if (groupPosition == getGroupCount() - 2) {
+				tv.setTextSize(Utils.convertDpToPixel(context, 12));
+				tv.setText("FEEDBACK");
+				tv.setCompoundDrawablesWithIntrinsicBounds(
+						R.drawable.ic_drawer_mail, 0, 0, 0);
+			} else {
+				tv.setTextSize(Utils.convertDpToPixel(context, 12));
+				tv.setText("BUY US A BEER");
+				tv.setCompoundDrawablesWithIntrinsicBounds(
+						R.drawable.ic_drawer_beer, 0, 0, 0);
+			}
 		}
-		convertView.setBackgroundResource(((Season)getGroup(groupPosition)).getBackgroundId());
 		return convertView;
 	}
-	
-	
+
 	@Override
 	public View getChildView(int groupPosition, int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
 		if (convertView == null) {
-			LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) this.context
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			convertView = inflater.inflate(R.layout.list_item, null);
 		}
 		TextView tv = (TextView) convertView.findViewById(R.id.item_textview);
-		tv.setText(seasons.get(groupPosition).getEpisodes().get(childPosition).getName());
-		tv.setCompoundDrawablesWithIntrinsicBounds(seasons.get(groupPosition).getEpisodes().get(childPosition).getIconId(), 0,0,0);
+		tv.setText(seasons.get(groupPosition).getEpisodes().get(childPosition)
+				.getName());
+		tv.setCompoundDrawablesWithIntrinsicBounds(seasons.get(groupPosition)
+				.getEpisodes().get(childPosition).getIconId(), 0, 0, 0);
+		View v = (View) convertView.findViewById(R.id.item_selected_view);
+		v.setVisibility(groupPosition == mCurrentGroupSelected
+				&& childPosition == mCurrentChildSelected ? View.VISIBLE
+				: View.INVISIBLE);
 		return convertView;
 	}
 

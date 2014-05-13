@@ -45,7 +45,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="right"
         android:choiceMode="singleChoice"
-        android:background="@color/child_divider"
+        android:background="@color/list_group_background"
+        android:childDivider="@color/child_divider"
         android:groupIndicator="@null"        
         />
 

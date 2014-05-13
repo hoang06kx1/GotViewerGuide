@@ -8,17 +8,23 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.ImageView;
@@ -28,7 +34,7 @@ import co.k2lab.gotguide.utils.Callback;
 import co.k2lab.gotguide.utils.CustomDialog;
 import co.k2lab.gotguide.utils.Utils;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnChildClickListener, OnGroupClickListener{
 	// controls
 	private WebView mWebView, mErrorWebview;
 	private ImageView mSplashImage;
@@ -38,6 +44,8 @@ public class MainActivity extends Activity {
 	private LayoutParams mProgressBarLayoutParams;
 
 	private ArrayList<Season> mSeasons;
+	private NavigationAdapter mNavigationAdapter;
+	private DrawerLayout mDrawerLayout;
 	
 	// const
 	private static final long SPLASH_TIME = 7000;
@@ -61,6 +69,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (isNetWorkAvailable()) {
+			getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 			setContentView(R.layout.activity_main);
 			initActionBar();
 			initControlViews();
@@ -245,6 +254,7 @@ public class MainActivity extends Activity {
 	}
 	
 	private void initControlViews() {
+		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mSplashImage = (ImageView) findViewById(R.id.main_splash);
 		mProgressView = (View) findViewById(R.id.progress_bar);
 		mProgressBarLayoutParams = mProgressView.getLayoutParams();
@@ -320,22 +330,28 @@ public class MainActivity extends Activity {
 		
 		mSeasons = initSeasonData();
 		mExpandableListView = (ExpandableListView)findViewById(R.id.right_drawer);
-		final NavigationAdapter navigationAdapter = new NavigationAdapter(this, mSeasons);
-		mExpandableListView.setAdapter(navigationAdapter);
+		mNavigationAdapter = new NavigationAdapter(this, mSeasons);		
+		mExpandableListView.setAdapter(mNavigationAdapter);
+		mExpandableListView.setOnChildClickListener(this);
+		mExpandableListView.setOnGroupClickListener(this);
 		mExpandableListView.setOnGroupExpandListener(new OnGroupExpandListener() {
 			
 			@Override
-			public void onGroupExpand(int groupPosition) {				
-				mSeasons.get(groupPosition).setExpanded(true);
-				navigationAdapter.notifyDataSetChanged();
+			public void onGroupExpand(int groupPosition) {		
+				if (groupPosition < mNavigationAdapter.getGroupCount() - 2) {
+					mSeasons.get(groupPosition).setExpanded(true);
+					mNavigationAdapter.notifyDataSetChanged();
+				}
 			}
 		});
 		mExpandableListView.setOnGroupCollapseListener(new OnGroupCollapseListener() {
 			
 			@Override
 			public void onGroupCollapse(int groupPosition) {
-				mSeasons.get(groupPosition).setExpanded(false);
-				navigationAdapter.notifyDataSetChanged();
+				if (groupPosition < mNavigationAdapter.getGroupCount() - 2) {
+					mSeasons.get(groupPosition).setExpanded(false);
+					mNavigationAdapter.notifyDataSetChanged();
+				}
 			}
 		});
 	}
@@ -385,6 +401,36 @@ public class MainActivity extends Activity {
 	
 	// TODO implement
 	private void toggleRightDrawer() {
-		
+		if (mDrawerLayout != null) {
+			if (!mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+				mDrawerLayout.openDrawer(Gravity.RIGHT);
+			} else {
+				mDrawerLayout.closeDrawers();
+			}
+		}
+	}
+
+	@Override
+	public boolean onChildClick(ExpandableListView parent, View v,
+			int groupPosition, int childPosition, long id) {
+		if (mNavigationAdapter != null) {
+			mNavigationAdapter.setCurrentSelected(groupPosition, childPosition);
+			mNavigationAdapter.notifyDataSetChanged();
+		}
+		if (mDrawerLayout != null) {
+			mDrawerLayout.closeDrawers();
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean onGroupClick(ExpandableListView parent, View v,
+			int groupPosition, long id) {
+		if (groupPosition >= mNavigationAdapter.getGroupCount() - 2)	{
+			Log.d("CLICK", "Group clicked");
+			return true;
+		} else { 
+			return false;
+		}
 	}
 }

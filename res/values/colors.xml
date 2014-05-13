@@ -3,4 +3,7 @@
     <color name="list_item_background">#3a3a3c</color>
     <color name="child_divider">#4f4f4f</color>
     <color name="feedback">#66FFFFFF</color>
+    <color name="list_group_background">#58585a</color>
+    <color name="divider">#6e6e6e</color>
+    <color name="item_selected">#5490cc</color>
 </resources>
