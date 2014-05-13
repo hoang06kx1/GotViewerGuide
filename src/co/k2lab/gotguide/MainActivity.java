@@ -51,7 +51,6 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 	private static final long SPLASH_TIME = 7000;
 	
 	private static final String URL = "http://viewers-guide.hbo.com/";
-	private static final String EPISODE_URL_PREFIX = "http://viewers-guide.hbo.com/game-of-thrones/";
 
 	private static final String FAILED_URL = "file:///android_asset/error/error-screen.html";
 	private static final String FIRST_TIME_KEY = "first_time";
@@ -100,7 +99,7 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 		actionBarHomeArea.findViewById(R.id.action_bar_home_area).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (mWebView.getUrl().startsWith(EPISODE_URL_PREFIX)) {
+				if (mWebView.getUrl().startsWith(URL)) {
 					mWebView.loadUrl(JS_TOGGLE_MENU);
 				}
 			}
@@ -275,9 +274,9 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 
 			@Override
 			public void onPageFinished(WebView view, String url) {
-
+				Log.e("webview url", url);
+				
 				mProgressView.setVisibility(View.INVISIBLE);
-
 				// removed feature!
 				/*
 				_urlLoaded = true;
@@ -288,7 +287,8 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 				}
 				*/
 				
-				if (url.startsWith(EPISODE_URL_PREFIX)) {
+				if (url.startsWith(URL)) {
+					Log.e("webview", "removed nav bar");
 					view.loadUrl(JS_REMOVE_NAV_BAR);
 				}
 				
@@ -310,18 +310,19 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 		});
 
 		mWebView.setWebChromeClient(new WebChromeClient() {
-			/*
 			@Override
 			public void onReceivedTitle(WebView view, String title) {
 				super.onReceivedTitle(view, title);
-				CharSequence pnotfound = "The page cannot be found";
-				if (title.contains(pnotfound)) {
-					_pageNotFound = true;
+				Log.e("webview title", title);
+				if (title.contains("Webpage not available")) {
 					mProgressView.setVisibility(View.INVISIBLE);
 					view.stopLoading();
-					view.loadUrl(FAILED_URL);
+					if (mErrorWebview.getVisibility() == View.INVISIBLE) {
+						mErrorWebview.setVisibility(View.VISIBLE);
+						mErrorWebview.loadUrl(FAILED_URL);
+					}
 				}
-			}*/
+			}
 
 			public void onProgressChanged(WebView view, int progress) {
 				setProgressBarPercent(progress);
@@ -399,7 +400,6 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 	}
 	
 	
-	// TODO implement
 	private void toggleRightDrawer() {
 		if (mDrawerLayout != null) {
 			if (!mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {

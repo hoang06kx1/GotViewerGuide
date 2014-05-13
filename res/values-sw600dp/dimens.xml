@@ -3,7 +3,7 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="right_drawer_witdh">460dp</dimen>
+    <dimen name="right_drawer_witdh">450dp</dimen>
 	<dimen name="drawer_item_avatar_text_padding">16dp</dimen>
 	<dimen name="drawer_item_episode_text_size">18dp</dimen>
 	
