@@ -59,9 +59,9 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 	private static final String FIRST_TIME_KEY = "first_time";
 	private static final String JS_TOGGLE_MENU = "javascript:$('body').toggleClass('side-nav-opened');Chaplin.mediator.publish('nav:closeEpisodeSelector');Chaplin.mediator.publish('app:hidenav');void 0";
 	public  static final String JS_REMOVE_NAV_BAR = "javascript:if(typeof removeNavBar!='function'){function removeNavBar(){var e=10;var t=document.querySelector('.global-nav');if(t){if(!t.style.display){t.style.display='none';document.querySelector('.page-container>div:first-child').style.marginTop=0;document.querySelector('.close-icon.sprites-close').style.display='none'}}else if(e--)setTimeout(removeNavBar,1e3)}}removeNavBar();void 0";
-	private static final String JS_ADD_URL_CHANGE_LISTENER = "javascript:if(typeof removeNavBar!='function'){console.log('removeNavBar not defined, now define it');var removeNavBar=function(){console.log('removeNavBar called');var e=10;var t=document.querySelector('.global-nav');if(t){console.log('navbar found');if(!t.style.display){console.log('now hide navbar');t.style.display='none';document.querySelector('.page-container>div:first-child').style.marginTop=0;document.querySelector('.close-icon.sprites-close').style.display='none'}else{console.log('navbar already hidden')}}else if(e--){console.log('navbar not found, retry',e);setTimeout(removeNavBar,1e3)}else{console.log('stop looking for navbar')}}}else{console.log('removeNavBar defined')}if(typeof removePaddingMap!='function'){var removePaddingMap=function(){console.log('removePaddingMap called');var e=10;var t=document.querySelector('.page-container>div:first-child');if(t){if(t.style.top){t.style.top=0;$('#map').height($(window).height())}}else if(e--)setTimeout(removePaddingMap,1e3)}}var lastLocation;if(typeof checkUrl!='function'){console.log('checkUrl not defined, now define it');var checkUrl=function(){if(window.location.href!=lastLocation){lastLocation=window.location.href;console.log('url changed to',lastLocation);removeNavBar();if(lastLocation.indexOf('/map')>-1)removePaddingMap()}}}else{console.log('checkUrl defined')}window.setInterval(checkUrl,1e3);void 0";
+	private static final String JS_ADD_URL_CHANGE_LISTENER = "javascript:if(typeof removeNavBar!='function'){var removeNavBar=function(){var e=10;var t=document.querySelector('.global-nav');if(t){if(!t.style.display){t.style.display='none';document.querySelector('.page-container>div:first-child').style.marginTop=0;document.querySelector('.close-icon.sprites-close').style.display='none'}}else if(e--){setTimeout(removeNavBar,1e3)}}}if(typeof removePaddingMap!='function'){var removePaddingMap=function(){var e=10;var t=document.querySelector('.page-container>div:first-child');if(t){if(t.style.top){t.style.top=0;$('#map').height($(window).height())}}else if(e--)setTimeout(removePaddingMap,1e3)}}var lastLocation;if(typeof checkUrl!='function'){var checkUrl=function(){if(window.location.href!=lastLocation){lastLocation=window.location.href;removeNavBar();if(lastLocation.indexOf('/map')>-1)removePaddingMap()}}}window.setInterval(checkUrl,1e3);void 0";
 	// flags
-	private static final int _firstTimeCount = 3;
+	private static final int _firstTimeCount = 5;
 	private boolean _triggerHint = false;
 	private long _startTime = 0;
 	private ExpandableListView mExpandableListView;
@@ -105,10 +105,10 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 					// toggle left drawer
 					mWebView.loadUrl(JS_TOGGLE_MENU);
 					
-					// close right drawer if it is opening 
-					//if (mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
-					//	mDrawerLayout.closeDrawers();
-					//}
+					// close right drawer if it is opening
+					if (mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+						mDrawerLayout.closeDrawers();
+					}
 				}
 			}
 		});
