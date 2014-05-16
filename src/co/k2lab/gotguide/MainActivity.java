@@ -239,9 +239,9 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 		episodes4[4] = new Episode("5. First of His Name", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-5/home/35", R.drawable.s4_e5, false, true);
 		episodes4[5] = new Episode("6. The Laws of Gods and Men", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-6/home/36", R.drawable.s4_e6, true, true);
 		episodes4[6] = new Episode("7. Mockingbird", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-7/home/37", R.drawable.s4_e7, false, true);
-		episodes4[7] = new Episode("8. The Mountain and the Viper", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-8/home/38", R.drawable.s4_e8, true, true);
+		episodes4[7] = new Episode("8. The Mountain and the Viper", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-8/home/38", R.drawable.s4_e8, true, false);
 		episodes4[8] = new Episode("9. The Watchers on the Wall", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-9/home/39", R.drawable.s4_e9, true, true);
-		episodes4[9] = new Episode("10. The Children", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-10/home/40", R.drawable.s4_e10, false, true);
+		episodes4[9] = new Episode("10. The Children", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-10/home/40", R.drawable.s4_e10, false, false);
 		ArrayList<Episode> episodes4List = new ArrayList<>();
 		episodes4List.addAll(Arrays.asList(episodes4));
 		seasons[3] = new Season("Season 4", episodes4List, R.drawable.bg_season_4);
