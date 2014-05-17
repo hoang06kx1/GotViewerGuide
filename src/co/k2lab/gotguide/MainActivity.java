@@ -22,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.webkit.WebChromeClient;
-import android.webkit.WebSettings.RenderPriority;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ExpandableListView;
@@ -214,7 +213,7 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 					add(new Episode("4. Garden of Bones", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-4/home/14", R.drawable.s2_e4, false, true));
 					add(new Episode("5. The Ghost of Harrenhal", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-5/home/15", R.drawable.s2_e5, false, true));
 					add(new Episode("6. The Old Gods and the New", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-6/home/16", R.drawable.s2_e6, false, true));
-					add(new Episode("7. A Man Without Honor", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-7/home/17", R.drawable.s2_e7, true, true));
+					add(new Episode("7. A Man Without Honor", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-7/home/17", R.drawable.s2_e7, false, true));
 					add(new Episode("8. The Prince of Winterfell", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-8/home/18", R.drawable.s2_e8, false, true));
 					add(new Episode("9. Blackwater", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-9/home/19", R.drawable.s2_e9, false, true));
 					add(new Episode("10. Valar Morghulis", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-10/home/20", R.drawable.s2_e10, false, true));
@@ -295,8 +294,8 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 		mWebView = (WebView) findViewById(R.id.main_webview);
 		
 		// nonsense flags for a better performance I hope
-		mWebView.getSettings().setRenderPriority(RenderPriority.HIGH);
-		mWebView.getSettings().setPluginState(android.webkit.WebSettings.PluginState.ON_DEMAND);
+		//mWebView.getSettings().setRenderPriority(RenderPriority.HIGH);
+		//mWebView.getSettings().setPluginState(android.webkit.WebSettings.PluginState.ON_DEMAND);
 		
 		mWebView.getSettings().setJavaScriptEnabled(true);
 		mWebView.setWebViewClient(new WebViewClient() {
