@@ -37,7 +37,7 @@ import co.k2lab.gotguide.utils.Callback;
 import co.k2lab.gotguide.utils.CustomDialog;
 import co.k2lab.gotguide.utils.Utils;
 
-public class MainActivity extends Activity implements OnChildClickListener, OnGroupClickListener{
+public class MainActivity extends BaseIabActivity implements OnChildClickListener, OnGroupClickListener{
 	// controls
 	private WebView mWebView, mErrorWebview;
 	private ImageView mSplashImage;
@@ -461,11 +461,13 @@ public class MainActivity extends Activity implements OnChildClickListener, OnGr
 	@Override
 	public boolean onGroupClick(ExpandableListView parent, View v,
 			int groupPosition, long id) {
-		if (groupPosition >= mNavigationAdapter.getGroupCount() - 2)	{
+		if (groupPosition == mNavigationAdapter.getGroupCount() - 1)	{
 			Log.d("drawer", "group item clicked");
 			return true;
-		} else { 
-			return false;
+		} else if (groupPosition == mNavigationAdapter.getGroupCount() - 2) {
+			purchaseAnProduct(BaseIabActivity.SKU_ONE_DOLLAR);
+			return true;
 		}
+		return false;
 	}
 }

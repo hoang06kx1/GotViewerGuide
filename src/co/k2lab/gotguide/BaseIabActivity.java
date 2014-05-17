@@ -4,9 +4,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.content.ServiceConnection;
@@ -14,13 +17,15 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 
+import co.k2lab.gotguide.utils.Alert;
+
 import com.android.vending.billing.IInAppBillingService;
 
 public class BaseIabActivity extends Activity {
 	IInAppBillingService mService;
-	protected static final String oneDollarId = "";
-	protected static final String twoDollarsId = "";
-	protected static final String fiveDollarsId = "";
+	protected static final String SKU_ONE_DOLLAR = "";
+	protected static final String SKU_TWO_DOLLARS = "";
+	protected static final String SKU_FIVE_DOLLARS = "";
 	private static final String PAYLOAD_STRING = "1234567890qwertyuiop+_)(*&^%$#@!";
 	private static final int REQUEST_CODE = 32145;
 
@@ -76,6 +81,21 @@ public class BaseIabActivity extends Activity {
 				try {
 					JSONObject jo = new JSONObject(purchaseData);
 					String sku = jo.getString("productId");
+					String donationMessage = "";
+					if (sku.contains(SKU_ONE_DOLLAR)) {
+						donationMessage = getResources().getString(R.string.one_dollar_message);
+					} else if (sku.contains(SKU_TWO_DOLLARS)) {
+						donationMessage = getResources().getString(R.string.two_dollars_message);
+					} else if (sku.contains(SKU_FIVE_DOLLARS)) {
+						donationMessage = getResources().getString(R.string.five_dollars_message);
+					}
+					Alert.AlertMessage(this, getResources().getString(R.string.donation_title), donationMessage, ";)", new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+					});
 					// TODO: implement Notification here
 				} catch (JSONException e) {
 					// TODO: notify about failed purchase

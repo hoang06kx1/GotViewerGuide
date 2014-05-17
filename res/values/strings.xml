@@ -9,6 +9,10 @@
     <string name="action_refresh">Refresh</string>
     <string name="action_episode">Episode</string>
     <string name="got_it">GOT IT!</string>
+    <string name="donation_title"> Thanks for your warming behaviour!</string>
+    <string name="one_dollar_message">WOWWW!</string>
+    <string name="two_dollars_message">AWESOME!</string>
+    <string name="five_dollars_message">UNBELIEVABLE!</string>
     <!-- 
     <string name="be_patient">When you play a game of thrones you win or you die. When you use this app it connects to Westeros to fetch data so please be patient... or you die.</string>
     -->
