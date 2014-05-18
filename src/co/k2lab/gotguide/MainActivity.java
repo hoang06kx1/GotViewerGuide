@@ -6,9 +6,10 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 import android.app.ActionBar;
-import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
@@ -20,7 +21,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.view.Window;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings.RenderPriority;
 import android.webkit.WebView;
@@ -70,7 +70,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (isNetWorkAvailable()) {
-			getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+			// getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 			setContentView(R.layout.activity_main);
 			initActionBar();
 			initControlViews();
@@ -461,13 +461,23 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	@Override
 	public boolean onGroupClick(ExpandableListView parent, View v,
 			int groupPosition, long id) {
-		if (groupPosition == mNavigationAdapter.getGroupCount() - 1)	{
-			Log.d("drawer", "group item clicked");
+		if (groupPosition == mNavigationAdapter.getGroupCount() - 2)	{
+			feedbackToDev();
 			return true;
-		} else if (groupPosition == mNavigationAdapter.getGroupCount() - 2) {
-			purchaseAnProduct(BaseIabActivity.SKU_ONE_DOLLAR);
+		} else if (groupPosition == mNavigationAdapter.getGroupCount() - 1) {
+			purchaseProduct(BaseIabActivity.SKU_ONE_DOLLAR);
 			return true;
 		}
 		return false;
 	}
+	
+	private void feedbackToDev() {
+		Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+				"mailto", "feedback@k2lab.co", null));
+		intent.putExtra(Intent.EXTRA_EMAIL, "feedback@k2lab.co");
+		intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback on GOT Viewer's Guide");
+		intent.putExtra(Intent.EXTRA_TEXT, "Hi K2 Lab,");
+		startActivity(Intent.createChooser(intent, "Send Email"));
+	}
+
 }

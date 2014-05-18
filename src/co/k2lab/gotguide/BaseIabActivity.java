@@ -16,6 +16,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.util.Log;
 
 import co.k2lab.gotguide.utils.Alert;
 
@@ -23,9 +24,10 @@ import com.android.vending.billing.IInAppBillingService;
 
 public class BaseIabActivity extends Activity {
 	IInAppBillingService mService;
-	protected static final String SKU_ONE_DOLLAR = "";
-	protected static final String SKU_TWO_DOLLARS = "";
-	protected static final String SKU_FIVE_DOLLARS = "";
+	protected static final String SKU_ONE_DOLLAR = "onedollar";
+	// protected static final String SKU_ONE_DOLLAR = "android.test.purchased";	
+	protected static final String SKU_TWO_DOLLARS = "twodollars";
+	protected static final String SKU_FIVE_DOLLARS = "fivedollars";
 	private static final String PAYLOAD_STRING = "1234567890qwertyuiop+_)(*&^%$#@!";
 	private static final int REQUEST_CODE = 32145;
 
@@ -53,16 +55,19 @@ public class BaseIabActivity extends Activity {
 				mServiceConn, Context.BIND_AUTO_CREATE);
 	}
 
-	protected void purchaseAnProduct(String sku) {
+	protected void purchaseProduct(String sku) {
 		try {
 			Bundle buyIntentBundle = mService.getBuyIntent(3, getPackageName(),
 					sku, "inapp", PAYLOAD_STRING);
-			if (buyIntentBundle.getInt("RESPONSE_CODE") == 0) { // TODO: implement else condition
+			int responseCode = buyIntentBundle.getInt("RESPONSE_CODE");
+			if (responseCode == 0) { // TODO: implement else condition
 				PendingIntent purchaseIntent = buyIntentBundle
 						.getParcelable("BUY_INTENT");
 				startIntentSenderForResult(purchaseIntent.getIntentSender(),
 						REQUEST_CODE, new Intent(), Integer.valueOf(0),
 						Integer.valueOf(0), Integer.valueOf(0));
+			} else {
+				Log.d("IAB", responseCode + "");
 			}
 		} catch (RemoteException | SendIntentException e) {
 			// TODO Auto-generated catch block
