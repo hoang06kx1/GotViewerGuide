@@ -13,6 +13,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.content.ServiceConnection;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -24,10 +25,10 @@ import com.android.vending.billing.IInAppBillingService;
 
 public class BaseIabActivity extends Activity {
 	IInAppBillingService mService;
-	protected static final String SKU_ONE_DOLLAR = "onedollar";
+	public static final String SKU_ONE_DOLLAR = "onedollar";
 	// protected static final String SKU_ONE_DOLLAR = "android.test.purchased";	
-	protected static final String SKU_TWO_DOLLARS = "twodollars";
-	protected static final String SKU_FIVE_DOLLARS = "fivedollars";
+	public static final String SKU_TWO_DOLLARS = "twodollars";
+	public static final String SKU_FIVE_DOLLARS = "fivedollars";
 	private static final String PAYLOAD_STRING = "1234567890qwertyuiop+_)(*&^%$#@!";
 	private static final int REQUEST_CODE = 32145;
 
@@ -55,7 +56,7 @@ public class BaseIabActivity extends Activity {
 				mServiceConn, Context.BIND_AUTO_CREATE);
 	}
 
-	protected void purchaseProduct(String sku) {
+	public void purchaseProduct(String sku) {
 		try {
 			Bundle buyIntentBundle = mService.getBuyIntent(3, getPackageName(),
 					sku, "inapp", PAYLOAD_STRING);
@@ -74,7 +75,21 @@ public class BaseIabActivity extends Activity {
 			e.printStackTrace();
 		}
 	}
-
+	
+	protected int consumeProduct(String token) {
+		if (token != null && !token.equals("")) {			 
+			try {
+				return mService.consumePurchase(3, getPackageName(), token);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return -1;
+			}	            
+		}
+		return -1;
+	}
+	
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -86,6 +101,7 @@ public class BaseIabActivity extends Activity {
 				try {
 					JSONObject jo = new JSONObject(purchaseData);
 					String sku = jo.getString("productId");
+					String token = jo.getString("purchaseToken");
 					String donationMessage = "";
 					if (sku.contains(SKU_ONE_DOLLAR)) {
 						donationMessage = getResources().getString(R.string.one_dollar_message);
@@ -94,7 +110,7 @@ public class BaseIabActivity extends Activity {
 					} else if (sku.contains(SKU_FIVE_DOLLARS)) {
 						donationMessage = getResources().getString(R.string.five_dollars_message);
 					}
-					Alert.AlertMessage(this, getResources().getString(R.string.donation_title), donationMessage, ";)", new DialogInterface.OnClickListener() {
+					Alert.AlertMessage(this, getResources().getString(R.string.donation_title), donationMessage, "Continue...", new DialogInterface.OnClickListener() {
 						
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
@@ -102,6 +118,8 @@ public class BaseIabActivity extends Activity {
 						}
 					});
 					// TODO: implement Notification here
+					// Consume purchase 
+					new consumeProductAsync().execute(token);
 				} catch (JSONException e) {
 					// TODO: notify about failed purchase
 					e.printStackTrace();
@@ -118,5 +136,21 @@ public class BaseIabActivity extends Activity {
 			unbindService(mServiceConn);
 		}
 	}
+	
+	public class consumeProductAsync extends AsyncTask<String, Void, Integer> {
 
+		@Override
+		protected Integer doInBackground(String... params) {			
+			return Integer.valueOf(consumeProduct(params[0]));
+		}
+		
+		@Override
+		protected void onPostExecute(Integer result) {
+			if (result == -1) {
+				Log.d("IAB", "Consume purchase failed");
+			} else {
+				Log.d("IAB", "Consume purchase status:" + result);
+			}
+		}
+	}
 }

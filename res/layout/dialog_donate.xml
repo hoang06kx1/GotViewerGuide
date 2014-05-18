@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:minWidth="300dp"    
+    android:layout_height="wrap_content"
+    android:layout_gravity="center" 
+    android:maxWidth="420dp"
+    android:gravity="center_horizontal"
+    android:background="@color/donate_dialog_background"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:text="Buy us a beer"
+            android:textColor="@android:color/black"
+            android:textSize="21sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="What is your fav kind of beer?"
+			android:textColor="@color/divider_dialog_main"                        
+            android:textSize="15sp" />
+
+        <View
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_dialog" />
+
+        <Button
+            android:gravity="left|center_vertical"
+            android:id="@+id/one_dollar_button"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:drawableLeft="@drawable/ic_popup_beer1"
+            android:text="$1 - Cheers!"
+            android:textSize="18sp"
+            android:textColor="#96aa39" 
+            android:background="@drawable/donate_button_bg"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_dialog" />
+
+        <Button
+            android:gravity="left|center_vertical"
+            android:id="@+id/two_dollars_button"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:drawableLeft="@drawable/ic_popup_beer1"
+            android:text="$2 - We&apos;re very happy!"
+            android:textColor="#96aa39"
+            android:textSize="18sp"
+            android:background="@drawable/donate_button_bg" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_dialog" />
+
+        <Button
+            android:gravity="left|center_vertical"
+            android:id="@+id/five_dollars_button"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:drawableLeft="@drawable/ic_popup_beer1"
+            android:text="$5 - We&apos;ll write you a love letter!"
+            android:textColor="#96aa39"
+            android:textSize="18sp"
+            android:background="@drawable/donate_button_bg" 
+            />
+    </LinearLayout>
+
+</LinearLayout>

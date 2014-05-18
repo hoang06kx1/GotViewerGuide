@@ -6,4 +6,9 @@
     <color name="list_group_background">#58585a</color>
     <color name="divider">#6e6e6e</color>
     <color name="item_selected">#5490cc</color>
+    <color name="divider_dialog">#d0d0d0</color>
+    <color name="divider_dialog_main">#8d8d8d</color>
+    <color name="donate_dialog_background">#f5f5f5</color>
+    <color name="donate_button_pressed">#b2cb39</color>
+    
 </resources>

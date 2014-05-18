@@ -35,7 +35,7 @@ public class CustomDialog extends Dialog {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.error_dialog);
+		setContentView(R.layout.dialog_error);
 		mImageView = (ImageView) findViewById(R.id.background_image);
 		mImageView.setImageResource(mDrawableId);		
 		mTextView = (TextView) findViewById(R.id.textview);

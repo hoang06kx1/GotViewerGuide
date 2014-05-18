@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 import android.app.ActionBar;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -33,6 +34,7 @@ import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.ImageView;
 import co.k2lab.gotguide.controls.CustomDialog;
+import co.k2lab.gotguide.controls.DonateDialog;
 import co.k2lab.gotguide.controls.VideoEnabledWebChromeClient;
 import co.k2lab.gotguide.controls.VideoEnabledWebView;
 import co.k2lab.gotguide.model.Episode;
@@ -526,7 +528,8 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			feedbackToDev();
 			return true;
 		} else if (groupPosition == mNavigationAdapter.getGroupCount() - 1) {
-			purchaseProduct(BaseIabActivity.SKU_ONE_DOLLAR);
+			Dialog donateDialog = new DonateDialog(MainActivity.this, true, null, MainActivity.this);
+			donateDialog.show();
 			return true;
 		}
 		return false;
