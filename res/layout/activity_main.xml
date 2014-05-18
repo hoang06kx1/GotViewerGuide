@@ -11,32 +11,44 @@
         android:layout_height="match_parent"
         tools:context="co.k2lab.gotguide.MainActivity"
         tools:ignore="MergeRootFrame">
-
-        <WebView
+        
+        <!-- splash screen, only shown first time app loads -->
+        <co.k2lab.gotguide.controls.FitWidthImage
+            android:id="@+id/main_splash"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/splash"
+            android:visibility="visible" />
+        
+        <!-- wiew that will be shown while the fullscreen video loads -->
+        <!-- (TODO maybe include a spinner and a "Loading..." message) -->
+        <FrameLayout
+	        android:id="@+id/video_container"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:visibility="gone"/>
+		
+        <!-- main webview -->
+        <co.k2lab.gotguide.controls.VideoEnabledWebView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/main_webview"
             />
-    
+        
+        <!-- view for progress bar, only shown when page is loading via loadUrl() -->
+        <View
+            android:id="@+id/progress_bar"
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:background="#5bc8ff" />
+        
+        <!-- error webview, only shown when there is something wrong with main webview -->
         <WebView
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:id="@+id/error_webview"
              android:visibility="invisible"
             />
-
-        <View
-            android:id="@+id/progress_bar"
-            android:layout_width="0dp"
-            android:layout_height="3dp"
-            android:background="#5bc8ff" />
-
-        <co.k2lab.gotguide.utils.FitWidthImage
-            android:id="@+id/main_splash"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/splash"
-            android:visibility="visible" />
     </FrameLayout>
 
     <ExpandableListView

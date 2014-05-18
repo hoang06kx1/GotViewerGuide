@@ -6,7 +6,6 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -19,8 +18,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -30,40 +31,42 @@ import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.ImageView;
+import co.k2lab.gotguide.controls.CustomDialog;
+import co.k2lab.gotguide.controls.VideoEnabledWebChromeClient;
+import co.k2lab.gotguide.controls.VideoEnabledWebView;
 import co.k2lab.gotguide.model.Episode;
 import co.k2lab.gotguide.model.Season;
 import co.k2lab.gotguide.utils.Callback;
-import co.k2lab.gotguide.utils.CustomDialog;
 import co.k2lab.gotguide.utils.Utils;
 
 public class MainActivity extends BaseIabActivity implements OnChildClickListener, OnGroupClickListener{
 	// controls
-	private WebView mWebView, mErrorWebview;
+	private VideoEnabledWebView mWebView;
+	private VideoEnabledWebChromeClient mWebChromeClient;
+	private WebView mErrorWebview;
 	private ImageView mSplashImage;
-
 	private ActionBar mActionBar;
 	private View mProgressView;
 	private LayoutParams mProgressBarLayoutParams;
-
-	private ArrayList<Season> mSeasons;
 	private NavigationAdapter mNavigationAdapter;
 	private DrawerLayout mDrawerLayout;
 	
 	// const
 	private static final long SPLASH_TIME = 7000;
-	
 	private static final String URL = "http://viewers-guide.hbo.com/";
-
 	private static final String FAILED_URL = "file:///android_asset/error/error-screen.html";
 	private static final String FIRST_TIME_KEY = "first_time";
 	private static final String JS_TOGGLE_MENU = "javascript:$('body').toggleClass('side-nav-opened');Chaplin.mediator.publish('nav:closeEpisodeSelector');Chaplin.mediator.publish('app:hidenav');void 0";
 	public  static final String JS_REMOVE_NAV_BAR = "javascript:if(typeof removeNavBar!='function'){function removeNavBar(){var e=10;var t=document.querySelector('.global-nav');if(t){if(!t.style.display){t.style.display='none';document.querySelector('.page-container>div:first-child').style.marginTop=0;document.querySelector('.close-icon.sprites-close').style.display='none'}}else if(e--)setTimeout(removeNavBar,1e3)}}removeNavBar();void 0";
 	private static final String JS_ADD_URL_CHANGE_LISTENER = "javascript:if(typeof removeNavBar!='function'){var removeNavBar=function(){var e=10;var t=document.querySelector('.global-nav');if(t){if(!t.style.display){t.style.display='none';document.querySelector('.page-container>div:first-child').style.marginTop=0;document.querySelector('.close-icon.sprites-close').style.display='none'}}else if(e--){setTimeout(removeNavBar,1e3)}}}if(typeof removePaddingMap!='function'){var removePaddingMap=function(){var e=10;var t=document.querySelector('.page-container>div:first-child');if(t){if(t.style.top){t.style.top=0;$('#map').height($(window).height())}}else if(e--)setTimeout(removePaddingMap,1e3)}}var lastLocation;if(typeof checkUrl!='function'){var checkUrl=function(){if(window.location.href!=lastLocation){lastLocation=window.location.href;removeNavBar();if(lastLocation.indexOf('/map')>-1)removePaddingMap()}}}window.setInterval(checkUrl,1e3);void 0";
+	
 	// flags
 	private static final int _firstTimeCount = 5;
 	private boolean _triggerHint = false;
-	private long _startTime = 0;
 	private ExpandableListView mExpandableListView;
+	
+	// data
+	private ArrayList<Season> mSeasons;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +77,6 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			initActionBar();
 			initControlViews();
 			checkFirstTime();
-			_startTime = System.currentTimeMillis();
 			mWebView.loadUrl(URL);
 			// remove splash after xx seconds
 			mSplashImage.postDelayed(new Runnable() {
@@ -285,42 +287,96 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	}
 	
 	private void initControlViews() {
+		// misc
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mSplashImage = (ImageView) findViewById(R.id.main_splash);
 		mProgressView = (View) findViewById(R.id.progress_bar);
 		mProgressBarLayoutParams = mProgressView.getLayoutParams();
 		mErrorWebview = (WebView) findViewById(R.id.error_webview);
 		
-		mWebView = (WebView) findViewById(R.id.main_webview);
-		
-		// nonsense flags for a better performance I hope
-		//mWebView.getSettings().setRenderPriority(RenderPriority.HIGH);
-		//mWebView.getSettings().setPluginState(android.webkit.WebSettings.PluginState.ON_DEMAND);
-		
+		// webview
+		mWebView = (VideoEnabledWebView) findViewById(R.id.main_webview);
 		mWebView.getSettings().setJavaScriptEnabled(true);
+		
+		// this is for playing video fullscreen on webview
+		//View nonVideoLayout = findViewById(R.id.main_webview);
+		ViewGroup videoLayout = (ViewGroup) findViewById(R.id.video_container);
+	    //View loadingView = findViewById(R.id.video_loading);
+		
+		mWebChromeClient = new VideoEnabledWebChromeClient(mWebView, videoLayout, null, mWebView) {
+			@Override
+			public void onReceivedTitle(WebView view, String title) {
+				super.onReceivedTitle(view, title);
+				
+				if (title.contains("error") || 
+						title.contains("404") || 
+						title.contains("not found") || 
+						title.contains("not available")) {
+					mProgressView.setVisibility(View.GONE);
+					view.stopLoading();
+					if (mErrorWebview.getVisibility() == View.GONE) {
+						mErrorWebview.setVisibility(View.VISIBLE);
+						mErrorWebview.loadUrl(FAILED_URL);
+						Log.e("webview error", "based on its title: " + title);
+					}
+				}
+			}
+			
+			public void onProgressChanged(WebView view, int progress) {
+				setProgressBarPercent(progress);
+			}
+		};
+		
+		mWebChromeClient.setOnToggledFullscreen(new VideoEnabledWebChromeClient.ToggledFullscreenCallback() {
+	        @Override
+	        public void toggledFullscreen(boolean fullscreen) {
+	            // Your code to handle the full-screen change, for example showing and hiding the title bar. Example:
+	            if (fullscreen) {
+	                WindowManager.LayoutParams attrs = getWindow().getAttributes();
+	                attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+	                attrs.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+	                getWindow().setAttributes(attrs);
+	                if (android.os.Build.VERSION.SDK_INT >= 14) {
+	                    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+	                }
+	            }
+	            else {
+	                WindowManager.LayoutParams attrs = getWindow().getAttributes();
+	                attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
+	                attrs.flags &= ~WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+	                getWindow().setAttributes(attrs);
+	                if (android.os.Build.VERSION.SDK_INT >= 14) {
+	                    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+	                }
+	            }
+	        }
+	    });
+		
+		mWebView.setWebChromeClient(mWebChromeClient);
+		
 		mWebView.setWebViewClient(new WebViewClient() {
 			@Override
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
 				super.onPageStarted(view, url, favicon);
 				
-				Log.d("webview started url", url);
+				//Log.d("webview started url", url);
 				
 				setProgressBarPercent(0);
 				mProgressView.setVisibility(View.VISIBLE);
 				if (mErrorWebview.getVisibility() == View.VISIBLE) {
-					mErrorWebview.setVisibility(View.INVISIBLE);
+					mErrorWebview.setVisibility(View.GONE);
 					mErrorWebview.loadUrl("about:blank");
 				}
 			}
 
 			@Override
 			public void onPageFinished(WebView view, String url) {
-				mProgressView.setVisibility(View.INVISIBLE);
+				mProgressView.setVisibility(View.GONE);
 				
-				Log.d("webview finished url", url);
+				//Log.d("webview finished url", url);
 				
 				if (url.startsWith(URL)) {
-					Log.d("webview", "trying to remove nav bar");
+					//Log.d("webview", "trying to remove nav bar");
 					//view.loadUrl(JS_REMOVE_NAV_BAR);  // enable this for a little faster trigger, but we choose
 														// to disable it for slightly better performance
 					view.loadUrl(JS_ADD_URL_CHANGE_LISTENER); // the real deal
@@ -330,38 +386,18 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			@Override
 			public void onReceivedError(WebView view, int errorCode,
 					String description, String failingUrl) {
-				mProgressView.setVisibility(View.INVISIBLE);
+				mProgressView.setVisibility(View.GONE);
 				view.stopLoading();
-				if (mErrorWebview.getVisibility() == View.INVISIBLE) {
+				if (mErrorWebview.getVisibility() == View.GONE) {
 					mErrorWebview.setVisibility(View.VISIBLE);
 					mErrorWebview.loadUrl(FAILED_URL);
+					Log.e("webview error", "url: " + failingUrl + "\nerror: " + description);
 				}
-			}
-		});
-
-		mWebView.setWebChromeClient(new WebChromeClient() {		
-			@Override
-			public void onReceivedTitle(WebView view, String title) {
-				super.onReceivedTitle(view, title);
-				Log.d("webview title", title);
-				if (title.contains("error") || 
-						title.contains("404") || 
-						title.contains("not found") || 
-						title.contains("not available")) {
-					mProgressView.setVisibility(View.INVISIBLE);
-					view.stopLoading();
-					if (mErrorWebview.getVisibility() == View.INVISIBLE) {
-						mErrorWebview.setVisibility(View.VISIBLE);
-						mErrorWebview.loadUrl(FAILED_URL);
-					}
-				}
-			}
-			
-			public void onProgressChanged(WebView view, int progress) {
-				setProgressBarPercent(progress);
 			}
 		});
 		
+		
+		// data
 		mSeasons = initSeasonData();
 		mExpandableListView = (ExpandableListView)findViewById(R.id.right_drawer);
 		mNavigationAdapter = new NavigationAdapter(this, mSeasons);		
@@ -392,10 +428,19 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 
 	@Override
 	public void onBackPressed() {
+		// go back fromm fullscreen video, if any
+	    if (!mWebChromeClient.onBackPressed() && mWebView.canGoBack()) {
+	        mWebView.goBack();
+	        return;
+	    }
+	    
+	    // go back in webview
 		if (mWebView.canGoBack()) {
 			mWebView.goBack();
 			return;
 		}
+		
+		// exit app (presumably)
 		super.onBackPressed();
 	}
 
