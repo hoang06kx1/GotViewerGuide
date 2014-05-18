@@ -1,4 +1,4 @@
-package co.k2lab.gotguide.utils;
+package co.k2lab.gotguide.controls;
 
 import android.content.Context;
 import android.util.AttributeSet;

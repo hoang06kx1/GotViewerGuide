@@ -1,4 +1,4 @@
-package co.k2lab.gotguide.utils;
+package co.k2lab.gotguide.controls;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import co.k2lab.gotguide.R;
+import co.k2lab.gotguide.utils.Callback;
+import co.k2lab.gotguide.utils.Callback.AlertCallback;
 
 public class CustomDialog extends Dialog {
 	private TextView mTextView;
