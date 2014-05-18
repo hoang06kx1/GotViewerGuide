@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="co.k2lab.gotguide.MainActivity"
-        tools:ignore="MergeRootFrame">
+        tools:ignore="MergeRootFrame"
+        android:background="#000000">
         
         <!-- wiew that will be shown while the fullscreen video loads -->
         <!-- (TODO maybe include a spinner and a "Loading..." message) -->

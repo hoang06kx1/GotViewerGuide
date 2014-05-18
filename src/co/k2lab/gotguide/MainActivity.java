@@ -332,25 +332,13 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			public void onProgressChanged(WebView view, int progress) {
 				setProgressBarPercent(progress);
 			}
-			
-			@Override
-			public void onShowCustomView(View view, CustomViewCallback callback) {
-				mActionBar.hide();
-				super.onShowCustomView(view, callback);
-			}
-			
-			@Override
-			public void onHideCustomView() {
-				mActionBar.show();
-				super.onHideCustomView();
-			}
 		};
 		
 		mWebChromeClient.setOnToggledFullscreen(new VideoEnabledWebChromeClient.ToggledFullscreenCallback() {
 	        @Override
 	        public void toggledFullscreen(boolean fullscreen) {
-	            // Your code to handle the full-screen change, for example showing and hiding the title bar. Example:
 	            if (fullscreen) {
+	            	mActionBar.hide();
 	                WindowManager.LayoutParams attrs = getWindow().getAttributes();
 	                attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
 	                attrs.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
@@ -360,6 +348,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	                }
 	            }
 	            else {
+	            	mActionBar.show();
 	                WindowManager.LayoutParams attrs = getWindow().getAttributes();
 	                attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
 	                attrs.flags &= ~WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
