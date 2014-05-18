@@ -8,6 +8,7 @@ import java.util.TimeZone;
 import android.app.ActionBar;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
@@ -25,6 +26,7 @@ import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.webkit.WebChromeClient.CustomViewCallback;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
@@ -153,8 +155,12 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	}
 
 	private void hideSplash() {
+		// remove splash
 		mSplashImage.setVisibility(View.GONE);
+		((BitmapDrawable) mSplashImage.getDrawable()).getBitmap().recycle();
+		mDrawerLayout.removeView(mSplashImage);
 		mSplashImage = null;
+		
 		if (_triggerHint) {
 			mWebView.postDelayed(new Runnable() {
 
@@ -324,6 +330,18 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			
 			public void onProgressChanged(WebView view, int progress) {
 				setProgressBarPercent(progress);
+			}
+			
+			@Override
+			public void onShowCustomView(View view, CustomViewCallback callback) {
+				mActionBar.hide();
+				super.onShowCustomView(view, callback);
+			}
+			
+			@Override
+			public void onHideCustomView() {
+				mActionBar.show();
+				super.onHideCustomView();
 			}
 		};
 		
