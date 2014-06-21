@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
             android:textStyle="normal"
-            android:text="Buy us a beer"
+            android:text="@string/donate_title"
             android:textColor="#333333"
             android:textSize="21sp"
             />
@@ -27,7 +27,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="What is your fav kind of beer?"
+            android:text="@string/donate_subtitle"
 			android:textColor="@color/divider_dialog_main"                        
             android:textSize="14sp" />
 
@@ -44,7 +44,7 @@
             android:layout_height="48dp"
             android:drawablePadding="4dp"
             android:drawableLeft="@drawable/ic_popup_beer1"
-            android:text="$1 • Cheers!"
+            android:text="@string/donate_one"
             android:textSize="16sp"
             android:textColor="@drawable/donate_dialog_color"
             android:background="@android:color/transparent" />
@@ -61,7 +61,7 @@
             android:layout_height="48dp"
             android:drawablePadding="4dp"
             android:drawableLeft="@drawable/ic_popup_beer2"
-            android:text="$2 • We&apos;re very happy!"
+            android:text="@string/donate_two"
 			android:textColor="@drawable/donate_dialog_color" 
             android:textSize="16sp"
             android:background="@android:color/transparent" />
@@ -78,7 +78,7 @@
             android:layout_height="48dp"
             android:drawablePadding="4dp"
             android:drawableLeft="@drawable/ic_popup_beer5"
-            android:text="$5 • We&apos;ll write you a love letter!"
+            android:text="@string/donate_five"
             android:textColor="@drawable/donate_dialog_color" 
             android:textSize="16sp"
             android:background="@android:color/transparent" />
