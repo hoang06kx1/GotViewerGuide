@@ -67,6 +67,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	private static final int _firstTimeCount = 5;
 	private boolean _triggerHint = false;
 	private ExpandableListView mExpandableListView;
+	boolean mWebviewLoadingFinished = false;
 	
 	// data
 	private ArrayList<Season> mSeasons;
@@ -367,21 +368,21 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
 				super.onPageStarted(view, url, favicon);
 				
-				//Log.d("webview started url", url);
-				
 				setProgressBarPercent(0);
 				mProgressView.setVisibility(View.VISIBLE);
 				if (mErrorWebview.getVisibility() == View.VISIBLE) {
 					mErrorWebview.setVisibility(View.GONE);
 					mErrorWebview.loadUrl("about:blank");
 				}
+				
+				mWebviewLoadingFinished = false;
 			}
 
 			@Override
 			public void onPageFinished(WebView view, String url) {
-				mProgressView.setVisibility(View.GONE);
+				super.onPageFinished(view, url);
 				
-				//Log.d("webview finished url", url);
+				mProgressView.setVisibility(View.GONE);
 				
 				if (url.startsWith(URL)) {
 					//Log.d("webview", "trying to remove nav bar");
@@ -389,6 +390,8 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 														// to disable it for slightly better performance
 					view.loadUrl(JS_ADD_URL_CHANGE_LISTENER); // the real deal
 				}
+				
+				mWebviewLoadingFinished = true;	
 			}
 
 			@Override
@@ -400,6 +403,21 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 					mErrorWebview.setVisibility(View.VISIBLE);
 					mErrorWebview.loadUrl(FAILED_URL);
 					Log.e("webview error", "url: " + failingUrl + "\nerror: " + description);
+				}
+
+				mWebviewLoadingFinished = false;
+			}
+
+			@Override
+			public boolean shouldOverrideUrlLoading(WebView view, String url) {
+				if (url.startsWith(URL)) {
+					// viewer's guide page, open with our webview
+					return false;
+				} else {
+					// not our page, launch another Activity that handles the URL
+			        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+			        startActivity(intent);
+			        return true;
 				}
 			}
 		});
@@ -525,12 +543,30 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	}
 	
 	private void feedbackToDev() {
+		/* send an email to k2lab */
+		/*
 		Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
 				"mailto", "feedback@k2lab.co", null));
 		intent.putExtra(Intent.EXTRA_EMAIL, "feedback@k2lab.co");
 		intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback on GOT Viewer's Guide");
 		intent.putExtra(Intent.EXTRA_TEXT, "Hi K2 Lab,");
 		startActivity(Intent.createChooser(intent, "Send Email"));
+		*/
+		
+		/* redirect user to play store review page */ 
+		Uri uri = Uri.parse("market://details?id=" + getPackageName());
+		Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+		goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+		try {
+			startActivity(goToMarket);
+		} catch (Exception e) {
+			// if Play Store is not installed, open web link
+			startActivity(new Intent(Intent.ACTION_VIEW, 
+					Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+		}
 	}
-
+	
+	public boolean getIsSettingsReady() {
+		return mWebviewLoadingFinished;
+	}
 }
