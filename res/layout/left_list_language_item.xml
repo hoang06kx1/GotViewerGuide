@@ -16,13 +16,6 @@
         android:textColor="@android:color/white" 
         android:checked="true"
         android:enabled="false"/>
-    <!-- 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        />
-     -->
      
     <RadioButton 
         android:layout_marginLeft="16dp"
