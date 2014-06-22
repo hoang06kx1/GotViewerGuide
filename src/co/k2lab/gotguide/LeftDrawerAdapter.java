@@ -1,7 +1,6 @@
 package co.k2lab.gotguide;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,29 +10,17 @@ import android.widget.TextView;
 
 public class LeftDrawerAdapter extends BaseExpandableListAdapter {
 	
-	private static final int GROUP_COUNT = 8;
-	private static final int[] CHILD_COUNT = { 0, 0, 0, 0, 0, 2, 4, 5 };
-	private Context context;
-	// private Boolean[] isExpanded =
-	// {false,false,false,false,false,false,false,false};
-	private int mCurrentGroupSelected = -1, mCurrentChildSelected = -1;
+	private static final int GROUP_COUNT = 4;
+	private static final int[] CHILD_COUNT = {5, 2, 4, 5 };
+	private static final int[] GROUP_STRINGS_ID = {R.string.in_this_episode, R.string.settings, R.string.HBO, R.string.social};
+	private static final int[] CHILD_ICON_ID = {R.drawable.drawer_home, R.drawable.drawer_map, R.drawable.drawer_houses, R.drawable.drawer_people, R.drawable.drawer_appendix}; 
+	private static final int[] CHILD_STRING_ID = {R.string.home, R.string.map, R.string.houses, R.string.people, R.string.appendix, R.string.language, R.string.spoiler_alerts};
+	private static final String[] CHILD_STRINGS = {"HBO.com", "HBO GO", "HBO Connect", "HBO Store", "Facebook", "Tumblr", "Twitter", "Youtube", "Instagram"};
+	
+	private MainActivity mMainActivity;
 
-	public LeftDrawerAdapter(Context context) {
-		this.context = context;
-	}
-
-	/*
-	 * @Override public void onGroupExpanded(int groupPosition) {
-	 * isExpanded[groupPosition] = true; super.onGroupExpanded(groupPosition); }
-	 * 
-	 * @Override public void onGroupCollapsed(int groupPosition) {
-	 * isExpanded[groupPosition] = false; super.onGroupCollapsed(groupPosition);
-	 * }
-	 */
-
-	public void setCurrentSelected(int group, int child) {
-		mCurrentGroupSelected = group;
-		mCurrentChildSelected = child;
+	public LeftDrawerAdapter(MainActivity activity) {
+		this.mMainActivity = activity;
 	}
 
 	@Override
@@ -64,49 +51,60 @@ public class LeftDrawerAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
-		LayoutInflater inflater = (LayoutInflater) this.context
+		LayoutInflater inflater = (LayoutInflater) this.mMainActivity
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		convertView = inflater.inflate(R.layout.left_list_group, null);
-
-		ListGroupItem item = new ListGroupItem(this.context, groupPosition);
 		((TextView) convertView.findViewById(R.id.group_textview))
-				.setText(item.title);
-
-		if (groupPosition <= GROUP_COUNT - 4) { // Groups with no child
-			convertView.findViewById(R.id.group_icon).setVisibility(View.VISIBLE);
-			((ImageView) convertView.findViewById(R.id.group_icon))
-					.setImageDrawable(item.iconDrawable);
-		} else {
-			((View) convertView.findViewById(R.id.group_seperator)).setVisibility(View.VISIBLE);
-			ImageView indicator = ((ImageView) convertView
-					.findViewById(R.id.group_indicator));
+				.setText(mMainActivity.getResources().getString(GROUP_STRINGS_ID[groupPosition]));		
+		// hide settings if not ready 
+		/*
+		if (groupPosition == 1 && !mMainActivity.isSettingsReady() && convertView != null) {
+			View view = new View(mMainActivity);
+			view.setLayoutParams(new LinearLayout.LayoutParams(0,0));
+			return view;
+		}				
+		*/
+		if (groupPosition > 0) {
+			ImageView indicator = ((ImageView) convertView.findViewById(R.id.group_indicator));
 			indicator.setVisibility(View.VISIBLE);
 			if (isExpanded) {
-				indicator.setImageResource(R.drawable.ic_action_collapse);
+				indicator.setImageResource(R.drawable.drawer_top_arrow);
 			} else {
-				indicator.setImageResource(R.drawable.ic_action_expand);
+				indicator.setImageResource(R.drawable.drawer_bottom_arrow);
 			}
 		}
+		
 		return convertView;
 	}
 
 	@Override
 	public View getChildView(int groupPosition, int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {		
-			LayoutInflater inflater = (LayoutInflater) this.context
+			LayoutInflater inflater = (LayoutInflater) this.mMainActivity
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			
-			if (groupPosition == 5) {// settings group
-				if (childPosition == 0) {
-					convertView = inflater.inflate(R.layout.left_list_language_item, null);	
-				} else {
-					convertView = inflater.inflate(R.layout.left_list_spoiler_item, null);
-				}
-			} else { // other groups
-				ListChildItem childItem = new ListChildItem(context, groupPosition, childPosition);
+			if (groupPosition == 0) {
 				convertView = inflater.inflate(R.layout.left_list_item, null);
-				TextView tv = (TextView) convertView.findViewById(R.id.item_textview);
-				tv.setText(childItem.title);
+				ImageView icon = (ImageView) convertView.findViewById(R.id.child_icon);
+				icon.setVisibility(View.VISIBLE);
+				icon.setImageResource(CHILD_ICON_ID[childPosition]);
+				((TextView)convertView.findViewById(R.id.child_textview)).setText(mMainActivity.getResources().getString(CHILD_STRING_ID[childPosition]));
+			
+			} else if (groupPosition == 1) {// settings group
+				convertView  = inflater.inflate(R.layout.left_list_settings_item, null);
+				((TextView)convertView.findViewById(R.id.textview)).setText(mMainActivity.getResources().getString(R.string.language));
+				((TextView)convertView.findViewById(R.id.textview_change)).setText(mMainActivity.getResources().getString(R.string.change));
+				
+			} else if (groupPosition > 1) { // HBO & SOCIAL 
+				convertView = inflater.inflate(R.layout.left_list_item, null);
+				if (groupPosition == 2) {
+					((TextView)convertView.findViewById(R.id.child_textview)).setText(CHILD_STRINGS[childPosition]);
+			
+				} else {
+					((TextView)convertView.findViewById(R.id.child_textview)).setText(CHILD_STRINGS[childPosition+4]);
+				}
+				
+				convertView.findViewById(R.id.child_link_icon).setVisibility(View.VISIBLE);
 			}
 		return convertView;
 	}
@@ -128,103 +126,5 @@ public class LeftDrawerAdapter extends BaseExpandableListAdapter {
 		return null;
 	}
 	
-	class ListGroupItem {
-		public int titleId = -1;
-		public int iconId = -1;
-		public String title = "";
-		public Drawable iconDrawable;
-		
-		public ListGroupItem(Context context, int groupPosition) {
-			switch (groupPosition) {
-			case 0:
-				titleId = R.string.home;
-				iconId = R.drawable.drawer_home;
-				break;
-			case 1:
-				titleId = R.string.map;
-				iconId = R.drawable.drawer_map;
-				break;
-			case 2:
-				titleId = R.string.houses;
-				iconId = R.drawable.drawer_houses;
-				break;
-			case 3:
-				titleId = R.string.people;
-				iconId = R.drawable.drawer_people;
-				break;
-			case 4:
-				titleId = R.string.appendix;
-				iconId = R.drawable.drawer_appendix;
-				break;
-			case 5:
-				titleId = R.string.settings;
-				break;
-			case 6:
-				titleId = R.string.HBO;
-				break;
-			case 7:
-				titleId = R.string.social;
-				break;
-			default:
-				break;
-			}
-
-			title = context.getResources().getString(titleId);
-			if (iconId != -1) { 
-				iconDrawable =	context.getResources().getDrawable(iconId);
-			}
-		}
-	}
-	
-	class ListChildItem {
-		private String title = "";
-		private String link = "";
-		public ListChildItem(Context context, int groupPosition, int childPosition) {
-			if (groupPosition == 6) { // HBO section
-				switch (childPosition) {
-				case 0:
-					title = "HBO.com";
-					link = "";
-					break;
-				case 1:
-					title = "HBO GO";
-					link = "";
-					break;
-				case 2:
-					title = "HBO Connect";
-					link = "";
-					break;
-				case 3:
-					title = "HBO Store";
-					link = "";
-					break;
-				default:
-					break;
-				}			
-			} else if (groupPosition == 7) { // SOCIAL section
-				switch (childPosition) {
-				case 0:
-					title = "Facebook";
-					link = "";
-					break;
-				case 1:
-					title = "Tumblr";
-					link = "";
-					break;
-				case 2:
-					title = "Twitter";
-					link = "";
-					break;
-				case 3:
-					title = "Youtube";
-					link = "";
-					break;
-				case 4:
-					title = "Instagram";
-					link = "";
-				}
-			}
-		}
-	}
 }
 

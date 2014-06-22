@@ -9,28 +9,20 @@
     android:paddingLeft="25dp"
     android:paddingRight="14dp" >
 
-    <ImageView
-        android:id="@+id/child_icon"
-        android:layout_width="14dp"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="16dp"
-        android:src="@drawable/drawer_appendix" 
-        android:visibility="gone"/>
-
     <TextView
-        android:id="@+id/child_textview"
+        android:id="@+id/textview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Appendix"
         android:textColor="@color/light_white"
         android:textSize="15dp" />
 
-    <ImageView
-        android:id="@+id/child_link_icon"
+    <TextView
+        android:id="@+id/textview_change"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/drawer_link" 
-        android:visibility="gone"/>
+        android:textColor="@color/white"
+        android:textSize="12dp"
+        android:textStyle="bold" />
 
 </LinearLayout>

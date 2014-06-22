@@ -17,6 +17,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -132,7 +133,10 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 		actionBarHomeArea.findViewById(R.id.action_bar_home_area).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-					toggleLeftDrawer();
+					if (mLeftDrawerAdapter != null && mDrawerLayout != null && !mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
+						mLeftDrawerAdapter.notifyDataSetChanged();
+					}
+					toggleLeftDrawer();					
 					// mWebView.loadUrl(JS_TOGGLE_MENU);
 				}			
 		});
@@ -457,15 +461,29 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 		mLeftExpandableListView.setAdapter(mLeftDrawerAdapter);
 		mLeftExpandableListView.setOnChildClickListener(this);
 		mLeftExpandableListView.setOnGroupClickListener(this);
-		mLeftExpandableListView.setOnGroupExpandListener(new OnGroupExpandListener() {
+		mDrawerLayout.setDrawerListener(new DrawerListener() {
 			
 			@Override
-			public void onGroupExpand(int groupPosition) {
-				if (isSettingsReady()) {
-					enableSettings(true);
-				} else {
-					enableSettings(false);
-				}
+			public void onDrawerStateChanged(int arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onDrawerSlide(View arg0, float arg1) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onDrawerOpened(View arg0) {				
+				
+			}
+			
+			@Override
+			public void onDrawerClosed(View arg0) {
+				// TODO Auto-generated method stub
+				
 			}
 		});
 	}
@@ -589,17 +607,10 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 				return true;
 			}
 			return false;
+			
 		} else { // left drawer clicked
-			if (groupPosition < 5) {
-				String urlString = TABS_URL[groupPosition];
-				mWebView.loadUrl(urlString);
-				mDrawerLayout.closeDrawers();
-				return true;
-			} else {
 				return false;
 			}
-			
-		}
 	}
 	
 	private void feedbackToDev() {		
@@ -626,6 +637,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 		}
 	}
 	
+	/*
 	private void enableSettings(Boolean enable) {
 		if (findViewById(R.id.radio_english) != null) 
 			findViewById(R.id.radio_english).setEnabled(enable);
@@ -634,8 +646,19 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 		if (findViewById(R.id.toogle_spoiler) != null)
 			findViewById(R.id.toogle_spoiler).setEnabled(enable);
 	}
+	*/
 	
-	private Boolean isSettingsReady() {
+	/*
+	private void syncSettingsControl() {
+		if (mWebviewLoadingFinished && mWebView != null && mWebView.getUrl().startsWith(URL)) {
+			enableSettings(true);
+		} else {
+			enableSettings(false);
+		}
+	}
+	*/
+	
+	public Boolean isSettingsReady() {
 		return mWebviewLoadingFinished && mWebView != null && mWebView.getUrl().startsWith(URL);
 	}
 	

@@ -56,7 +56,8 @@
         android:layout_width="@dimen/left_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="left"
-        android:background="@color/list_bg"
+        android:choiceMode="singleChoice"
+        android:background="@color/left_list_bg"
         android:childDivider="@color/list_divider"
         android:groupIndicator="@null"
     	/>
