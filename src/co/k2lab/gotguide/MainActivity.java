@@ -375,7 +375,6 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 				}
 				
 				mWebviewLoadingFinished = false;
-				enableSettings(false);
 			}
 
 			@Override
@@ -392,7 +391,6 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 				}
 				
 				mWebviewLoadingFinished = true;
-				enableSettings(true);
 			}
 
 			@Override
@@ -407,7 +405,6 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 				}
 
 				mWebviewLoadingFinished = false;
-				enableSettings(false);
 			}
 
 			@Override
@@ -459,6 +456,17 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 		mLeftExpandableListView.setAdapter(mLeftDrawerAdapter);
 		mLeftExpandableListView.setOnChildClickListener(this);
 		mLeftExpandableListView.setOnGroupClickListener(this);
+		mLeftExpandableListView.setOnGroupExpandListener(new OnGroupExpandListener() {
+			
+			@Override
+			public void onGroupExpand(int groupPosition) {
+				if (isSettingsReady()) {
+					enableSettings(true);
+				} else {
+					enableSettings(false);
+				}
+			}
+		});
 	}
 
 	@Override
@@ -626,7 +634,9 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			findViewById(R.id.toogle_spoiler).setEnabled(enable);
 	}
 	
-	
+	private Boolean isSettingsReady() {
+		return mWebviewLoadingFinished;
+	}
 	public void setLocate(String lang) {
 		Locale myLocale = new Locale(lang);
 		Resources res = getResources();
