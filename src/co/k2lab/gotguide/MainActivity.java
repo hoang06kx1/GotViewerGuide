@@ -134,6 +134,9 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			@Override
 			public void onClick(View v) {
 					if (mLeftDrawerAdapter != null && mDrawerLayout != null && !mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
+						if (mLeftExpandableListView != null && !isSettingsReady()) {
+							mLeftExpandableListView.collapseGroup(1); // collapse settings group. 
+						}
 						mLeftDrawerAdapter.notifyDataSetChanged();						
 					}
 					toggleLeftDrawer();					
