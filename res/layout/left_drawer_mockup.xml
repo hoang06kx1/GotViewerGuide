@@ -34,6 +34,8 @@
 	        android:paddingRight="14dp"
 	        android:gravity="center_vertical"
 	        android:orientation="horizontal"
+	        android:clickable="true"
+	        android:background="@drawable/left_list_item_bg"
 	        >
 	        <ImageView
 	            android:layout_width="14dp"
@@ -64,6 +66,8 @@
 	        android:paddingRight="14dp"
 	        android:gravity="center_vertical"
 	        android:orientation="horizontal"
+	        android:clickable="true"
+	        android:background="@drawable/left_list_item_bg"
 	        >
 	        <ImageView
 	            android:layout_width="14dp"
@@ -94,6 +98,8 @@
 	        android:paddingRight="14dp"
 	        android:gravity="center_vertical"
 	        android:orientation="horizontal"
+	        android:clickable="true"
+	        android:background="@drawable/left_list_item_bg"
 	        >
 	        <ImageView
 	            android:layout_width="14dp"
@@ -124,6 +130,8 @@
 	        android:paddingRight="14dp"
 	        android:gravity="center_vertical"
 	        android:orientation="horizontal"
+	        android:clickable="true"
+	        android:background="@drawable/left_list_item_bg"
 	        >
 	        <ImageView
 	            android:layout_width="14dp"
@@ -154,6 +162,8 @@
 	        android:paddingRight="14dp"
 	        android:gravity="center_vertical"
 	        android:orientation="horizontal"
+	        android:clickable="true"
+	        android:background="@drawable/left_list_item_bg"
 	        >
 	        <ImageView
 	            android:layout_width="14dp"
@@ -185,6 +195,7 @@
         android:background="@color/left_list_group"
         android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:clickable="true"
         >
         <TextView
             android:layout_width="0dp"
@@ -210,6 +221,8 @@
 	        android:paddingRight="14dp"
 	        android:gravity="center_vertical"
 	        android:orientation="horizontal"
+	        android:clickable="true"
+	        android:background="@drawable/left_list_item_bg"
 	        >
 	        <TextView
 	            android:layout_width="0dp"
@@ -237,6 +250,8 @@
 	        android:paddingRight="14dp"
 	        android:gravity="center_vertical"
 	        android:orientation="horizontal"
+	        android:clickable="true"
+	        android:background="@drawable/left_list_item_bg"
 	        >
 	        <TextView
 	            android:layout_width="0dp"
@@ -266,6 +281,7 @@
         android:background="@color/left_list_group"
         android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:clickable="true"
         >
         <TextView
             android:layout_width="0dp"
@@ -290,6 +306,8 @@
 	        android:paddingRight="14dp"
 	        android:gravity="center_vertical"
 	        android:orientation="horizontal"
+	        android:clickable="true"
+	        android:background="@drawable/left_list_item_bg"
 	        >
 	        <TextView
 	            android:layout_width="0dp"
@@ -312,28 +330,8 @@
 	        android:paddingRight="14dp"
 	        android:gravity="center_vertical"
 	        android:orientation="horizontal"
-	        >
-	        <TextView
-	            android:layout_width="0dp"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="1"
-	            android:textColor="@color/light_white"
-	            android:textSize="15dp"
-	            android:text="HBO.com"
-	            />
-	        <ImageView
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:src="@drawable/drawer_link"
-	            />
-	    </LinearLayout>
-	    <LinearLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="45dp"
-	        android:paddingLeft="25dp"
-	        android:paddingRight="14dp"
-	        android:gravity="center_vertical"
-	        android:orientation="horizontal"
+	        android:clickable="true"
+	        android:background="@drawable/left_list_item_bg"
 	        >
 	        <TextView
 	            android:layout_width="0dp"
