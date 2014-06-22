@@ -21,7 +21,7 @@
 	    android:textSize="22sp"
 	    android:fontFamily="sans-serif"
 	    android:textStyle="bold"
-	    android:textColor="@android:color/white"
+	    android:textColor="@color/white"
 	    android:paddingLeft="18dp"
 	    />
 	<View 
@@ -33,7 +33,7 @@
 	    android:id="@+id/group_seperator"
 	    android:layout_width="1dp"
 	    android:layout_height="44dp"
-	    android:background="@android:color/white"
+	    android:background="@color/white"
 	    android:visibility="gone"
 	    android:layout_marginRight="12dp"/>	
 	    

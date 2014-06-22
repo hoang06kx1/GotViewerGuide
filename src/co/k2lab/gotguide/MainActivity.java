@@ -55,8 +55,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	private View mProgressView;
 	private LayoutParams mProgressBarLayoutParams;
 	private RightDrawerAdapter mRightDrawerAdapter;
-	private LeftDrawerAdapter mLeftDrawerAdapter;
-	
+	private LeftDrawerAdapter mLeftDrawerAdapter;	
 	private DrawerLayout mDrawerLayout;
 	
 	// const
@@ -67,14 +66,16 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	private static final String JS_TOGGLE_MENU = "javascript:$('body').toggleClass('side-nav-opened');Chaplin.mediator.publish('nav:closeEpisodeSelector');Chaplin.mediator.publish('app:hidenav');void 0";
 	private static final String JS_REMOVE_NAV_BAR = "javascript:if(typeof removeNavBar!='function'){function removeNavBar(){var e=10;var t=document.querySelector('.global-nav');if(t){if(!t.style.display){t.style.display='none';document.querySelector('.page-container>div:first-child').style.marginTop=0;document.querySelector('.close-icon.sprites-close').style.display='none'}}else if(e--)setTimeout(removeNavBar,1e3)}}removeNavBar();void 0";
 	private static final String JS_ADD_URL_CHANGE_LISTENER = "javascript:if(typeof removeNavBar!='function'){var removeNavBar=function(){var e=10;var t=document.querySelector('.global-nav');if(t){if(!t.style.display){t.style.display='none';document.querySelector('.page-container>div:first-child').style.marginTop=0;document.querySelector('.close-icon.sprites-close').style.display='none'}}else if(e--){setTimeout(removeNavBar,1e3)}}}if(typeof removePaddingMap!='function'){var removePaddingMap=function(){var e=10;var t=document.querySelector('.page-container>div:first-child');if(t){if(t.style.top){t.style.top=0;$('#map').height($(window).height())}}else if(e--)setTimeout(removePaddingMap,1e3)}}var lastLocation;if(typeof checkUrl!='function'){var checkUrl=function(){if(window.location.href!=lastLocation){lastLocation=window.location.href;removeNavBar();if(lastLocation.indexOf('/map')>-1)removePaddingMap()}}}window.setInterval(checkUrl,1e3);void 0";
-	private static final String[] TABS_URL = {" http://viewers-guide.hbo.com/",
+	private static final String[] TABS_URL = {
+		"http://viewers-guide.hbo.com/",
 		"http://viewers-guide.hbo.com/game-of-thrones/map",
 		"http://viewers-guide.hbo.com/game-of-thrones/houses",
 		"http://viewers-guide.hbo.com/game-of-thrones/people",
 		"http://viewers-guide.hbo.com/game-of-thrones/appendix"
 	};
 	
-	private static final String[] HBO_URL = {"http://www.hbo.com/",
+	private static final String[] HBO_URL = {
+		"http://www.hbo.com/",
 		"http://www.hbogo.com/",
 		"http://connect.hbo.com/",
 		"http://store.hbo.com/game-of-thrones/index.php?v=hbo_shows_game-of-thrones&ecid=PRF-HBO-803217&pa=PRF-HBO-803217",
@@ -635,8 +636,9 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	}
 	
 	private Boolean isSettingsReady() {
-		return mWebviewLoadingFinished;
+		return mWebviewLoadingFinished && mWebView != null && mWebView.getUrl().startsWith(URL);
 	}
+	
 	public void setLocate(String lang) {
 		Locale myLocale = new Locale(lang);
 		Resources res = getResources();

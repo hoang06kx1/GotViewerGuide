@@ -9,9 +9,7 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="co.k2lab.gotguide.MainActivity"
-        tools:ignore="MergeRootFrame"
-        android:background="#000000">
+        android:background="@color/black">
         
         <!-- wiew that will be shown while the fullscreen video loads -->
         <!-- (TODO maybe include a spinner and a "Loading..." message) -->
@@ -33,7 +31,7 @@
             android:id="@+id/progress_bar"
             android:layout_width="0dp"
             android:layout_height="3dp"
-            android:background="#5bc8ff"
+            android:background="@color/progress_bar"
             android:visibility="gone" />
         
         <!-- error webview, only shown when there is something wrong with main webview -->
@@ -55,12 +53,12 @@
 	
     <ExpandableListView
         android:id="@+id/left_drawer"
-        android:layout_width="@dimen/right_drawer_witdh"
+        android:layout_width="@dimen/left_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="left"
-        android:background="@color/list_group_background"
-        android:childDivider="@color/child_divider"
-        android:groupIndicator="@null"        
+        android:background="@color/list_bg"
+        android:childDivider="@color/list_divider"
+        android:groupIndicator="@null"
     	/>
         
     <ExpandableListView
@@ -69,9 +67,9 @@
         android:layout_height="match_parent"
         android:layout_gravity="right"
         android:choiceMode="singleChoice"
-        android:background="@color/list_group_background"
-        android:childDivider="@color/child_divider"
-        android:groupIndicator="@null"        
+        android:background="@color/list_bg"
+        android:childDivider="@color/list_child_divider"
+        android:groupIndicator="@null"
         />
 
 </android.support.v4.widget.DrawerLayout>

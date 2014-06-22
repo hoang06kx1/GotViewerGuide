@@ -79,7 +79,7 @@ public class RightDrawerAdapter extends BaseExpandableListAdapter {
 			View convertView, ViewGroup parent) {
 		LayoutInflater inflater = (LayoutInflater) this.context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		convertView = inflater.inflate(R.layout.list_group, null);
+		convertView = inflater.inflate(R.layout.right_list_group, null);
 
 		if (groupPosition < getGroupCount() - 2) {
 			((TextView) convertView.findViewById(R.id.group_textview))
@@ -125,7 +125,7 @@ public class RightDrawerAdapter extends BaseExpandableListAdapter {
 		if (convertView == null) {
 			LayoutInflater inflater = (LayoutInflater) this.context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			convertView = inflater.inflate(R.layout.list_item, null);
+			convertView = inflater.inflate(R.layout.right_list_item, null);
 		}
 		TextView tv = (TextView) convertView.findViewById(R.id.item_textview);
 		tv.setText(seasons.get(groupPosition).getEpisodes().get(childPosition)

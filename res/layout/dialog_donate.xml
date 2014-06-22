@@ -5,7 +5,7 @@
     android:layout_gravity="center"
     android:maxWidth="400dp"
     android:gravity="center_horizontal"
-    android:background="@drawable/donate_dialog_bg"
+    android:background="@drawable/dialog_donate_bg"
     android:orientation="vertical">
 
     <LinearLayout
@@ -20,7 +20,7 @@
             android:fontFamily="sans-serif-light"
             android:textStyle="normal"
             android:text="@string/donate_title"
-            android:textColor="#333333"
+            android:textColor="@color/action_bg"
             android:textSize="21sp"
             />
 
@@ -28,14 +28,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/donate_subtitle"
-			android:textColor="@color/divider_dialog_main"                        
+			android:textColor="@color/dialog_divider_main"                        
             android:textSize="14sp" />
 
         <View
             android:layout_marginTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/divider_dialog" />
+            android:background="@color/dialog_divider" />
 
         <Button
             android:gravity="left|center_vertical"
@@ -46,13 +46,13 @@
             android:drawableLeft="@drawable/ic_popup_beer1"
             android:text="@string/donate_one"
             android:textSize="16sp"
-            android:textColor="@drawable/donate_dialog_color"
+            android:textColor="@drawable/dialog_donate_color"
             android:background="@android:color/transparent" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/divider_dialog" />
+            android:background="@color/dialog_divider" />
 
         <Button
             android:gravity="left|center_vertical"
@@ -62,14 +62,14 @@
             android:drawablePadding="4dp"
             android:drawableLeft="@drawable/ic_popup_beer2"
             android:text="@string/donate_two"
-			android:textColor="@drawable/donate_dialog_color" 
+			android:textColor="@drawable/dialog_donate_color" 
             android:textSize="16sp"
             android:background="@android:color/transparent" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/divider_dialog" />
+            android:background="@color/dialog_divider" />
 
         <Button
             android:gravity="left|center_vertical"
@@ -79,7 +79,7 @@
             android:drawablePadding="4dp"
             android:drawableLeft="@drawable/ic_popup_beer5"
             android:text="@string/donate_five"
-            android:textColor="@drawable/donate_dialog_color" 
+            android:textColor="@drawable/dialog_donate_color" 
             android:textSize="16sp"
             android:background="@android:color/transparent" />
     </LinearLayout>
