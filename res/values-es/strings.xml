@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Game of Thrones Guía del Visor</string>
+	
+	<!-- first time dialog box -->
+	<string name="network_required_text">Todos los caminos llevan a Desembarco del Rey …\n\nEn realidad, no! Por favor, asegúrese de que usted está en un camino que tiene una buena conexión a Internet. Inténtelo de nuevo cuando su conexión a Internet está lista.</string>
+	<string name="network_required_title">Se requiere Internet</string>
+	<string name="hint_text">A veces, la aplicación parece no responder, como un White Walker …\n\nTenga paciencia, prueba un doble clic en lugar de un solo clic.</string>
+	<string name="ok">OK</string>
+	<string name="got_it">¡LO TENGO!</string>
+	
+	<!-- donation dialog box -->
+	<string name="donation_title"> Gracias por su amabilidad!</string>
+	<string name="one_dollar_message"> Gracias, K2 Lab te ama!</string>
+	<string name="two_dollars_message"> Gracias, K2 Lab te ama!</string>
+	<string name="five_dollars_message"> Gracias, K2 Lab te ama!</string>
+	<string name="donate_title">Comprarnos una cerveza</string>
+	<string name="donate_subtitle">¿Cuál es tu tipo favorito de cerveza?</string>
+	<string name="donate_one">$1 • ¡Salud!</string>
+	<string name="donate_two">$2 • Estamos muy felices!</string>
+	<string name="donate_five">$5 • Te escribimos una carta de amor!</string>
+	
+	<!-- right drawer -->
+	<string name="feedback">FEEDBACK</string>
+	<string name="buy_us_a_beer">COMPRARNOS UNA CERVEZA</string>
+	
+	<!-- action bar -->
+	<string name="action_refresh">Actualizar</string>
+	<string name="action_episode">Episodio</string>
+	
+	<!-- episode -->
+	<string name="s1">Temporada 1</string>
+	<string name="s1_1">1. Se acerca el invierno</string>
+	<string name="s1_2">2. El Camino Real</string>
+	<string name="s1_3">3. Lord Snow</string>
+	<string name="s1_4">4. Lisiados, bastardos y cosas rotas</string>
+	<string name="s1_5">5. El lobo y el león</string>
+	<string name="s1_6">6. Una corona de oro</string>
+	<string name="s1_7">7. Ganas o mueres</string>
+	<string name="s1_8">8. Por el lado de la punta</string>
+	<string name="s1_9">9. Baelor</string>
+	<string name="s1_10">10. Fuego y sangre</string>
+	
+	<string name="s2">Temporada 2</string>
+	<string name="s2_1">1. El Norte recuerda</string>
+	<string name="s2_2">2. Las Tierras de la Noche</string>
+	<string name="s2_3">3. Lo que está muerto jamás morirá</string>
+	<string name="s2_4">4. Jardín de los Huesos</string>
+	<string name="s2_5">5. El fantasma de Harrenhal</string>
+	<string name="s2_6">6. Los dioses antiguos y nuevos</string>
+	<string name="s2_7">7. Un hombre sin honor</string>
+	<string name="s2_8">8. El PrÍncipe de Winterfell</string>
+	<string name="s2_9">9. Blackwater</string>
+	<string name="s2_10">10. Valar Morghulis</string>
+	
+	<string name="s3">Temporada 3</string>
+	<string name="s3_1">1. Valar Dohaeris</string>
+	<string name="s3_2">2. Alas negras, palabras negras</string>
+	<string name="s3_3">3. El camino del castigo</string>
+	<string name="s3_4">4. Y ahora su guardia ha terminado</string>
+	<string name="s3_5">5. Besado por el fuego</string>
+	<string name="s3_6">6. La escalada</string>
+	<string name="s3_7">7. El oso y la doncella</string>
+	<string name="s3_8">8. Los segundos hijos</string>
+	<string name="s3_9">9. Las lluvias de Castamere</string>
+	<string name="s3_10">10. Mhysa</string>
+	
+	<string name="s4">Temporada 4</string>
+	<string name="s4_1">1. Dos Espadas</string>
+	<string name="s4_2">2. El León y la Rosa</string>
+	<string name="s4_3">3. Rompedora de cadenas</string>
+	<string name="s4_4">4. Guardajuramentos</string>
+	<string name="s4_5">5. El primero de su nombre</string>
+	<string name="s4_6">6. Las Leyes de los Dioses y del Hombre</string>
+	<string name="s4_7">7. Ruiseñor</string>
+	<string name="s4_8">8. La Montaña y la Víbora</string>
+	<string name="s4_9">9. Los Vigilantes del Muro</string>
+	<string name="s4_10">10. Los Hijos</string>
+</resources>

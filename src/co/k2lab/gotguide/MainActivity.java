@@ -3,12 +3,15 @@ package co.k2lab.gotguide;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -62,7 +65,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	private static final String FAILED_URL = "file:///android_asset/error/error-screen.html";
 	private static final String FIRST_TIME_KEY = "first_time";
 	private static final String JS_TOGGLE_MENU = "javascript:$('body').toggleClass('side-nav-opened');Chaplin.mediator.publish('nav:closeEpisodeSelector');Chaplin.mediator.publish('app:hidenav');void 0";
-	public  static final String JS_REMOVE_NAV_BAR = "javascript:if(typeof removeNavBar!='function'){function removeNavBar(){var e=10;var t=document.querySelector('.global-nav');if(t){if(!t.style.display){t.style.display='none';document.querySelector('.page-container>div:first-child').style.marginTop=0;document.querySelector('.close-icon.sprites-close').style.display='none'}}else if(e--)setTimeout(removeNavBar,1e3)}}removeNavBar();void 0";
+	private static final String JS_REMOVE_NAV_BAR = "javascript:if(typeof removeNavBar!='function'){function removeNavBar(){var e=10;var t=document.querySelector('.global-nav');if(t){if(!t.style.display){t.style.display='none';document.querySelector('.page-container>div:first-child').style.marginTop=0;document.querySelector('.close-icon.sprites-close').style.display='none'}}else if(e--)setTimeout(removeNavBar,1e3)}}removeNavBar();void 0";
 	private static final String JS_ADD_URL_CHANGE_LISTENER = "javascript:if(typeof removeNavBar!='function'){var removeNavBar=function(){var e=10;var t=document.querySelector('.global-nav');if(t){if(!t.style.display){t.style.display='none';document.querySelector('.page-container>div:first-child').style.marginTop=0;document.querySelector('.close-icon.sprites-close').style.display='none'}}else if(e--){setTimeout(removeNavBar,1e3)}}}if(typeof removePaddingMap!='function'){var removePaddingMap=function(){var e=10;var t=document.querySelector('.page-container>div:first-child');if(t){if(t.style.top){t.style.top=0;$('#map').height($(window).height())}}else if(e--)setTimeout(removePaddingMap,1e3)}}var lastLocation;if(typeof checkUrl!='function'){var checkUrl=function(){if(window.location.href!=lastLocation){lastLocation=window.location.href;removeNavBar();if(lastLocation.indexOf('/map')>-1)removePaddingMap()}}}window.setInterval(checkUrl,1e3);void 0";
 	
 	// flags
@@ -70,6 +73,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	private boolean _triggerHint = false;
 	private ExpandableListView mRightExpandableListView;
 	private ExpandableListView mLeftExpandableListView;
+	boolean mWebviewLoadingFinished = false;
 	
 	// data
 	private ArrayList<Season> mSeasons;
@@ -123,7 +127,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 		boolean canLoadUrl = Utils.isNetworkEnabled(getApplicationContext());
 		if (!canLoadUrl) {
 			final CustomDialog errorDialog = new CustomDialog(this,
-					getResources().getString(R.string.network_require),
+					getResources().getString(R.string.network_required_text),
 					R.drawable.error_pop_up_bg, null);
 			errorDialog.setCallback(new Callback.AlertCallback() {
 
@@ -172,7 +176,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 
 	private void showHint() {
 		final CustomDialog hintDialog = new CustomDialog(this, getResources()
-				.getString(R.string.hint), R.drawable.hint_pop_up_bg, null);
+				.getString(R.string.hint_text), R.drawable.hint_pop_up_bg, null);
 		hintDialog.setCallback(new Callback.AlertCallback() {
 
 			@Override
@@ -193,95 +197,76 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	}
 
 	private ArrayList<Season> initSeasonData() {
+		final Resources res = getResources();
+		
 		Season[] seasons = new Season[4];
 		
 		// season 1
-		seasons[0] = new Season("Season 1",
+		seasons[0] = new Season(res.getString(R.string.s1),
 				new ArrayList<Episode>() {{
-					add(new Episode("1. Winter Is Coming", "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-1/home/21", R.drawable.s1_e1, false, true));
-					add(new Episode("2. The Kingsroad", "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-2/home/22", R.drawable.s1_e2, false, true));
-					add(new Episode("3. Lord Snow", "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-3/home/23", R.drawable.s1_e3, false, true));
-					add(new Episode("4. Cripples, Bastards, and Broken Things", "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-4/home/24", R.drawable.s1_e4, false, true));
-					add(new Episode("5. The Wolf and the Lion", "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-5/home/25", R.drawable.s1_e5, false, true));
-					add(new Episode("6. A Golden Crown", "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-6/home/26", R.drawable.s1_e6, false, true));
-					add(new Episode("7. You Win or You Die", "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-7/home/27", R.drawable.s1_e7, false, true));
-					add(new Episode("8. The Pointy End", "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-8/home/28", R.drawable.s1_e8, false, true));
-					add(new Episode("9. Baelor", "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-9/home/29", R.drawable.s1_e9, false, true));
-					add(new Episode("10. Fire and Blood", "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-10/home/30", R.drawable.s1_e10, false, true));
+					add(new Episode(res.getString(R.string.s1_1), "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-1/home/21", R.drawable.s1_e1, false, true));
+					add(new Episode(res.getString(R.string.s1_2), "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-2/home/22", R.drawable.s1_e2, false, true));
+					add(new Episode(res.getString(R.string.s1_3), "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-3/home/23", R.drawable.s1_e3, false, true));
+					add(new Episode(res.getString(R.string.s1_4), "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-4/home/24", R.drawable.s1_e4, false, true));
+					add(new Episode(res.getString(R.string.s1_5), "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-5/home/25", R.drawable.s1_e5, false, true));
+					add(new Episode(res.getString(R.string.s1_6), "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-6/home/26", R.drawable.s1_e6, false, true));
+					add(new Episode(res.getString(R.string.s1_7), "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-7/home/27", R.drawable.s1_e7, false, true));
+					add(new Episode(res.getString(R.string.s1_8), "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-8/home/28", R.drawable.s1_e8, false, true));
+					add(new Episode(res.getString(R.string.s1_9), "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-9/home/29", R.drawable.s1_e9, false, true));
+					add(new Episode(res.getString(R.string.s1_10), "http://viewers-guide.hbo.com/game-of-thrones/season-1/episode-10/home/30", R.drawable.s1_e10, false, true));
 				}},	R.drawable.bg_season_1);
 		
 		// season 2
-		seasons[1] = new Season("Season 2",
+		seasons[1] = new Season(res.getString(R.string.s2),
 				new ArrayList<Episode>() {{
-					add(new Episode("1. The North Remembers", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-1/home/11", R.drawable.s2_e1, false, true));
-					add(new Episode("2. The Night Lands", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-2/home/12", R.drawable.s2_e2, false, true));
-					add(new Episode("3. What Is Dead May Never Die", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-3/home/13", R.drawable.s2_e3, false, true));
-					add(new Episode("4. Garden of Bones", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-4/home/14", R.drawable.s2_e4, false, true));
-					add(new Episode("5. The Ghost of Harrenhal", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-5/home/15", R.drawable.s2_e5, false, true));
-					add(new Episode("6. The Old Gods and the New", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-6/home/16", R.drawable.s2_e6, false, true));
-					add(new Episode("7. A Man Without Honor", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-7/home/17", R.drawable.s2_e7, false, true));
-					add(new Episode("8. The Prince of Winterfell", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-8/home/18", R.drawable.s2_e8, false, true));
-					add(new Episode("9. Blackwater", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-9/home/19", R.drawable.s2_e9, false, true));
-					add(new Episode("10. Valar Morghulis", "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-10/home/20", R.drawable.s2_e10, false, true));
+					add(new Episode(res.getString(R.string.s2_1), "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-1/home/11", R.drawable.s2_e1, false, true));
+					add(new Episode(res.getString(R.string.s2_2), "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-2/home/12", R.drawable.s2_e2, false, true));
+					add(new Episode(res.getString(R.string.s2_3), "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-3/home/13", R.drawable.s2_e3, false, true));
+					add(new Episode(res.getString(R.string.s2_4), "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-4/home/14", R.drawable.s2_e4, false, true));
+					add(new Episode(res.getString(R.string.s2_5), "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-5/home/15", R.drawable.s2_e5, false, true));
+					add(new Episode(res.getString(R.string.s2_6), "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-6/home/16", R.drawable.s2_e6, false, true));
+					add(new Episode(res.getString(R.string.s2_7), "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-7/home/17", R.drawable.s2_e7, false, true));
+					add(new Episode(res.getString(R.string.s2_8), "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-8/home/18", R.drawable.s2_e8, false, true));
+					add(new Episode(res.getString(R.string.s2_9), "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-9/home/19", R.drawable.s2_e9, false, true));
+					add(new Episode(res.getString(R.string.s2_10), "http://viewers-guide.hbo.com/game-of-thrones/season-2/episode-10/home/20", R.drawable.s2_e10, false, true));
 				}},	R.drawable.bg_season_2);
 		
 		// season 3
-		seasons[2] = new Season("Season 3",
+		seasons[2] = new Season(res.getString(R.string.s3),
 				new ArrayList<Episode>() {{
-					add(new Episode("1. Valar Dohaeris", "http://viewers-guide.hbo.com/game-of-thrones/season-3/episode-1/home/1", R.drawable.s3_e1, false, true));
-					add(new Episode("2. Dark Wings, Dark Words", "http://viewers-guide.hbo.com/game-of-thrones/season-3/episode-2/home/2", R.drawable.s3_e2, false, true));
-					add(new Episode("3. Walk of Punishment", "http://viewers-guide.hbo.com/game-of-thrones/season-3/episode-3/home/3", R.drawable.s3_e3, false, true));
-					add(new Episode("4. And Now His Watch Is Ended", "http://viewers-guide.hbo.com/game-of-thrones/season-3/episode-4/home/4", R.drawable.s3_e4, false, true));
-					add(new Episode("5. Kissed by Fire", "http://viewers-guide.hbo.com/game-of-thrones/season-3/episode-5/home/5", R.drawable.s3_e5, false, true));
-					add(new Episode("6. The Climb", "http://viewers-guide.hbo.com/game-of-thrones/season-3/episode-6/home/6", R.drawable.s3_e6, false, true));
-					add(new Episode("7. The Bear and the Maiden Fair", "http://viewers-guide.hbo.com/game-of-thrones/season-3/episode-7/home/7", R.drawable.s3_e7, false, true));
-					add(new Episode("8. Second Sons", "http://viewers-guide.hbo.com/game-of-thrones/season-3/episode-8/home/8", R.drawable.s3_e8, false, true));
-					add(new Episode("9. The Rains of Castamere", "http://viewers-guide.hbo.com/game-of-thrones/season-3/episode-9/home/9", R.drawable.s3_e9, false, true));
-					add(new Episode("10. Mhysa", "http://viewers-guide.hbo.com/game-of-thrones/season-3/episode-10/home/10", R.drawable.s3_e10, false, true));
+					add(new Episode(res.getString(R.string.s3_1), "http://viewers-guide.hbo.com/game-of-thrones/season-3/episode-1/home/1", R.drawable.s3_e1, false, true));
+					add(new Episode(res.getString(R.string.s3_2), "http://viewers-guide.hbo.com/game-of-thrones/season-3/episode-2/home/2", R.drawable.s3_e2, false, true));
+					add(new Episode(res.getString(R.string.s3_3), "http://viewers-guide.hbo.com/game-of-thrones/season-3/episode-3/home/3", R.drawable.s3_e3, false, true));
+					add(new Episode(res.getString(R.string.s3_4), "http://viewers-guide.hbo.com/game-of-thrones/season-3/episode-4/home/4", R.drawable.s3_e4, false, true));
+					add(new Episode(res.getString(R.string.s3_5), "http://viewers-guide.hbo.com/game-of-thrones/season-3/episode-5/home/5", R.drawable.s3_e5, false, true));
+					add(new Episode(res.getString(R.string.s3_6), "http://viewers-guide.hbo.com/game-of-thrones/season-3/episode-6/home/6", R.drawable.s3_e6, false, true));
+					add(new Episode(res.getString(R.string.s3_7), "http://viewers-guide.hbo.com/game-of-thrones/season-3/episode-7/home/7", R.drawable.s3_e7, false, true));
+					add(new Episode(res.getString(R.string.s3_8), "http://viewers-guide.hbo.com/game-of-thrones/season-3/episode-8/home/8", R.drawable.s3_e8, false, true));
+					add(new Episode(res.getString(R.string.s3_9), "http://viewers-guide.hbo.com/game-of-thrones/season-3/episode-9/home/9", R.drawable.s3_e9, false, true));
+					add(new Episode(res.getString(R.string.s3_10), "http://viewers-guide.hbo.com/game-of-thrones/season-3/episode-10/home/10", R.drawable.s3_e10, false, true));
 				}}, R.drawable.bg_season_3);
 		
 		// season 4
-		seasons[3] = new Season("Season 4",
+		seasons[3] = new Season(res.getString(R.string.s4),
 				new ArrayList<Episode>() {{
-					add(new Episode("1. Two Swords", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-1/home/31", R.drawable.s4_e1, false, true));
-					add(new Episode("2. The Lion and the Rose", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-2/home/32", R.drawable.s4_e2, false, true));
-					add(new Episode("3. Breaker of Chains", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-3/home/33", R.drawable.s4_e3, false, true));
-					add(new Episode("4. Oathkeeper", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-4/home/34", R.drawable.s4_e4, false, true));
-					add(new Episode("5. First of His Name", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-5/home/35", R.drawable.s4_e5, false, true));
-					add(new Episode("6. The Laws of Gods and Men", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-6/home/36", R.drawable.s4_e6, false, true));
+					add(new Episode(res.getString(R.string.s4_1), "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-1/home/31", R.drawable.s4_e1, false, true));
+					add(new Episode(res.getString(R.string.s4_2), "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-2/home/32", R.drawable.s4_e2, false, true));
+					add(new Episode(res.getString(R.string.s4_3), "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-3/home/33", R.drawable.s4_e3, false, true));
+					add(new Episode(res.getString(R.string.s4_4), "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-4/home/34", R.drawable.s4_e4, false, true));
+					add(new Episode(res.getString(R.string.s4_5), "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-5/home/35", R.drawable.s4_e5, false, true));
+					add(new Episode(res.getString(R.string.s4_6), "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-6/home/36", R.drawable.s4_e6, false, true));
+					add(new Episode(res.getString(R.string.s4_7), "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-7/home/37", R.drawable.s4_e7, false, true));
+					add(new Episode(res.getString(R.string.s4_8), "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-8/home/38", R.drawable.s4_e8, false, true));
+					add(new Episode(res.getString(R.string.s4_9), "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-9/home/39", R.drawable.s4_e9, false, true));
 					
 					// check for newly aired episodes
 					Calendar airTime = Calendar.getInstance(TimeZone.getTimeZone("EST"));
 					Calendar currentTime = Calendar.getInstance(TimeZone.getTimeZone("EST"));
-					airTime.set(2014, Calendar.JUNE, 15, 21, 0, 0);
-					
-					if (currentTime.compareTo(airTime) == 1) {
-						add(new Episode("7. Mockingbird", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-7/home/37", R.drawable.s4_e7, false, true));
-						add(new Episode("8. The Mountain and the Viper", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-8/home/38", R.drawable.s4_e8, false, true));
-						add(new Episode("9. The Watchers on the Wall", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-9/home/39", R.drawable.s4_e9, false, true));
-						airTime.set(2014, Calendar.JUNE, 30);
-						if (currentTime.compareTo(airTime) == 1)
-							add(new Episode("10. The Children", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-10/home/40", R.drawable.s4_e10, false, true));
-						else
-							add(new Episode("10. The Children", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-10/home/40", R.drawable.s4_e10, true, true));
-					} else {
-						airTime.set(2014, Calendar.JUNE, 8);
-						if (currentTime.compareTo(airTime) == 1) {
-							add(new Episode("7. Mockingbird", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-7/home/37", R.drawable.s4_e7, false, true));
-							add(new Episode("8. The Mountain and the Viper", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-8/home/38", R.drawable.s4_e8, false, true));
-							add(new Episode("9. The Watchers on the Wall", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-9/home/39", R.drawable.s4_e9, true, true));
-						} else {
-							airTime.set(2014, Calendar.JUNE, 1);
-							if (currentTime.compareTo(airTime) == 1) {
-								add(new Episode("7. Mockingbird", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-7/home/37", R.drawable.s4_e7, false, true));
-								add(new Episode("8. The Mountain and the Viper", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-8/home/38", R.drawable.s4_e8, true, true));
-							} else {
-								airTime.set(2014, Calendar.MAY, 18);
-								if (currentTime.compareTo(airTime) == 1)
-									add(new Episode("7. Mockingbird", "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-7/home/37", R.drawable.s4_e7, true, true));
-							}
-						}
-					}
+					airTime.set(2014, Calendar.JUNE, 30, 21, 0, 0);
+					if (currentTime.compareTo(airTime) == 1)
+						add(new Episode(res.getString(R.string.s4_10), "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-10/home/40", R.drawable.s4_e10, false, true));
+					else
+						add(new Episode(res.getString(R.string.s4_10), "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-10/home/40", R.drawable.s4_e10, true, true));
 				}},	R.drawable.bg_season_4);
 	
 		// New season list
@@ -364,28 +349,30 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
 				super.onPageStarted(view, url, favicon);
 				
-				//Log.d("webview started url", url);
-				
 				setProgressBarPercent(0);
 				mProgressView.setVisibility(View.VISIBLE);
 				if (mErrorWebview.getVisibility() == View.VISIBLE) {
 					mErrorWebview.setVisibility(View.GONE);
 					mErrorWebview.loadUrl("about:blank");
 				}
+				
+				mWebviewLoadingFinished = false;
 			}
 
 			@Override
 			public void onPageFinished(WebView view, String url) {
-				mProgressView.setVisibility(View.GONE);
+				super.onPageFinished(view, url);
 				
-				//Log.d("webview finished url", url);
+				mProgressView.setVisibility(View.GONE);
 				
 				if (url.startsWith(URL)) {
 					//Log.d("webview", "trying to remove nav bar");
-					//view.loadUrl(JS_REMOVE_NAV_BAR);  // enable this for a little faster trigger, but we choose
-														// to disable it for slightly better performance
+					view.loadUrl(JS_REMOVE_NAV_BAR);  // enable this for a little faster trigger, or
+														// disable it for slightly better performance
 					view.loadUrl(JS_ADD_URL_CHANGE_LISTENER); // the real deal
 				}
+				
+				mWebviewLoadingFinished = true;	
 			}
 
 			@Override
@@ -397,6 +384,21 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 					mErrorWebview.setVisibility(View.VISIBLE);
 					mErrorWebview.loadUrl(FAILED_URL);
 					Log.e("webview error", "url: " + failingUrl + "\nerror: " + description);
+				}
+
+				mWebviewLoadingFinished = false;
+			}
+
+			@Override
+			public boolean shouldOverrideUrlLoading(WebView view, String url) {
+				if (url.startsWith(URL)) {
+					// viewer's guide page, open with our webview
+					return false;
+				} else {
+					// not our page, launch another Activity that handles the URL
+			        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+			        startActivity(intent);
+			        return true;
 				}
 			}
 		});
@@ -539,13 +541,42 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 		return false;
 	}
 	
-	private void feedbackToDev() {
+	private void feedbackToDev() {		
+		/* send an email to k2lab */
+		/*
 		Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
 				"mailto", "feedback@k2lab.co", null));
 		intent.putExtra(Intent.EXTRA_EMAIL, "feedback@k2lab.co");
 		intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback on GOT Viewer's Guide");
 		intent.putExtra(Intent.EXTRA_TEXT, "Hi K2 Lab,");
 		startActivity(Intent.createChooser(intent, "Send Email"));
+		*/
+		
+		/* redirect user to play store review page */ 
+		Uri uri = Uri.parse("market://details?id=" + getPackageName());
+		Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+		goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+		try {
+			startActivity(goToMarket);
+		} catch (Exception e) {
+			// if Play Store is not installed, open web link
+			startActivity(new Intent(Intent.ACTION_VIEW, 
+					Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+		}
 	}
-
+	
+	public boolean getIsSettingsReady() {
+		return mWebviewLoadingFinished;
+	}
+	
+	public void setLocate(String lang) {
+		Locale myLocale = new Locale(lang);
+		Resources res = getResources();
+		DisplayMetrics dm = res.getDisplayMetrics();
+		Configuration conf = res.getConfiguration();
+		conf.locale = myLocale;
+		res.updateConfiguration(conf, dm);
+		Intent refresh = new Intent(this, MainActivity.class); 
+		startActivity(refresh);
+	}
 }

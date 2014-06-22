@@ -3,6 +3,7 @@ package co.k2lab.gotguide.utils;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import co.k2lab.gotguide.R;
 
 public class Alert {
@@ -20,7 +21,7 @@ public class Alert {
 			AlertDialog.Builder alertBuilder = new AlertDialog.Builder(activity);
 			alertBuilder.setTitle(title).setMessage(message)
 					.setCancelable(true);
-			if (buttonMessage == null) buttonMessage = "OK";
+			if (buttonMessage == null) buttonMessage = activity.getResources().getString(R.string.ok);
 			alertBuilder.setNeutralButton(buttonMessage, onClick);
 			alertBuilder.create().show();
 		}
@@ -28,7 +29,8 @@ public class Alert {
 
 	public static void AlertIfNoNetworkConnection(Activity activity, String title, final Callback.AlertCallback callback) {
 		if (!Utils.isNetworkEnabled(activity)) {
-			AlertMessage(activity, title, activity.getResources().getString(R.string.network_require), "Got it!", new DialogInterface.OnClickListener() {
+			Resources res = activity.getResources();
+			AlertMessage(activity, title, res.getString(R.string.network_required_text), res.getString(R.string.got_it), new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					if (callback != null) {

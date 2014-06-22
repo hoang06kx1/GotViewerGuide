@@ -106,12 +106,12 @@ public class RightDrawerAdapter extends BaseExpandableListAdapter {
 			tv.setCompoundDrawablePadding(12);
 			if (groupPosition == getGroupCount() - 2) {
 				tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f);
-				tv.setText("FEEDBACK");
+				tv.setText(context.getResources().getString(R.string.feedback));
 				tv.setCompoundDrawablesWithIntrinsicBounds(
 						R.drawable.ic_drawer_mail, 0, 0, 0);
 			} else {
 				tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f);
-				tv.setText("BUY US A BEER");
+				tv.setText(context.getResources().getString(R.string.buy_us_a_beer));
 				tv.setCompoundDrawablesWithIntrinsicBounds(
 						R.drawable.ic_drawer_beer, 0, 0, 0);
 			}

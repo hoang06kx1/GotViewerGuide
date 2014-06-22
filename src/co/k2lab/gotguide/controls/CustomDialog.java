@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import co.k2lab.gotguide.R;
 import co.k2lab.gotguide.utils.Callback;
-import co.k2lab.gotguide.utils.Callback.AlertCallback;
 
 public class CustomDialog extends Dialog {
 	private TextView mTextView;

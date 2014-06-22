@@ -1,18 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="app_name">Game of Thrones Viewer\'s Guide</string>
-    <string name="network_require">All roads lead to King\'s Landing…\n\nNot really, please check if you are on one with good Internet connection. Try again when your internet connection is ready!</string>
-    <string name="network_require_title">Internet required</string>
-    <string name="hint">Sometimes the app seems unresponsive, like a White Walker…\n\nBe patience, try a double tap instead of single tap.</string>
-    <string name="action_refresh">Refresh</string>
-    <string name="action_episode">Episode</string>
-    <string name="got_it">GOT IT!</string>
-    <string name="donation_title"> Thanks for your warming behaviour!</string>
-    <string name="one_dollar_message"> Thank you, we at K2 Lab love you!</string>
-    <string name="two_dollars_message"> Thank you, we at K2 Lab love you!</string>
-    <string name="five_dollars_message"> Thank you, we at K2 Lab love you!</string>
-    <string name="home">Home</string>
+	<string name="app_name">Game of Thrones Viewer\'s Guide</string>
+	
+	<!-- first time dialog box -->
+	<string name="network_required_text">All roads lead to King\'s Landing…\n\nNot really, please check if you are on one with good Internet connection. Try again when your internet connection is ready!</string>
+	<string name="network_required_title">Internet required</string>
+	<string name="hint_text">Sometimes the app seems unresponsive, like a White Walker…\n\nBe patience, try a double tap instead of single tap.</string>
+	<string name="ok">OK</string>
+	<string name="got_it">GOT IT!</string>
+	
+	<!-- donation dialog box -->
+	<string name="donation_title"> Thanks for your kindness!</string>
+	<string name="one_dollar_message"> Thank you, we at K2 Lab love you!</string>
+	<string name="two_dollars_message"> Thank you, we at K2 Lab love you!</string>
+	<string name="five_dollars_message"> Thank you, we at K2 Lab love you!</string>
+	<string name="donate_title">Buy us a beer</string>
+	<string name="donate_subtitle">What is your fav kind of beer?</string>
+	<string name="donate_one">$1 • Cheers!</string>
+	<string name="donate_two">$2 • We\'re very happy!</string>
+	<string name="donate_five">$5 • We\'ll write you a love letter!</string>
+	
+	<!-- right drawer -->
+	<string name="feedback">FEEDBACK</string>
+	<string name="buy_us_a_beer">BUY US A BEER</string>
+	
+	<!-- left drawer -->
+	
+	<string name="home">Home</string>
     <string name="map">Map</string>
     <string name="houses">Houses</string>
     <string name="people">People</string>
@@ -20,5 +34,58 @@
     <string name="settings">Settings</string>
     <string name="HBO">HBO</string>
     <string name="social">Social</string>   
+    
+	<!-- action bar -->
+	<string name="action_refresh">Refresh</string>
+	<string name="action_episode">Episode</string>	
+	
+	<!-- episode -->
+	<string name="s1">Season 1</string>
+	<string name="s1_1">1. Winter Is Coming</string>
+	<string name="s1_2">2. The Kingsroad</string>
+	<string name="s1_3">3. Lord Snow</string>
+	<string name="s1_4">4. Cripples, Bastards, and Broken Things</string>
+	<string name="s1_5">5. The Wolf and the Lion</string>
+	<string name="s1_6">6. A Golden Crown</string>
+	<string name="s1_7">7. You Win or You Die</string>
+	<string name="s1_8">8. The Pointy End</string>
+	<string name="s1_9">9. Baelor</string>
+	<string name="s1_10">10. Fire and Blood</string>
+	
+	<string name="s2">Season 2</string>
+	<string name="s2_1">1. The North Remembers</string>
+	<string name="s2_2">2. The Night Lands</string>
+	<string name="s2_3">3. What Is Dead May Never Die</string>
+	<string name="s2_4">4. Garden of Bones</string>
+	<string name="s2_5">5. The Ghost of Harrenhal</string>
+	<string name="s2_6">6. The Old Gods and the New</string>
+	<string name="s2_7">7. A Man Without Honor</string>
+	<string name="s2_8">8. The Prince of Winterfell</string>
+	<string name="s2_9">9. Blackwater</string>
+	<string name="s2_10">10. Valar Morghulis</string>
+	
+	<string name="s3">Season 3</string>
+	<string name="s3_1">1. Valar Dohaeris</string>
+	<string name="s3_2">2. Dark Wings, Dark Words</string>
+	<string name="s3_3">3. Walk of Punishment</string>
+	<string name="s3_4">4. And Now His Watch Is Ended</string>
+	<string name="s3_5">5. Kissed by Fire</string>
+	<string name="s3_6">6. The Climb</string>
+	<string name="s3_7">7. The Bear and the Maiden Fair</string>
+	<string name="s3_8">8. Second Sons</string>
+	<string name="s3_9">9. The Rains of Castamere</string>
+	<string name="s3_10">10. Mhysa</string>
+	
+	<string name="s4">Season 4</string>
+	<string name="s4_1">1. Two Swords</string>
+	<string name="s4_2">2. The Lion and the Rose</string>
+	<string name="s4_3">3. Breaker of Chains</string>
+	<string name="s4_4">4. Oathkeeper</string>
+	<string name="s4_5">5. First of His Name</string>
+	<string name="s4_6">6. The Laws of Gods and Men</string>
+	<string name="s4_7">7. Mockingbird</string>
+	<string name="s4_8">8. The Mountain and the Viper</string>
+	<string name="s4_9">9. The Watchers on the Wall</string>
+	<string name="s4_10">10. The Children</string>
 
 </resources>
