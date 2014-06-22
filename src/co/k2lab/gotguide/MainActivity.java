@@ -134,9 +134,12 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			@Override
 			public void onClick(View v) {
 					if (mLeftDrawerAdapter != null && mDrawerLayout != null && !mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
-						mLeftDrawerAdapter.notifyDataSetChanged();
+						mLeftDrawerAdapter.notifyDataSetChanged();						
 					}
 					toggleLeftDrawer();					
+					if (mLeftExpandableListView != null) {
+						mLeftExpandableListView.expandGroup(0, false);
+					}
 					// mWebView.loadUrl(JS_TOGGLE_MENU);
 				}			
 		});
@@ -577,12 +580,12 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			return true;
 			
 		} else { // left drawer clicked
-			if (groupPosition == 6) {
+			if (groupPosition == 0) { // tabs
+				mWebView.loadUrl(TABS_URL[childPosition]);
+			} else if (groupPosition == 2) { // HBO
 				loadUrlOutside(HBO_URL[childPosition]);
-			} else if (groupPosition == 7) {
+			} else if (groupPosition == 3) {// settings			
 				loadUrlOutside(HBO_URL[childPosition + 4]);
-			} else if (groupPosition == 5) {// settings			
-			
 			}
 			mDrawerLayout.closeDrawers();
 			return true;
@@ -609,8 +612,13 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			return false;
 			
 		} else { // left drawer clicked
+			if (groupPosition == 0) {
+				return true; // do nothing
+		
+			} else {
 				return false;
 			}
+		}
 	}
 	
 	private void feedbackToDev() {		

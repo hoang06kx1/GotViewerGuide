@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class LeftDrawerAdapter extends BaseExpandableListAdapter {
@@ -57,13 +58,12 @@ public class LeftDrawerAdapter extends BaseExpandableListAdapter {
 		((TextView) convertView.findViewById(R.id.group_textview))
 				.setText(mMainActivity.getResources().getString(GROUP_STRINGS_ID[groupPosition]));		
 		// hide settings if not ready 
-		/*
 		if (groupPosition == 1 && !mMainActivity.isSettingsReady() && convertView != null) {
 			View view = new View(mMainActivity);
 			view.setLayoutParams(new LinearLayout.LayoutParams(0,0));
 			return view;
-		}				
-		*/
+		}
+		
 		if (groupPosition > 0) {
 			ImageView indicator = ((ImageView) convertView.findViewById(R.id.group_indicator));
 			indicator.setVisibility(View.VISIBLE);

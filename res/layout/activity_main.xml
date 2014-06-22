@@ -58,7 +58,7 @@
         android:layout_gravity="left"
         android:choiceMode="singleChoice"
         android:background="@color/left_list_bg"
-        android:childDivider="@color/list_divider"
+        android:childDivider="@android:color/transparent"
         android:groupIndicator="@null"
     	/>
         
