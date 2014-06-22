@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="48dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="@drawable/list_group_background">
+    <ImageView
+        android:id="@+id/group_icon"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:adjustViewBounds="false"
+        android:paddingLeft="18dp"   
+        android:visibility="gone"     
+        />    
+	<TextView 
+	    android:id="@+id/group_textview"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:textSize="22sp"
+	    android:fontFamily="sans-serif"
+	    android:textStyle="bold"
+	    android:textColor="@android:color/white"
+	    android:paddingLeft="18dp"
+	    />
+	<View 
+	    android:layout_width="0dp"
+	    android:layout_height="match_parent"
+	    android:layout_weight="1"
+	    />
+	<View 
+	    android:id="@+id/group_seperator"
+	    android:layout_width="1dp"
+	    android:layout_height="44dp"
+	    android:background="@android:color/white"
+	    android:visibility="gone"
+	    android:layout_marginRight="12dp"/>	
+	    
+	<ImageView
+	    android:id="@+id/group_indicator"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:src="@drawable/ic_action_expand"
+	    android:visibility="gone"
+	    android:layout_marginRight="12dp"/>
+</LinearLayout>

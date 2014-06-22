@@ -51,7 +51,9 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	private ActionBar mActionBar;
 	private View mProgressView;
 	private LayoutParams mProgressBarLayoutParams;
-	private NavigationAdapter mNavigationAdapter;
+	private RightDrawerAdapter mRightDrawerAdapter;
+	private LeftDrawerAdapter mLeftDrawerAdapter;
+	
 	private DrawerLayout mDrawerLayout;
 	
 	// const
@@ -66,7 +68,8 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	// flags
 	private static final int _firstTimeCount = 5;
 	private boolean _triggerHint = false;
-	private ExpandableListView mExpandableListView;
+	private ExpandableListView mRightExpandableListView;
+	private ExpandableListView mLeftExpandableListView;
 	
 	// data
 	private ArrayList<Season> mSeasons;
@@ -88,7 +91,9 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 				public void run() {
 					if (mSplashImage != null) {
 						hideSplash();
-						getActionBar().show();
+						if (mActionBar != null) {
+							mActionBar.show();
+						}
 					}
 				}
 			}, SPLASH_TIME);
@@ -105,16 +110,8 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 		actionBarHomeArea.findViewById(R.id.action_bar_home_area).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (mWebView.getUrl().contains("/game-of-thrones/")) {
-					// toggle left drawer
-					mWebView.loadUrl(JS_TOGGLE_MENU);
-					
-					// close right drawer if it is opening
-					if (mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
-						mDrawerLayout.closeDrawers();
-					}
-				}
-			}
+					toggleLeftDrawer();
+				}			
 		});
 		
 		// set custom home area into view
@@ -407,31 +404,37 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 		
 		// data
 		mSeasons = initSeasonData();
-		mExpandableListView = (ExpandableListView)findViewById(R.id.right_drawer);
-		mNavigationAdapter = new NavigationAdapter(this, mSeasons);		
-		mExpandableListView.setAdapter(mNavigationAdapter);
-		mExpandableListView.setOnChildClickListener(this);
-		mExpandableListView.setOnGroupClickListener(this);
-		mExpandableListView.setOnGroupExpandListener(new OnGroupExpandListener() {
+		mRightExpandableListView = (ExpandableListView)findViewById(R.id.right_drawer);
+		
+		mRightDrawerAdapter = new RightDrawerAdapter(this, mSeasons);		
+		mRightExpandableListView.setAdapter(mRightDrawerAdapter);
+		mRightExpandableListView.setOnChildClickListener(this);
+		mRightExpandableListView.setOnGroupClickListener(this);
+		mRightExpandableListView.setOnGroupExpandListener(new OnGroupExpandListener() {
 			
 			@Override
 			public void onGroupExpand(int groupPosition) {		
-				if (groupPosition < mNavigationAdapter.getGroupCount() - 2) {
+				if (groupPosition < mRightDrawerAdapter.getGroupCount() - 2) {
 					mSeasons.get(groupPosition).setExpanded(true);
-					mNavigationAdapter.notifyDataSetChanged();
+					mRightDrawerAdapter.notifyDataSetChanged();
 				}
 			}
 		});
-		mExpandableListView.setOnGroupCollapseListener(new OnGroupCollapseListener() {
+		mRightExpandableListView.setOnGroupCollapseListener(new OnGroupCollapseListener() {
 			
 			@Override
 			public void onGroupCollapse(int groupPosition) {
-				if (groupPosition < mNavigationAdapter.getGroupCount() - 2) {
+				if (groupPosition < mRightDrawerAdapter.getGroupCount() - 2) {
 					mSeasons.get(groupPosition).setExpanded(false);
-					mNavigationAdapter.notifyDataSetChanged();
+					mRightDrawerAdapter.notifyDataSetChanged();
 				}
 			}
 		});
+		
+		mLeftExpandableListView = (ExpandableListView)findViewById(R.id.left_drawer);
+		mLeftDrawerAdapter = new LeftDrawerAdapter(this);
+		mLeftExpandableListView.setAdapter(mLeftDrawerAdapter);
+		
 	}
 
 	@Override
@@ -489,7 +492,19 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	private void toggleRightDrawer() {
 		if (mDrawerLayout != null) {
 			if (!mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+				mDrawerLayout.closeDrawer(Gravity.LEFT);
 				mDrawerLayout.openDrawer(Gravity.RIGHT);
+			} else {
+				mDrawerLayout.closeDrawers();
+			}
+		}
+	}
+	
+	private void toggleLeftDrawer() {
+		if (mDrawerLayout != null) {
+			if (!mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
+				mDrawerLayout.closeDrawer(Gravity.RIGHT);
+				mDrawerLayout.openDrawer(Gravity.LEFT);
 			} else {
 				mDrawerLayout.closeDrawers();
 			}
@@ -499,9 +514,9 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	@Override
 	public boolean onChildClick(ExpandableListView parent, View v,
 			int groupPosition, int childPosition, long id) {
-		if (mNavigationAdapter != null) {
-			mNavigationAdapter.setCurrentSelected(groupPosition, childPosition);
-			mNavigationAdapter.notifyDataSetChanged();			
+		if (mRightDrawerAdapter != null) {
+			mRightDrawerAdapter.setCurrentSelected(groupPosition, childPosition);
+			mRightDrawerAdapter.notifyDataSetChanged();			
 		}
 		if (mDrawerLayout != null) {
 			mDrawerLayout.closeDrawers();
@@ -513,10 +528,10 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	@Override
 	public boolean onGroupClick(ExpandableListView parent, View v,
 			int groupPosition, long id) {
-		if (groupPosition == mNavigationAdapter.getGroupCount() - 2)	{
+		if (groupPosition == mRightDrawerAdapter.getGroupCount() - 2)	{
 			feedbackToDev();
 			return true;
-		} else if (groupPosition == mNavigationAdapter.getGroupCount() - 1) {
+		} else if (groupPosition == mRightDrawerAdapter.getGroupCount() - 1) {
 			Dialog donateDialog = new DonateDialog(MainActivity.this, true, null, MainActivity.this);
 			donateDialog.show();
 			return true;

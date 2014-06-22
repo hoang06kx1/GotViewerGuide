@@ -15,12 +15,12 @@ import co.k2lab.gotguide.model.Episode;
 import co.k2lab.gotguide.model.Season;
 import co.k2lab.gotguide.utils.Utils;
 
-public class NavigationAdapter extends BaseExpandableListAdapter {
+public class RightDrawerAdapter extends BaseExpandableListAdapter {
 	private ArrayList<Season> seasons;
 	private Context context;
 	private int mCurrentGroupSelected = -1, mCurrentChildSelected = -1;
 
-	public NavigationAdapter(Context context, ArrayList<Season> seasons) {
+	public RightDrawerAdapter(Context context, ArrayList<Season> seasons) {
 		this.context = context;
 		if (seasons != null) {
 			this.seasons = seasons;

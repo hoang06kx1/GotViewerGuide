@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="48dp"
+    android:padding="8dp"
+    android:orientation="horizontal" 
+    android:gravity="center_vertical"
+    android:background="@drawable/list_item_background">
+        
+    <RadioButton
+        android:id="@+id/radio_english"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="English"
+        android:textColor="@android:color/white" 
+        android:checked="true"/>
+    <!-- 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        />
+     -->
+     
+    <RadioButton 
+        android:layout_marginLeft="16dp"
+        android:id="@+id/radio_spanish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Español"
+        android:textColor="@android:color/white" />
+    
+</RadioGroup>
+

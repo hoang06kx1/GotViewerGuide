@@ -52,7 +52,17 @@
             android:src="@drawable/splash"
             android:visibility="visible" />
     </FrameLayout>
-
+	
+    <ExpandableListView
+        android:id="@+id/left_drawer"
+        android:layout_width="@dimen/right_drawer_witdh"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:background="@color/list_group_background"
+        android:childDivider="@color/child_divider"
+        android:groupIndicator="@null"        
+    	/>
+        
     <ExpandableListView
         android:id="@+id/right_drawer"
         android:layout_width="@dimen/right_drawer_witdh"
