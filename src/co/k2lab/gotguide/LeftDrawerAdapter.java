@@ -93,7 +93,7 @@ public class LeftDrawerAdapter extends BaseExpandableListAdapter {
 			} else if (groupPosition == 1) {// settings group
 				convertView  = inflater.inflate(R.layout.left_list_settings_item, null);
 				((TextView)convertView.findViewById(R.id.textview)).setText(mMainActivity.getResources().getString(R.string.language));
-				((TextView)convertView.findViewById(R.id.textview_change)).setText(mMainActivity.getResources().getString(R.string.change));
+				((TextView)convertView.findViewById(R.id.textview_change)).setText(mMainActivity.getResources().getString(R.string.spoiler_alerts));
 				
 			} else if (groupPosition > 1) { // HBO & SOCIAL 
 				convertView = inflater.inflate(R.layout.left_list_item, null);
