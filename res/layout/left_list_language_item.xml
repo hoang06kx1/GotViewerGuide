@@ -14,7 +14,8 @@
         android:layout_height="wrap_content"
         android:text="English"
         android:textColor="@android:color/white" 
-        android:checked="true"/>
+        android:checked="true"
+        android:enabled="false"/>
     <!-- 
     <View
         android:layout_width="0dp"
@@ -29,6 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Español"
+        android:enabled="false"
         android:textColor="@android:color/white" />
     
 </RadioGroup>

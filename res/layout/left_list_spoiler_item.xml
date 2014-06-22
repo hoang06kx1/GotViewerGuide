@@ -41,5 +41,6 @@
 	    android:layout_marginRight="10dp"
 	    android:textOn="On"
 	    android:textOff="Off"
+	    android:enabled="false"
 	    /> 	
 </LinearLayout>

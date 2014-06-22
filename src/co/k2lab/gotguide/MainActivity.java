@@ -67,6 +67,23 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	private static final String JS_TOGGLE_MENU = "javascript:$('body').toggleClass('side-nav-opened');Chaplin.mediator.publish('nav:closeEpisodeSelector');Chaplin.mediator.publish('app:hidenav');void 0";
 	private static final String JS_REMOVE_NAV_BAR = "javascript:if(typeof removeNavBar!='function'){function removeNavBar(){var e=10;var t=document.querySelector('.global-nav');if(t){if(!t.style.display){t.style.display='none';document.querySelector('.page-container>div:first-child').style.marginTop=0;document.querySelector('.close-icon.sprites-close').style.display='none'}}else if(e--)setTimeout(removeNavBar,1e3)}}removeNavBar();void 0";
 	private static final String JS_ADD_URL_CHANGE_LISTENER = "javascript:if(typeof removeNavBar!='function'){var removeNavBar=function(){var e=10;var t=document.querySelector('.global-nav');if(t){if(!t.style.display){t.style.display='none';document.querySelector('.page-container>div:first-child').style.marginTop=0;document.querySelector('.close-icon.sprites-close').style.display='none'}}else if(e--){setTimeout(removeNavBar,1e3)}}}if(typeof removePaddingMap!='function'){var removePaddingMap=function(){var e=10;var t=document.querySelector('.page-container>div:first-child');if(t){if(t.style.top){t.style.top=0;$('#map').height($(window).height())}}else if(e--)setTimeout(removePaddingMap,1e3)}}var lastLocation;if(typeof checkUrl!='function'){var checkUrl=function(){if(window.location.href!=lastLocation){lastLocation=window.location.href;removeNavBar();if(lastLocation.indexOf('/map')>-1)removePaddingMap()}}}window.setInterval(checkUrl,1e3);void 0";
+	private static final String[] TABS_URL = {" http://viewers-guide.hbo.com/",
+		"http://viewers-guide.hbo.com/game-of-thrones/map",
+		"http://viewers-guide.hbo.com/game-of-thrones/houses",
+		"http://viewers-guide.hbo.com/game-of-thrones/people",
+		"http://viewers-guide.hbo.com/game-of-thrones/appendix"
+	};
+	
+	private static final String[] HBO_URL = {"http://www.hbo.com/",
+		"http://www.hbogo.com/",
+		"http://connect.hbo.com/",
+		"http://store.hbo.com/game-of-thrones/index.php?v=hbo_shows_game-of-thrones&ecid=PRF-HBO-803217&pa=PRF-HBO-803217",
+		"https://www.facebook.com/GameOfThrones",
+		"http://gameofthrones.tumblr.com/",
+		"https://twitter.com/GameOfThrones",
+		"https://www.youtube.com/user/GameofThrones",
+		"http://instagram.com/gameofthrones"
+	};
 	
 	// flags
 	private static final int _firstTimeCount = 5;
@@ -115,6 +132,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			@Override
 			public void onClick(View v) {
 					toggleLeftDrawer();
+					// mWebView.loadUrl(JS_TOGGLE_MENU);
 				}			
 		});
 		
@@ -357,6 +375,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 				}
 				
 				mWebviewLoadingFinished = false;
+				enableSettings(false);
 			}
 
 			@Override
@@ -372,7 +391,8 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 					view.loadUrl(JS_ADD_URL_CHANGE_LISTENER); // the real deal
 				}
 				
-				mWebviewLoadingFinished = true;	
+				mWebviewLoadingFinished = true;
+				enableSettings(true);
 			}
 
 			@Override
@@ -387,6 +407,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 				}
 
 				mWebviewLoadingFinished = false;
+				enableSettings(false);
 			}
 
 			@Override
@@ -436,7 +457,8 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 		mLeftExpandableListView = (ExpandableListView)findViewById(R.id.left_drawer);
 		mLeftDrawerAdapter = new LeftDrawerAdapter(this);
 		mLeftExpandableListView.setAdapter(mLeftDrawerAdapter);
-		
+		mLeftExpandableListView.setOnChildClickListener(this);
+		mLeftExpandableListView.setOnGroupClickListener(this);
 	}
 
 	@Override
@@ -516,29 +538,59 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	@Override
 	public boolean onChildClick(ExpandableListView parent, View v,
 			int groupPosition, int childPosition, long id) {
-		if (mRightDrawerAdapter != null) {
-			mRightDrawerAdapter.setCurrentSelected(groupPosition, childPosition);
-			mRightDrawerAdapter.notifyDataSetChanged();			
-		}
-		if (mDrawerLayout != null) {
+		if (parent == mRightExpandableListView) {		// right drawer clicked
+			if (mRightDrawerAdapter != null) {
+				mRightDrawerAdapter.setCurrentSelected(groupPosition, childPosition);
+				mRightDrawerAdapter.notifyDataSetChanged();			
+			}
+			if (mDrawerLayout != null) {
+				mDrawerLayout.closeDrawers();
+			}
+			mWebView.loadUrl(mSeasons.get(groupPosition).getEpisodes().get(childPosition).getUrl());
+			return true;
+			
+		} else { // left drawer clicked
+			if (groupPosition == 6) {
+				loadUrlOutside(HBO_URL[childPosition]);
+			} else if (groupPosition == 7) {
+				loadUrlOutside(HBO_URL[childPosition + 4]);
+			} else if (groupPosition == 5) {// settings			
+			
+			}
 			mDrawerLayout.closeDrawers();
+			return true;
 		}
-		mWebView.loadUrl(mSeasons.get(groupPosition).getEpisodes().get(childPosition).getUrl());
-		return true;
+	}
+	
+	private void loadUrlOutside(String url) {
+		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+		startActivity(browserIntent);
 	}
 	
 	@Override
 	public boolean onGroupClick(ExpandableListView parent, View v,
 			int groupPosition, long id) {
-		if (groupPosition == mRightDrawerAdapter.getGroupCount() - 2)	{
-			feedbackToDev();
-			return true;
-		} else if (groupPosition == mRightDrawerAdapter.getGroupCount() - 1) {
-			Dialog donateDialog = new DonateDialog(MainActivity.this, true, null, MainActivity.this);
-			donateDialog.show();
-			return true;
+		if (parent == mRightExpandableListView) { // right drawer clicked
+			if (groupPosition == mRightDrawerAdapter.getGroupCount() - 2)	{
+				feedbackToDev();
+				return true;
+			} else if (groupPosition == mRightDrawerAdapter.getGroupCount() - 1) {
+				Dialog donateDialog = new DonateDialog(MainActivity.this, true, null, MainActivity.this);
+				donateDialog.show();
+				return true;
+			}
+			return false;
+		} else { // left drawer clicked
+			if (groupPosition < 5) {
+				String urlString = TABS_URL[groupPosition];
+				mWebView.loadUrl(urlString);
+				mDrawerLayout.closeDrawers();
+				return true;
+			} else {
+				return false;
+			}
+			
 		}
-		return false;
 	}
 	
 	private void feedbackToDev() {		
@@ -565,9 +617,15 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 		}
 	}
 	
-	public boolean getIsSettingsReady() {
-		return mWebviewLoadingFinished;
+	private void enableSettings(Boolean enable) {
+		if (findViewById(R.id.radio_english) != null) 
+			findViewById(R.id.radio_english).setEnabled(enable);
+		if (findViewById(R.id.radio_spanish) != null)
+			findViewById(R.id.radio_spanish).setEnabled(enable);
+		if (findViewById(R.id.toogle_spoiler) != null)
+			findViewById(R.id.toogle_spoiler).setEnabled(enable);
 	}
+	
 	
 	public void setLocate(String lang) {
 		Locale myLocale = new Locale(lang);
