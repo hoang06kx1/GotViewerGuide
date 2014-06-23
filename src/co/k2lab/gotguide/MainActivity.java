@@ -64,13 +64,15 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	private static final String FIRST_TIME_KEY = "first_time";
 	
 	private static final String URL_HOME = "http://viewers-guide.hbo.com/";
-	private static final String URL_MAP = "http://viewers-guide.hbo.com/";
-	private static final String URL_HOUSES = "http://viewers-guide.hbo.com/";
-	private static final String URL_PEOPLE = "http://viewers-guide.hbo.com/";
-	private static final String URL_APPENDIX = "http://viewers-guide.hbo.com/";
+	private static final String URL_MAP = "http://viewers-guide.hbo.com/game-of-thrones/map";
+	private static final String URL_HOUSES = "http://viewers-guide.hbo.com/game-of-thrones/houses";
+	private static final String URL_PEOPLE = "http://viewers-guide.hbo.com/game-of-thrones/people";
+	private static final String URL_APPENDIX = "http://viewers-guide.hbo.com/game-of-thrones/appendix";
 	
-	private static final String JS_TOGGLE_LANGUAGE = "";
-	private static final String JS_TOGGLE_SPOILER = "";
+	private static final String JS_SET_LANG_EN = "javascript:Chaplin.mediator.publish('site:changelanguage','en');void 0";
+	private static final String JS_SET_LANG_ES = "javascript:Chaplin.mediator.publish('site:changelanguage','es');void 0";
+	private static final String JS_SET_SPOILER_ON = "javascript:Chaplin.mediator.publish('global-episodes:toggleSpoiler',true);void 0";
+	private static final String JS_SET_SPOILER_OFF = "javascript:Chaplin.mediator.publish('global-episodes:toggleSpoiler',false);void 0";
 	
 	private static final String JS_TOGGLE_MENU = "javascript:$('body').toggleClass('side-nav-opened');Chaplin.mediator.publish('nav:closeEpisodeSelector');Chaplin.mediator.publish('app:hidenav');void 0";
 	private static final String JS_REMOVE_NAV_BAR = "javascript:if(typeof removeNavBar!='function'){function removeNavBar(){var e=10;var t=document.querySelector('.global-nav');if(t){if(!t.style.display){t.style.display='none';document.querySelector('.page-container>div:first-child').style.marginTop=0;document.querySelector('.close-icon.sprites-close').style.display='none'}}else if(e--)setTimeout(removeNavBar,1e3)}}removeNavBar();void 0";
@@ -84,7 +86,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	private static final String URL_TB = "http://gameofthrones.tumblr.com/";
 	private static final String URL_TW = "https://twitter.com/GameOfThrones";
 	private static final String URL_YT = "https://www.youtube.com/user/GameofThrones";
-	private static final String URL_IS = "http://instagram.com/gameofthrones";
+	private static final String URL_IG = "http://instagram.com/gameofthrones";
 	
 	private static final String URL_ERROR = "file:///android_asset/error/error-screen.html";
 	
@@ -473,11 +475,14 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			@Override
 			public void onDrawerOpened(View arg0) {
 				if (arg0.getId() == R.id.left_drawer && mLeftDrawerAdapter != null) {
-					mLeftDrawerAdapter.notifyDataSetChanged();
+					if (mIsLastSettingShown != getIsSettingsReady()) {
+						mLeftDrawerAdapter.notifyDataSetChanged();
+						mIsLastSettingShown = getIsSettingsReady();
+						//mLeftExpandableListView.requestLayout();
+					}
 					if (mLeftExpandableListView != null) {
 						mLeftExpandableListView.expandGroup(0, false);
-						if (getIsSettingsReady())
-							mLeftExpandableListView.expandGroup(1, false);
+						mLeftExpandableListView.expandGroup(1, false);
 					}
 				}
 			}
@@ -580,14 +585,41 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 		} else { // left drawer clicked
 			if (id == R.id.left_drawer_group_tab_item_home)
 				mWebView.loadUrl(URL_HOME);
-			
-			if (groupPosition == 0) { // tabs
-				mWebView.loadUrl(TABS_URL[childPosition]);
-			} else if (groupPosition == 2) { // HBO
-				loadUrlIntent(HBO_URL[childPosition]);
-			} else if (groupPosition == 3) {// settings
-				loadUrlIntent(HBO_URL[childPosition + 4]);
+			else if (id == R.id.left_drawer_group_tab_item_map)
+				mWebView.loadUrl(URL_MAP);
+			else if (id == R.id.left_drawer_group_tab_item_houses)
+				mWebView.loadUrl(URL_HOUSES);
+			else if (id == R.id.left_drawer_group_tab_item_people)
+				mWebView.loadUrl(URL_PEOPLE);
+			else if (id == R.id.left_drawer_group_tab_item_appendix)
+				mWebView.loadUrl(URL_APPENDIX);
+			else if (id == R.id.left_drawer_group_settings_item_language) {
+				// TODO dialog box
+				mWebView.loadUrl(JS_SET_LANG_ES);
 			}
+			else if (id == R.id.left_drawer_group_settings_item_spoiler) {
+				// TODO dialog box
+				mWebView.loadUrl(JS_SET_SPOILER_OFF);
+			}
+			else if (id == R.id.left_drawer_group_hbo_item_com)
+				loadUrlIntent(URL_HBO_COM);
+			else if (id == R.id.left_drawer_group_hbo_item_go)
+				loadUrlIntent(URL_HBO_GO);
+			else if (id == R.id.left_drawer_group_hbo_item_connect)
+				loadUrlIntent(URL_HBO_CONNECT);
+			else if (id == R.id.left_drawer_group_hbo_item_store)
+				loadUrlIntent(URL_HBO_STORE);
+			else if (id == R.id.left_drawer_group_social_item_fb)
+				loadUrlIntent(URL_FB);
+			else if (id == R.id.left_drawer_group_social_item_tb)
+				loadUrlIntent(URL_TB);
+			else if (id == R.id.left_drawer_group_social_item_tw)
+				loadUrlIntent(URL_TW);
+			else if (id == R.id.left_drawer_group_social_item_yt)
+				loadUrlIntent(URL_YT);
+			else
+				loadUrlIntent(URL_IG);
+
 			mDrawerLayout.closeDrawers();
 			return true;
 		}
@@ -602,7 +634,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	public boolean onGroupClick(ExpandableListView parent, View v,
 			int groupPosition, long id) {
 		if (parent == mRightExpandableListView) { // right drawer clicked
-			if (groupPosition == mRightDrawerAdapter.getGroupCount() - 2)	{
+			if (groupPosition == mRightDrawerAdapter.getGroupCount() - 2) {
 				feedbackToDev();
 				return true;
 			} else if (groupPosition == mRightDrawerAdapter.getGroupCount() - 1) {
@@ -613,9 +645,8 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			return false;
 			
 		} else { // left drawer clicked
-			if (groupPosition == 0 || groupPosition == 1) {
-				return true; // do nothing
-		
+			if (id == R.id.left_drawer_group_tab || id == R.id.left_drawer_group_settings) {
+				return true; // do not expand/collapse this group
 			} else {
 				return false;
 			}
@@ -623,16 +654,6 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	}
 	
 	private void feedbackToDev() {		
-		/* send an email to k2lab */
-		/*
-		Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-				"mailto", "feedback@k2lab.co", null));
-		intent.putExtra(Intent.EXTRA_EMAIL, "feedback@k2lab.co");
-		intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback on GOT Viewer's Guide");
-		intent.putExtra(Intent.EXTRA_TEXT, "Hi K2 Lab,");
-		startActivity(Intent.createChooser(intent, "Send Email"));
-		*/
-		
 		/* redirect user to play store review page */ 
 		Uri uri = Uri.parse("market://details?id=" + getPackageName());
 		Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
@@ -646,10 +667,16 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 		}
 	}
 	
+	private boolean mIsLastSettingShown = false;
+	
 	public Boolean getIsSettingsReady() {
-		return mWebviewLoadingFinished && mWebView != null && mWebView.getUrl().startsWith(URL_HOME);
+		return  mWebviewLoadingFinished && 
+				mWebView != null && 
+				mWebView.getUrl().startsWith(URL_HOME) && 
+				mErrorWebview.getVisibility() != View.VISIBLE;
 	}
 	
+	/*
 	public void setLocate(String lang) {
 		Locale myLocale = new Locale(lang);
 		Resources res = getResources();
@@ -660,5 +687,6 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 		Intent refresh = new Intent(this, MainActivity.class); 
 		startActivity(refresh);
 	}
+	*/
 }
 

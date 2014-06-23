@@ -16,7 +16,7 @@
             android:layout_weight="1"            
             android:fontFamily="sans-serif-light"
             android:textColor="@color/white"
-            android:textSize="17dp"
+            android:textSize="16sp"
             />
         <ImageView
             android:id="@+id/group_indicator"

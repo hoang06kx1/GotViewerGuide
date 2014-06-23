@@ -4,35 +4,31 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class LeftDrawerAdapter extends BaseExpandableListAdapter {
-	private static final int[] GROUPS_WITH_SETTINGS = {R.id.left_drawer_group_tab, R.id.left_drawer_group_settings, R.id.left_drawer_group_hbo, R.id.left_drawer_group_social};
-	private static final int[] GROUPS_NO_SETTINGS = {R.id.left_drawer_group_tab, R.id.left_drawer_group_hbo, R.id.left_drawer_group_social};
+	private static final int[] GROUPS = {R.id.left_drawer_group_tab, R.id.left_drawer_group_settings, R.id.left_drawer_group_hbo, R.id.left_drawer_group_social};
 	
 	private static final int[] GROUP_TAB = {R.id.left_drawer_group_tab_item_home, R.id.left_drawer_group_tab_item_map, R.id.left_drawer_group_tab_item_houses, R.id.left_drawer_group_tab_item_people, R.id.left_drawer_group_tab_item_appendix};
 	private static final int[] GROUP_SETTINGS = {R.id.left_drawer_group_settings_item_language, R.id.left_drawer_group_settings_item_spoiler};
 	private static final int[] GROUP_HBO = {R.id.left_drawer_group_hbo_item_com, R.id.left_drawer_group_hbo_item_go, R.id.left_drawer_group_hbo_item_connect, R.id.left_drawer_group_hbo_item_store};
 	private static final int[] GROUP_SOCIAL = {R.id.left_drawer_group_social_item_fb, R.id.left_drawer_group_social_item_tb, R.id.left_drawer_group_social_item_tw, R.id.left_drawer_group_social_item_yt, R.id.left_drawer_group_social_item_ig};
-	
-	private static final int[] CHILD_ICON_ID = {R.drawable.drawer_home, R.drawable.drawer_map, R.drawable.drawer_houses, R.drawable.drawer_people, R.drawable.drawer_appendix}; 
-	private static final int[] CHILD_STRING_ID = {R.string.home, R.string.map, R.string.houses, R.string.people, R.string.appendix, R.string.language, R.string.spoiler_alerts};
-	private static final String[] CHILD_STRINGS = {"HBO.com", "HBO GO", "HBO Connect", "HBO Store", "Facebook", "Tumblr", "Twitter", "Youtube", "Instagram"};
-	
+
 	private MainActivity mMainActivity;
 	
-	boolean mShouldShowSettings = false;
-
 	public LeftDrawerAdapter(MainActivity activity) {
 		this.mMainActivity = activity;
 	}
+	
+	private boolean mShouldShowSettings = false;
 
 	@Override
 	public int getGroupCount() {
 		mShouldShowSettings = mMainActivity.getIsSettingsReady();
-		return mShouldShowSettings ? GROUPS_WITH_SETTINGS.length : GROUPS_NO_SETTINGS.length;
+		return GROUPS.length;
 	}
 
 	@Override
@@ -48,11 +44,7 @@ public class LeftDrawerAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public long getGroupId(int groupPosition) {
-		if (mShouldShowSettings) {
-			return GROUPS_WITH_SETTINGS[groupPosition];
-		} else {
-			return GROUPS_NO_SETTINGS[groupPosition];
-		}
+		return GROUPS[groupPosition];
 	}
 
 	@Override
@@ -151,7 +143,8 @@ public class LeftDrawerAdapter extends BaseExpandableListAdapter {
 			} else {
 				((TextView)convertView.findViewById(R.id.textview)).setText(mMainActivity.getResources().getString(R.string.spoiler_alerts));
 			}
-			((TextView)convertView.findViewById(R.id.textview_change)).setText(mMainActivity.getResources().getString(R.string.change));
+			((TextView)convertView.findViewById(R.id.textview_change)).
+					setText(mMainActivity.getResources().getString(mShouldShowSettings ? R.string.change : R.string.waiting));
 		}
 		
 		else {
@@ -188,6 +181,8 @@ public class LeftDrawerAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
+		if (getGroupId(groupPosition) == R.id.left_drawer_group_settings && !mShouldShowSettings)
+			return false;
 		return true;
 	}
 	

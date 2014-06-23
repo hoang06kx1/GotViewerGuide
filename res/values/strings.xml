@@ -37,6 +37,7 @@
     <string name="language">Language</string>
     <string name="spoiler_alerts">Spoiler Alerts</string>
     <string name="change">change</string> 
+    <string name="waiting">waiting for content</string>
     
 	<!-- action bar -->
 	<string name="action_refresh">Refresh</string>
