@@ -680,4 +680,9 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 		Intent refresh = new Intent(this, MainActivity.class); 
 		startActivity(refresh);
 	}
+	
+	public ExpandableListView getLeftListView() {
+		return mLeftExpandableListView;
+	}
 }
+

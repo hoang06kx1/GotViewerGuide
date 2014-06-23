@@ -59,6 +59,9 @@ public class LeftDrawerAdapter extends BaseExpandableListAdapter {
 				.setText(mMainActivity.getResources().getString(GROUP_STRINGS_ID[groupPosition]));		
 		// hide settings if not ready 
 		if ((groupPosition == 1 && !mMainActivity.isSettingsReady() && convertView != null)) { // TODO: need to be fixed for ver 1.2
+			if (mMainActivity.getLeftListView() != null) {
+				mMainActivity.getLeftListView().collapseGroup(1); // hide all settings children before hide itself
+			}
 			View view = new View(mMainActivity);
 			view.setLayoutParams(new LinearLayout.LayoutParams(0,0));
 			return view;
