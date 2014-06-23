@@ -612,7 +612,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			return false;
 			
 		} else { // left drawer clicked
-			if (groupPosition == 0) {
+			if (groupPosition == 0 || groupPosition == 1) {
 				return true; // do nothing
 		
 			} else {
