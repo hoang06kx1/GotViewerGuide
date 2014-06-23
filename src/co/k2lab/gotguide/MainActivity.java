@@ -135,7 +135,19 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 		View actionBarHomeArea = LayoutInflater.from(this).inflate(R.layout.action_bar_custom_home, null);
 		actionBarHomeArea.findViewById(R.id.action_bar_home_area).setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v) {				
+				if (!mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
+					if (mLeftDrawerAdapter != null && mIsLastSettingShown != getIsSettingsReady()) { 				
+						mLeftDrawerAdapter.notifyDataSetChanged();
+						mIsLastSettingShown = getIsSettingsReady();
+						//mLeftExpandableListView.requestLayout();
+					}
+					
+					if (mLeftExpandableListView != null) {
+						mLeftExpandableListView.expandGroup(0, false);
+						mLeftExpandableListView.expandGroup(1, false);
+					}				
+				}
 				toggleLeftDrawer();
 			}
 		});
@@ -474,17 +486,16 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			
 			@Override
 			public void onDrawerOpened(View arg0) {
-				if (arg0.getId() == R.id.left_drawer && mLeftDrawerAdapter != null) {
-					if (mIsLastSettingShown != getIsSettingsReady()) {
+				if (arg0.getId() == R.id.left_drawer && mLeftDrawerAdapter != null && mIsLastSettingShown != getIsSettingsReady()) {
 						mLeftDrawerAdapter.notifyDataSetChanged();
 						mIsLastSettingShown = getIsSettingsReady();
 						//mLeftExpandableListView.requestLayout();
 					}
+					
 					if (mLeftExpandableListView != null) {
 						mLeftExpandableListView.expandGroup(0, false);
 						mLeftExpandableListView.expandGroup(1, false);
-					}
-				}
+					}	
 			}
 			
 			@Override
