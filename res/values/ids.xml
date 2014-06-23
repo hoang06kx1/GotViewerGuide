@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<item type="id" name="left_drawer_group_tab" />
+	<item type="id" name="left_drawer_group_tab_item_home" />
+	<item type="id" name="left_drawer_group_tab_item_map" />
+	<item type="id" name="left_drawer_group_tab_item_houses" />
+	<item type="id" name="left_drawer_group_tab_item_people" />
+	<item type="id" name="left_drawer_group_tab_item_appendix" />
+	<item type="id" name="left_drawer_group_settings" />
+	<item type="id" name="left_drawer_group_settings_item_language" />
+	<item type="id" name="left_drawer_group_settings_item_spoiler" />
+	<item type="id" name="left_drawer_group_hbo" />
+	<item type="id" name="left_drawer_group_hbo_item_com" />
+	<item type="id" name="left_drawer_group_hbo_item_go" />
+	<item type="id" name="left_drawer_group_hbo_item_connect" />
+	<item type="id" name="left_drawer_group_hbo_item_store" />
+	<item type="id" name="left_drawer_group_social" />
+	<item type="id" name="left_drawer_group_social_item_fb" />
+	<item type="id" name="left_drawer_group_social_item_tb" />
+	<item type="id" name="left_drawer_group_social_item_tw" />
+	<item type="id" name="left_drawer_group_social_item_yt" />
+	<item type="id" name="left_drawer_group_social_item_ig" />
+</resources>

@@ -61,31 +61,32 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	
 	// const
 	private static final long SPLASH_TIME = 7000;
-	private static final String URL = "http://viewers-guide.hbo.com/";
-	private static final String FAILED_URL = "file:///android_asset/error/error-screen.html";
 	private static final String FIRST_TIME_KEY = "first_time";
+	
+	private static final String URL_HOME = "http://viewers-guide.hbo.com/";
+	private static final String URL_MAP = "http://viewers-guide.hbo.com/";
+	private static final String URL_HOUSES = "http://viewers-guide.hbo.com/";
+	private static final String URL_PEOPLE = "http://viewers-guide.hbo.com/";
+	private static final String URL_APPENDIX = "http://viewers-guide.hbo.com/";
+	
+	private static final String JS_TOGGLE_LANGUAGE = "";
+	private static final String JS_TOGGLE_SPOILER = "";
+	
 	private static final String JS_TOGGLE_MENU = "javascript:$('body').toggleClass('side-nav-opened');Chaplin.mediator.publish('nav:closeEpisodeSelector');Chaplin.mediator.publish('app:hidenav');void 0";
 	private static final String JS_REMOVE_NAV_BAR = "javascript:if(typeof removeNavBar!='function'){function removeNavBar(){var e=10;var t=document.querySelector('.global-nav');if(t){if(!t.style.display){t.style.display='none';document.querySelector('.page-container>div:first-child').style.marginTop=0;document.querySelector('.close-icon.sprites-close').style.display='none'}}else if(e--)setTimeout(removeNavBar,1e3)}}removeNavBar();void 0";
 	private static final String JS_ADD_URL_CHANGE_LISTENER = "javascript:if(typeof removeNavBar!='function'){var removeNavBar=function(){var e=10;var t=document.querySelector('.global-nav');if(t){if(!t.style.display){t.style.display='none';document.querySelector('.page-container>div:first-child').style.marginTop=0;document.querySelector('.close-icon.sprites-close').style.display='none'}}else if(e--){setTimeout(removeNavBar,1e3)}}}if(typeof removePaddingMap!='function'){var removePaddingMap=function(){var e=10;var t=document.querySelector('.page-container>div:first-child');if(t){if(t.style.top){t.style.top=0;$('#map').height($(window).height())}}else if(e--)setTimeout(removePaddingMap,1e3)}}var lastLocation;if(typeof checkUrl!='function'){var checkUrl=function(){if(window.location.href!=lastLocation){lastLocation=window.location.href;removeNavBar();if(lastLocation.indexOf('/map')>-1)removePaddingMap()}}}window.setInterval(checkUrl,1e3);void 0";
-	private static final String[] TABS_URL = {
-		"http://viewers-guide.hbo.com/",
-		"http://viewers-guide.hbo.com/game-of-thrones/map",
-		"http://viewers-guide.hbo.com/game-of-thrones/houses",
-		"http://viewers-guide.hbo.com/game-of-thrones/people",
-		"http://viewers-guide.hbo.com/game-of-thrones/appendix"
-	};
 	
-	private static final String[] HBO_URL = {
-		"http://www.hbo.com/",
-		"http://www.hbogo.com/",
-		"http://connect.hbo.com/",
-		"http://store.hbo.com/game-of-thrones/index.php?v=hbo_shows_game-of-thrones&ecid=PRF-HBO-803217&pa=PRF-HBO-803217",
-		"https://www.facebook.com/GameOfThrones",
-		"http://gameofthrones.tumblr.com/",
-		"https://twitter.com/GameOfThrones",
-		"https://www.youtube.com/user/GameofThrones",
-		"http://instagram.com/gameofthrones"
-	};
+	private static final String URL_HBO_COM = "http://www.hbo.com/";
+	private static final String URL_HBO_GO = "http://www.hbogo.com/";
+	private static final String URL_HBO_CONNECT = "http://connect.hbo.com/";
+	private static final String URL_HBO_STORE = "http://store.hbo.com/game-of-thrones/";
+	private static final String URL_FB = "https://www.facebook.com/GameOfThrones";
+	private static final String URL_TB = "http://gameofthrones.tumblr.com/";
+	private static final String URL_TW = "https://twitter.com/GameOfThrones";
+	private static final String URL_YT = "https://www.youtube.com/user/GameofThrones";
+	private static final String URL_IS = "http://instagram.com/gameofthrones";
+	
+	private static final String URL_ERROR = "file:///android_asset/error/error-screen.html";
 	
 	// flags
 	private static final int _firstTimeCount = 5;
@@ -106,7 +107,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			initActionBar();
 			initControlViews();
 			checkFirstTime();
-			mWebView.loadUrl(URL);
+			mWebView.loadUrl(URL_HOME);
 			// remove splash after xx seconds
 			mSplashImage.postDelayed(new Runnable() {
 
@@ -324,7 +325,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 					view.stopLoading();
 					if (mErrorWebview.getVisibility() == View.GONE) {
 						mErrorWebview.setVisibility(View.VISIBLE);
-						mErrorWebview.loadUrl(FAILED_URL);
+						mErrorWebview.loadUrl(URL_ERROR);
 						Log.e("webview error", "based on its title: " + title);
 					}
 				}
@@ -384,7 +385,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 				
 				mProgressView.setVisibility(View.GONE);
 				
-				if (url.startsWith(URL)) {
+				if (url.startsWith(URL_HOME)) {
 					//Log.d("webview", "trying to remove nav bar");
 					view.loadUrl(JS_REMOVE_NAV_BAR);  // enable this for a little faster trigger, or
 														// disable it for slightly better performance
@@ -401,7 +402,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 				view.stopLoading();
 				if (mErrorWebview.getVisibility() == View.GONE) {
 					mErrorWebview.setVisibility(View.VISIBLE);
-					mErrorWebview.loadUrl(FAILED_URL);
+					mErrorWebview.loadUrl(URL_ERROR);
 					Log.e("webview error", "url: " + failingUrl + "\nerror: " + description);
 				}
 
@@ -410,7 +411,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
-				if (url.startsWith(URL)) {
+				if (url.startsWith(URL_HOME)) {
 					// viewer's guide page, open with our webview
 					return false;
 				} else {
@@ -565,7 +566,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	@Override
 	public boolean onChildClick(ExpandableListView parent, View v,
 			int groupPosition, int childPosition, long id) {
-		if (parent == mRightExpandableListView) {		// right drawer clicked
+		if (parent == mRightExpandableListView) { // right drawer clicked
 			if (mRightDrawerAdapter != null) {
 				mRightDrawerAdapter.setCurrentSelected(groupPosition, childPosition);
 				mRightDrawerAdapter.notifyDataSetChanged();			
@@ -577,19 +578,22 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			return true;
 			
 		} else { // left drawer clicked
+			if (id == R.id.left_drawer_group_tab_item_home)
+				mWebView.loadUrl(URL_HOME);
+			
 			if (groupPosition == 0) { // tabs
 				mWebView.loadUrl(TABS_URL[childPosition]);
 			} else if (groupPosition == 2) { // HBO
-				loadUrlOutside(HBO_URL[childPosition]);
-			} else if (groupPosition == 3) {// settings			
-				loadUrlOutside(HBO_URL[childPosition + 4]);
+				loadUrlIntent(HBO_URL[childPosition]);
+			} else if (groupPosition == 3) {// settings
+				loadUrlIntent(HBO_URL[childPosition + 4]);
 			}
 			mDrawerLayout.closeDrawers();
 			return true;
 		}
 	}
 	
-	private void loadUrlOutside(String url) {
+	private void loadUrlIntent(String url) {
 		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 		startActivity(browserIntent);
 	}
@@ -643,7 +647,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	}
 	
 	public Boolean getIsSettingsReady() {
-		return mWebviewLoadingFinished && mWebView != null && mWebView.getUrl().startsWith(URL);
+		return mWebviewLoadingFinished && mWebView != null && mWebView.getUrl().startsWith(URL_HOME);
 	}
 	
 	public void setLocate(String lang) {
@@ -657,3 +661,4 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 		startActivity(refresh);
 	}
 }
+

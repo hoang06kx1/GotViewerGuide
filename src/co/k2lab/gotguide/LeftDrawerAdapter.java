@@ -6,19 +6,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class LeftDrawerAdapter extends BaseExpandableListAdapter {
+	private static final int[] GROUPS_WITH_SETTINGS = {R.id.left_drawer_group_tab, R.id.left_drawer_group_settings, R.id.left_drawer_group_hbo, R.id.left_drawer_group_social};
+	private static final int[] GROUPS_NO_SETTINGS = {R.id.left_drawer_group_tab, R.id.left_drawer_group_hbo, R.id.left_drawer_group_social};
 	
-	private static final int GROUP_COUNT = 4;
-	private static final int[] CHILD_COUNT = {5, 2, 4, 5 };
-	private static final int[] GROUP_STRINGS_ID = {R.string.in_this_episode, R.string.settings, R.string.HBO, R.string.social};
+	private static final int[] GROUP_TAB = {R.id.left_drawer_group_tab_item_home, R.id.left_drawer_group_tab_item_map, R.id.left_drawer_group_tab_item_houses, R.id.left_drawer_group_tab_item_people, R.id.left_drawer_group_tab_item_appendix};
+	private static final int[] GROUP_SETTINGS = {R.id.left_drawer_group_settings_item_language, R.id.left_drawer_group_settings_item_spoiler};
+	private static final int[] GROUP_HBO = {R.id.left_drawer_group_hbo_item_com, R.id.left_drawer_group_hbo_item_go, R.id.left_drawer_group_hbo_item_connect, R.id.left_drawer_group_hbo_item_store};
+	private static final int[] GROUP_SOCIAL = {R.id.left_drawer_group_social_item_fb, R.id.left_drawer_group_social_item_tb, R.id.left_drawer_group_social_item_tw, R.id.left_drawer_group_social_item_yt, R.id.left_drawer_group_social_item_ig};
+	
 	private static final int[] CHILD_ICON_ID = {R.drawable.drawer_home, R.drawable.drawer_map, R.drawable.drawer_houses, R.drawable.drawer_people, R.drawable.drawer_appendix}; 
 	private static final int[] CHILD_STRING_ID = {R.string.home, R.string.map, R.string.houses, R.string.people, R.string.appendix, R.string.language, R.string.spoiler_alerts};
 	private static final String[] CHILD_STRINGS = {"HBO.com", "HBO GO", "HBO Connect", "HBO Store", "Facebook", "Tumblr", "Twitter", "Youtube", "Instagram"};
 	
 	private MainActivity mMainActivity;
+	
+	boolean mShouldShowSettings = false;
 
 	public LeftDrawerAdapter(MainActivity activity) {
 		this.mMainActivity = activity;
@@ -26,22 +31,41 @@ public class LeftDrawerAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public int getGroupCount() {
-		return GROUP_COUNT;
+		mShouldShowSettings = mMainActivity.getIsSettingsReady();
+		return mShouldShowSettings ? GROUPS_WITH_SETTINGS.length : GROUPS_NO_SETTINGS.length;
 	}
 
 	@Override
 	public int getChildrenCount(int groupPosition) {
-		return CHILD_COUNT[groupPosition];
+		long groupId = getGroupId(groupPosition);
+		if (groupId == R.id.left_drawer_group_hbo)
+			return 4;
+		else if (groupId == R.id.left_drawer_group_settings)
+			return 2;
+		else
+			return 5;
 	}
 
 	@Override
 	public long getGroupId(int groupPosition) {
-		return groupPosition;
+		if (mShouldShowSettings) {
+			return GROUPS_WITH_SETTINGS[groupPosition];
+		} else {
+			return GROUPS_NO_SETTINGS[groupPosition];
+		}
 	}
 
 	@Override
 	public long getChildId(int groupPosition, int childPosition) {
-		return childPosition;
+		long groupId = getGroupId(groupPosition);
+		if (groupId == R.id.left_drawer_group_tab)
+			return GROUP_TAB[childPosition];
+		else if (groupId == R.id.left_drawer_group_settings)
+			return GROUP_SETTINGS[childPosition];
+		else if (groupId == R.id.left_drawer_group_hbo)
+			return GROUP_HBO[childPosition];
+		else
+			return GROUP_SOCIAL[childPosition];
 	}
 
 	@Override
@@ -55,16 +79,19 @@ public class LeftDrawerAdapter extends BaseExpandableListAdapter {
 		LayoutInflater inflater = (LayoutInflater) this.mMainActivity
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		convertView = inflater.inflate(R.layout.left_list_group, null);
-		((TextView) convertView.findViewById(R.id.group_textview))
-				.setText(mMainActivity.getResources().getString(GROUP_STRINGS_ID[groupPosition]));		
-		// hide settings if not ready 
-		if (groupPosition == 1 && !mMainActivity.getIsSettingsReady() && convertView != null) {
-			View view = new View(mMainActivity);
-			view.setLayoutParams(new LinearLayout.LayoutParams(0,0));
-			return view;
-		}
 		
-		if (groupPosition > 1) {
+		String groupName;
+		long groupId = getGroupId(groupPosition);
+		if (groupId == R.id.left_drawer_group_tab)
+			groupName = mMainActivity.getResources().getString(R.string.in_this_episode);
+		else if (groupId == R.id.left_drawer_group_settings)
+			groupName = mMainActivity.getResources().getString(R.string.settings);
+		else {
+			if (groupId == R.id.left_drawer_group_hbo)
+				groupName = mMainActivity.getResources().getString(R.string.HBO);
+			else
+				groupName = mMainActivity.getResources().getString(R.string.social);
+			
 			ImageView indicator = ((ImageView) convertView.findViewById(R.id.group_indicator));
 			indicator.setVisibility(View.VISIBLE);
 			if (isExpanded) {
@@ -72,44 +99,90 @@ public class LeftDrawerAdapter extends BaseExpandableListAdapter {
 			} else {
 				indicator.setImageResource(R.drawable.drawer_bottom_arrow);
 			}
-		}
+		}	
 		
+		((TextView) convertView.findViewById(R.id.group_textview))
+				.setText(groupName);		
+
 		return convertView;
 	}
 
 	@Override
 	public View getChildView(int groupPosition, int childPosition,
-			boolean isLastChild, View convertView, ViewGroup parent) {		
-			LayoutInflater inflater = (LayoutInflater) this.mMainActivity
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			boolean isLastChild, View convertView, ViewGroup parent) {
+		LayoutInflater inflater = (LayoutInflater) this.mMainActivity
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		
+		long groupId = getGroupId(groupPosition);
+		long childId = getChildId(groupPosition, childPosition);
+		
+		if (groupId == R.id.left_drawer_group_tab) {
+			convertView = inflater.inflate(R.layout.left_list_item, null);
 			
-			if (groupPosition == 0) {
-				convertView = inflater.inflate(R.layout.left_list_item, null);
-				ImageView icon = (ImageView) convertView.findViewById(R.id.child_icon);
-				icon.setVisibility(View.VISIBLE);
-				icon.setImageResource(CHILD_ICON_ID[childPosition]);
-				((TextView)convertView.findViewById(R.id.child_textview)).setText(mMainActivity.getResources().getString(CHILD_STRING_ID[childPosition]));
-			
-			} else if (groupPosition == 1) {// settings group
-				convertView  = inflater.inflate(R.layout.left_list_settings_item, null);
-				if (childPosition == 0) {
-					((TextView)convertView.findViewById(R.id.textview)).setText(mMainActivity.getResources().getString(R.string.language));
-				} else {
-					((TextView)convertView.findViewById(R.id.textview)).setText(mMainActivity.getResources().getString(R.string.spoiler_alerts));
-				}
-				((TextView)convertView.findViewById(R.id.textview_change)).setText(mMainActivity.getResources().getString(R.string.change));
-				
-			} else if (groupPosition > 1) { // HBO & SOCIAL 
-				convertView = inflater.inflate(R.layout.left_list_item, null);
-				if (groupPosition == 2) {
-					((TextView)convertView.findViewById(R.id.child_textview)).setText(CHILD_STRINGS[childPosition]);
-			
-				} else {
-					((TextView)convertView.findViewById(R.id.child_textview)).setText(CHILD_STRINGS[childPosition+4]);
-				}
-				
-				convertView.findViewById(R.id.child_link_icon).setVisibility(View.VISIBLE);
+			int imageId, titleId;
+			if (childId == R.id.left_drawer_group_tab_item_appendix) {
+				imageId = R.drawable.drawer_appendix;
+				titleId = R.string.appendix;
+			} else if (childId == R.id.left_drawer_group_tab_item_home) {
+				imageId = R.drawable.drawer_home;
+				titleId = R.string.home;
+			} else if (childId == R.id.left_drawer_group_tab_item_houses) {
+				imageId = R.drawable.drawer_houses;
+				titleId = R.string.houses;
+			} else if (childId == R.id.left_drawer_group_tab_item_map) {
+				imageId = R.drawable.drawer_map;
+				titleId = R.string.map;
+			} else {
+				imageId = R.drawable.drawer_people;
+				titleId = R.string.people;
 			}
+			
+			ImageView icon = (ImageView) convertView.findViewById(R.id.child_icon);
+			icon.setVisibility(View.VISIBLE);
+			icon.setImageResource(imageId);
+			
+			((TextView)convertView.findViewById(R.id.child_textview)).setText(mMainActivity.getResources().getString(titleId));
+		}
+		
+		else if (groupId == R.id.left_drawer_group_settings) {
+			convertView  = inflater.inflate(R.layout.left_list_settings_item, null);
+			if (childId == R.id.left_drawer_group_settings_item_language) {
+				((TextView)convertView.findViewById(R.id.textview)).setText(mMainActivity.getResources().getString(R.string.language));
+			} else {
+				((TextView)convertView.findViewById(R.id.textview)).setText(mMainActivity.getResources().getString(R.string.spoiler_alerts));
+			}
+			((TextView)convertView.findViewById(R.id.textview_change)).setText(mMainActivity.getResources().getString(R.string.change));
+		}
+		
+		else {
+			convertView = inflater.inflate(R.layout.left_list_item, null);
+			convertView.findViewById(R.id.child_link_icon).setVisibility(View.VISIBLE);
+			
+			String title = null;
+			if (groupId == R.id.left_drawer_group_hbo) {
+				if (childId == R.id.left_drawer_group_hbo_item_com)
+					title = "HBO.com";
+				else if (childId == R.id.left_drawer_group_hbo_item_go)
+					title = "HBO Go";
+				else if (childId == R.id.left_drawer_group_hbo_item_connect)
+					title = "HBO Connect";
+				else
+					title = "HBO Store";
+			} else {
+				if (childId == R.id.left_drawer_group_social_item_fb)
+					title = "Facebook";
+				else if (childId == R.id.left_drawer_group_social_item_tb)
+					title = "Tumblr";
+				else if (childId == R.id.left_drawer_group_social_item_tw)
+					title = "Twitter";
+				else if (childId == R.id.left_drawer_group_social_item_yt)
+					title = "Youtube";
+				else
+					title = "Instagram";
+			}
+			((TextView)convertView.findViewById(R.id.child_textview)).setText(title);
+		}
+		
 		return convertView;
 	}
 
