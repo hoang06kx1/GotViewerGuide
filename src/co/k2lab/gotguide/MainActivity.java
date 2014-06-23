@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
+import android.webkit.WebBackForwardList;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ExpandableListView;
@@ -510,16 +511,20 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	@Override
 	public void onBackPressed() {
 		// go back fromm fullscreen video, if any
+		/*
 	    if (!mWebChromeClient.onBackPressed() && mWebView.canGoBack()) {
 	        mWebView.goBack();
 	        return;
-	    }
+	    }*/
 	    
-	    // go back in webview
+	    // go back in webview (current url session) 
 		if (mWebView.canGoBack()) {
 			mWebView.goBack();
 			return;
 		}
+		
+		// TODO go back in webview (url history stack)
+		// WebBackForwardList history = mWebView.copyBackForwardList();		
 		
 		// exit app (presumably)
 		super.onBackPressed();
