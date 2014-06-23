@@ -133,15 +133,8 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 		actionBarHomeArea.findViewById(R.id.action_bar_home_area).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-					if (mLeftDrawerAdapter != null && mDrawerLayout != null && !mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
-						mLeftDrawerAdapter.notifyDataSetChanged();
-					}
-					toggleLeftDrawer();					
-					if (mLeftExpandableListView != null) {
-						mLeftExpandableListView.expandGroup(0, false);
-						mLeftExpandableListView.expandGroup(1, false);
-					}
-				}			
+				toggleLeftDrawer();
+			}
 		});
 		
 		// set custom home area into view
@@ -468,25 +461,29 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			
 			@Override
 			public void onDrawerStateChanged(int arg0) {
-				// TODO Auto-generated method stub
-				
+				//Log.d("view", arg0 + "");
 			}
 			
 			@Override
 			public void onDrawerSlide(View arg0, float arg1) {
-				// TODO Auto-generated method stub
-				
+				//Log.d("view", arg0.toString());
 			}
 			
 			@Override
-			public void onDrawerOpened(View arg0) {				
-				
+			public void onDrawerOpened(View arg0) {
+				if (arg0.getId() == R.id.left_drawer && mLeftDrawerAdapter != null) {
+					mLeftDrawerAdapter.notifyDataSetChanged();
+					if (mLeftExpandableListView != null) {
+						mLeftExpandableListView.expandGroup(0, false);
+						if (getIsSettingsReady())
+							mLeftExpandableListView.expandGroup(1, false);
+					}
+				}
 			}
 			
 			@Override
 			public void onDrawerClosed(View arg0) {
-				// TODO Auto-generated method stub
-				
+				//Log.d("view", arg0.toString());
 			}
 		});
 	}
@@ -645,28 +642,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 		}
 	}
 	
-	/*
-	private void enableSettings(Boolean enable) {
-		if (findViewById(R.id.radio_english) != null) 
-			findViewById(R.id.radio_english).setEnabled(enable);
-		if (findViewById(R.id.radio_spanish) != null)
-			findViewById(R.id.radio_spanish).setEnabled(enable);
-		if (findViewById(R.id.toogle_spoiler) != null)
-			findViewById(R.id.toogle_spoiler).setEnabled(enable);
-	}
-	*/
-	
-	/*
-	private void syncSettingsControl() {
-		if (mWebviewLoadingFinished && mWebView != null && mWebView.getUrl().startsWith(URL)) {
-			enableSettings(true);
-		} else {
-			enableSettings(false);
-		}
-	}
-	*/
-	
-	public Boolean isSettingsReady() {
+	public Boolean getIsSettingsReady() {
 		return mWebviewLoadingFinished && mWebView != null && mWebView.getUrl().startsWith(URL);
 	}
 	
