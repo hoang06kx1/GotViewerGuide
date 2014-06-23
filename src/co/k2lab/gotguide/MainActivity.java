@@ -7,7 +7,9 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -584,8 +586,32 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 				mWebView.loadUrl(TABS_URL[childPosition]);
 			} else if (groupPosition == 2) { // HBO
 				loadUrlOutside(HBO_URL[childPosition]);
-			} else if (groupPosition == 3) {// settings			
+			} else if (groupPosition == 3) { // Social			
 				loadUrlOutside(HBO_URL[childPosition + 4]);
+			} else if (groupPosition == 1) { // Settings
+				if (childPosition == 0) {
+					CharSequence items[] = { "English", "Spanish"}; 
+					   AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				        builder.setTitle("Choose your language");
+				        builder.setItems(items, new DialogInterface.OnClickListener() {
+				            public void onClick(DialogInterface dialog, int item) {
+				                // Do something with the selection
+				                Log.d("Pressed", item + " ");
+				            }
+				        });
+				        builder.create().show();				        
+				} else if (childPosition == 1) {
+					CharSequence items[] = { "On", "Off"}; 
+					   AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				        builder.setTitle("Turn spoiler alerts");
+				        builder.setItems(items, new DialogInterface.OnClickListener() {
+				            public void onClick(DialogInterface dialog, int item) {
+				                // Do something with the selection
+				                Log.d("Pressed", item + " "); 
+				            }
+				        });
+				        builder.create().show();
+				}
 			}
 			mDrawerLayout.closeDrawers();
 			return true;
