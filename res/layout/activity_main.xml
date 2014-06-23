@@ -69,7 +69,7 @@
         android:layout_gravity="right"
         android:choiceMode="singleChoice"
         android:background="@color/list_bg"
-        android:childDivider="@color/list_child_divider"
+        android:childDivider="@color/list_child_divider"        
         android:groupIndicator="@null"
         />
 
