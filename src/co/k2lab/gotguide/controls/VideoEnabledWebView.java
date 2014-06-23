@@ -53,14 +53,12 @@ public class VideoEnabledWebView extends WebView
         addedJavascriptInterface = false;
     }
 
-    @SuppressWarnings("unused")
     public VideoEnabledWebView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
         addedJavascriptInterface = false;
     }
 
-    @SuppressWarnings("unused")
     public VideoEnabledWebView(Context context, AttributeSet attrs, int defStyle)
     {
         super(context, attrs, defStyle);

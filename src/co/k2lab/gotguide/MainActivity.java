@@ -3,7 +3,6 @@ package co.k2lab.gotguide;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.TimeZone;
 
 import android.app.ActionBar;
@@ -12,7 +11,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -31,7 +29,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
-import android.webkit.WebBackForwardList;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ExpandableListView;
@@ -63,7 +60,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	private DrawerLayout mDrawerLayout;
 	
 	// const
-	private static final long SPLASH_TIME = 7000;
+	private static final int SPLASH_TIME = 7000;
 	private static final String FIRST_TIME_KEY = "first_time";
 	
 	private static final String URL_HOME = "http://viewers-guide.hbo.com/";
@@ -94,8 +91,8 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	private static final String URL_ERROR = "file:///android_asset/error/error-screen.html";
 	
 	// flags
-	private static final int _firstTimeCount = 5;
-	private boolean _triggerHint = false;
+	private static final int mFirstTimeCount = 5;
+	private boolean mShouldTriggerHint = false;
 	private ExpandableListView mRightExpandableListView;
 	private ExpandableListView mLeftExpandableListView;
 	boolean mWebviewLoadingFinished = false;
@@ -170,9 +167,9 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	private void checkFirstTime() {
 		SharedPreferences preferences = getPreferences(MODE_PRIVATE);
 		int firstTime = preferences.getInt(FIRST_TIME_KEY, 0);
-		if (firstTime < _firstTimeCount) {
+		if (firstTime < mFirstTimeCount) {
 			if (firstTime == 0) {
-				_triggerHint = true;
+				mShouldTriggerHint = true;
 			}
 			mSplashImage.setImageResource(R.drawable.splash_first_time);
 			preferences.edit().putInt(FIRST_TIME_KEY, ++firstTime).commit();
@@ -188,7 +185,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 		mDrawerLayout.removeView(mSplashImage);
 		mSplashImage = null;
 		
-		if (_triggerHint) {
+		if (mShouldTriggerHint) {
 			mWebView.postDelayed(new Runnable() {
 
 				@Override
@@ -499,7 +496,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 
 	@Override
 	public void onBackPressed() {
-		// go back fromm fullscreen video, if any
+		// go back fromm fullscreen video, if any // does not seem to work
 		/*
 	    if (!mWebChromeClient.onBackPressed() && mWebView.canGoBack()) {
 	        mWebView.goBack();

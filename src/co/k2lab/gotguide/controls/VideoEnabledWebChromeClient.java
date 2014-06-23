@@ -49,7 +49,6 @@ public class VideoEnabledWebChromeClient extends WebChromeClient implements OnPr
     * Never use this constructor alone.
     * This constructor allows this class to be defined as an inline inner class in which the user can override methods
     */
-   @SuppressWarnings("unused")
    public VideoEnabledWebChromeClient()
    {
    }
@@ -59,7 +58,6 @@ public class VideoEnabledWebChromeClient extends WebChromeClient implements OnPr
     * @param activityNonVideoView A View in the activity's layout that contains every other view that should be hidden when the video goes full-screen.
     * @param activityVideoView A ViewGroup in the activity's layout that will display the video. Typically you would like this to fill the whole layout.
     */
-   @SuppressWarnings("unused")
    public VideoEnabledWebChromeClient(View activityNonVideoView, ViewGroup activityVideoView)
    {
        this.activityNonVideoView = activityNonVideoView;
@@ -75,7 +73,6 @@ public class VideoEnabledWebChromeClient extends WebChromeClient implements OnPr
     * @param activityVideoView A ViewGroup in the activity's layout that will display the video. Typically you would like this to fill the whole layout.
     * @param loadingView A View to be shown while the video is loading (typically only used in API level <11). Must be already inflated and without a parent view.
     */
-   @SuppressWarnings("unused")
    public VideoEnabledWebChromeClient(View activityNonVideoView, ViewGroup activityVideoView, View loadingView)
    {
        this.activityNonVideoView = activityNonVideoView;
@@ -188,7 +185,6 @@ public class VideoEnabledWebChromeClient extends WebChromeClient implements OnPr
        }
    }
 
-   @Override @SuppressWarnings("deprecation")
    public void onShowCustomView(View view, int requestedOrientation, CustomViewCallback callback) // Available in API level 14+, deprecated in API level 18+
    {
        onShowCustomView(view, callback);
