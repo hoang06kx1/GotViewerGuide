@@ -64,7 +64,7 @@ public class LeftDrawerAdapter extends BaseExpandableListAdapter {
 			return view;
 		}
 		
-		if (groupPosition > 0) {
+		if (groupPosition > 1) {
 			ImageView indicator = ((ImageView) convertView.findViewById(R.id.group_indicator));
 			indicator.setVisibility(View.VISIBLE);
 			if (isExpanded) {

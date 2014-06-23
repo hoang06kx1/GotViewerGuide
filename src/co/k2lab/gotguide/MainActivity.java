@@ -134,16 +134,13 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			@Override
 			public void onClick(View v) {
 					if (mLeftDrawerAdapter != null && mDrawerLayout != null && !mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
-						if (mLeftExpandableListView != null && !isSettingsReady()) {
-							mLeftExpandableListView.collapseGroup(1); // collapse settings group. 
-						}
-						mLeftDrawerAdapter.notifyDataSetChanged();						
+						mLeftDrawerAdapter.notifyDataSetChanged();
 					}
 					toggleLeftDrawer();					
 					if (mLeftExpandableListView != null) {
 						mLeftExpandableListView.expandGroup(0, false);
+						mLeftExpandableListView.expandGroup(1, false);
 					}
-					// mWebView.loadUrl(JS_TOGGLE_MENU);
 				}			
 		});
 		
