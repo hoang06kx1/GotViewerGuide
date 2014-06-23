@@ -11,12 +11,12 @@
     <color name="action_hover">#595959</color>
     
     <!-- right drawer -->
-    <color name="list_bg">#3a3a3c</color>
+    <color name="list_bg">#58585a</color>
     <color name="list_hover">#58585a</color>
-    <color name="list_divider">#4f4f4f</color>
-    <color name="list_child_bg">#58585a</color>
+    <color name="list_divider">#6e6e6e</color>
+    <color name="list_child_bg">#3a3a3c</color>
     <color name="list_child_hover">#666666</color>
-    <color name="list_child_divider">#6e6e6e</color>
+    <color name="list_child_divider">#4f4f4f</color>
     <color name="list_selected_indicator">#5490cc</color>
     
     <!-- left drawer -->

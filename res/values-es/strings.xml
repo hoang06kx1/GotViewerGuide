@@ -24,6 +24,23 @@
 	<string name="feedback">FEEDBACK</string>
 	<string name="buy_us_a_beer">COMPRARNOS UNA CERVEZA</string>
 	
+	<!-- left drawer -->
+	<string name="home">Casa</string>
+    <string name="map">Mapa</string>
+    <string name="houses">Casas</string>
+    <string name="people">Personajes</string>
+    <string name="appendix">Apéndice</string>
+    <string name="settings">Configuración</string>
+    <string name="HBO">HBO</string>
+    <string name="social">SOCIAL</string>   
+    <string name="in_this_episode">EN ESTE EPISODIO</string>
+    <string name="language">Idioma</string>
+    <string name="spoiler_alerts">Alertas de Spoiler</string>
+    <string name="change">cambio</string> 
+    <string name="waiting">carga de contenidos …</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+	
 	<!-- action bar -->
 	<string name="action_refresh">Actualizar</string>
 	<string name="action_episode">Episodio</string>

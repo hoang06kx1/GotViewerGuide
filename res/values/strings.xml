@@ -37,7 +37,9 @@
     <string name="language">Language</string>
     <string name="spoiler_alerts">Spoiler Alerts</string>
     <string name="change">change</string> 
-    <string name="waiting">waiting for content</string>
+    <string name="waiting">waiting for content…</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
     
 	<!-- action bar -->
 	<string name="action_refresh">Refresh</string>
@@ -91,5 +93,4 @@
 	<string name="s4_8">8. The Mountain and the Viper</string>
 	<string name="s4_9">9. The Watchers on the Wall</string>
 	<string name="s4_10">10. The Children</string>
-
 </resources>

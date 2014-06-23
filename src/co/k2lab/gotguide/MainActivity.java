@@ -7,7 +7,9 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -580,8 +582,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 				mDrawerLayout.closeDrawers();
 			}
 			mWebView.loadUrl(mSeasons.get(groupPosition).getEpisodes().get(childPosition).getUrl());
-			return true;
-			
+			return true;			
 		} else { // left drawer clicked
 			if (id == R.id.left_drawer_group_tab_item_home)
 				mWebView.loadUrl(URL_HOME);
@@ -594,12 +595,32 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			else if (id == R.id.left_drawer_group_tab_item_appendix)
 				mWebView.loadUrl(URL_APPENDIX);
 			else if (id == R.id.left_drawer_group_settings_item_language) {
-				// TODO dialog box
-				mWebView.loadUrl(JS_SET_LANG_ES);
+				CharSequence items[] = {"English", "Español"}; 
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(getResources().getString(R.string.language));
+				builder.setItems(items, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int item) {
+						if (item == 0)
+							mWebView.loadUrl(JS_SET_LANG_EN);
+						else
+							mWebView.loadUrl(JS_SET_LANG_ES);
+					}
+		        });
+				builder.create().show();
 			}
 			else if (id == R.id.left_drawer_group_settings_item_spoiler) {
-				// TODO dialog box
-				mWebView.loadUrl(JS_SET_SPOILER_OFF);
+				CharSequence items[] = {getResources().getString(R.string.on), getResources().getString(R.string.off)}; 
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(getResources().getString(R.string.spoiler_alerts));
+				builder.setItems(items, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int item) {
+						if (item == 0)
+							mWebView.loadUrl(JS_SET_SPOILER_ON);
+						else
+							mWebView.loadUrl(JS_SET_SPOILER_OFF);
+					}
+		        });
+				builder.create().show();
 			}
 			else if (id == R.id.left_drawer_group_hbo_item_com)
 				loadUrlIntent(URL_HBO_COM);
