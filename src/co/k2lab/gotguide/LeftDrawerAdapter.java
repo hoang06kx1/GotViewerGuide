@@ -23,10 +23,14 @@ public class LeftDrawerAdapter extends BaseExpandableListAdapter {
 	}
 	
 	private boolean mShouldShowSettings = false;
+	private boolean mIsLanguageEn = true;
+	private boolean mIsSpoilerAlertOn = true;
 
 	@Override
 	public int getGroupCount() {
-		mShouldShowSettings = mMainActivity.getIsSettingsReady();
+		mShouldShowSettings = mMainActivity.isSettingsReady();
+		mIsLanguageEn = mMainActivity.isLanguageEn();
+		mIsSpoilerAlertOn = mMainActivity.isSpoilerAlertOn();
 		return GROUPS.length;
 	}
 
@@ -137,13 +141,22 @@ public class LeftDrawerAdapter extends BaseExpandableListAdapter {
 		
 		else if (groupId == R.id.left_drawer_group_settings) {
 			convertView  = inflater.inflate(R.layout.left_list_settings_item, null);
+			String title, subtitle;
 			if (childId == R.id.left_drawer_group_settings_item_language) {
-				((TextView)convertView.findViewById(R.id.textview)).setText(mMainActivity.getResources().getString(R.string.language));
-			} else {
-				((TextView)convertView.findViewById(R.id.textview)).setText(mMainActivity.getResources().getString(R.string.spoiler_alerts));
+				title = mMainActivity.getResources().getString(R.string.language);
+				subtitle = mShouldShowSettings ?
+						(mIsLanguageEn ? "English" : "Español") :
+						mMainActivity.getResources().getString(R.string.waiting);
 			}
-			((TextView)convertView.findViewById(R.id.textview_change)).
-					setText(mMainActivity.getResources().getString(mShouldShowSettings ? R.string.change : R.string.waiting));
+			else {
+				title = mMainActivity.getResources().getString(R.string.spoiler_alerts);
+				subtitle = mMainActivity.getResources().getString(mShouldShowSettings ?
+						(mIsSpoilerAlertOn ? R.string.on : R.string.off) :
+						R.string.waiting);
+			}
+			
+			((TextView)convertView.findViewById(R.id.textview)).setText(title);
+			((TextView)convertView.findViewById(R.id.textview_change)).setText(subtitle);
 		}
 		
 		else {

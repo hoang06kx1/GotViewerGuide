@@ -26,6 +26,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -103,9 +104,9 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	// flags
 	private static final int mFirstTimeCount = 5;
 	private boolean mShouldTriggerHint = false;
-	boolean mWebviewLoadingFinished = false;
-	boolean mIsSpoilerOn = true;
-	boolean mIsLanguageEn = true;
+	private boolean mWebviewLoadingFinished = false;
+	private boolean mIsSpoilerAlertOn = true;
+	private boolean mIsLanguageEn = true;
 	
 	// data
 	private ArrayList<Season> mSeasons;
@@ -124,8 +125,8 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			if (cookieJson != null) {
 				if (!cookieJson.optString("id").isEmpty())
 					mWebView.loadUrl(URL_HOME);
-				mIsSpoilerOn = cookieJson.optBoolean("spoilerAlerts");
-				mIsLanguageEn = cookieJson.optString("lang", "en") == "en";
+				mIsSpoilerAlertOn = cookieJson.optBoolean("spoilerAlerts");
+				mIsLanguageEn = cookieJson.optString("lang", "en").equals("en");
 			} else {
 				mWebView.loadUrl(URL_DEFAULT_EPISODE);
 			}
@@ -157,9 +158,9 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			@Override
 			public void onClick(View v) {				
 				if (!mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
-					if (mLeftDrawerAdapter != null && mIsLastSettingShown != getIsSettingsReady()) { 				
+					if (mLeftDrawerAdapter != null && mIsLastSettingShown != isSettingsReady()) { 				
 						mLeftDrawerAdapter.notifyDataSetChanged();
-						mIsLastSettingShown = getIsSettingsReady();
+						mIsLastSettingShown = isSettingsReady();
 						//mLeftExpandableListView.requestLayout();
 					}
 					
@@ -506,9 +507,9 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			
 			@Override
 			public void onDrawerOpened(View arg0) {
-				if (arg0.getId() == R.id.left_drawer && mLeftDrawerAdapter != null && mIsLastSettingShown != getIsSettingsReady()) {
+				if (arg0.getId() == R.id.left_drawer && mLeftDrawerAdapter != null && mIsLastSettingShown != isSettingsReady()) {
 						mLeftDrawerAdapter.notifyDataSetChanged();
-						mIsLastSettingShown = getIsSettingsReady();
+						mIsLastSettingShown = isSettingsReady();
 						//mLeftExpandableListView.requestLayout();
 					}
 					
@@ -629,31 +630,27 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 				mWebView.loadUrl(URL_APPENDIX);
 			else if (id == R.id.left_drawer_group_settings_item_language) {
 				CharSequence items[] = {"English", "Español"}; 
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, android.R.style.Theme_Holo_Dialog));
 				builder.setTitle(getResources().getString(R.string.language));
 				builder.setItems(items, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int item) {
-						if (item == 0)
+						if (item == 0) {
 							mWebView.loadUrl(JS_SET_LANG_EN);
-						else
+							mIsLanguageEn = true;
+						}
+						else {							
 							mWebView.loadUrl(JS_SET_LANG_ES);
+							mIsLanguageEn = false;
+						}
+						mLeftDrawerAdapter.notifyDataSetChanged();
 					}
 		        });
 				builder.create().show();
 			}
 			else if (id == R.id.left_drawer_group_settings_item_spoiler) {
-				CharSequence items[] = {getResources().getString(R.string.on), getResources().getString(R.string.off)}; 
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setTitle(getResources().getString(R.string.spoiler_alerts));
-				builder.setItems(items, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int item) {
-						if (item == 0)
-							mWebView.loadUrl(JS_SET_SPOILER_ON);
-						else
-							mWebView.loadUrl(JS_SET_SPOILER_OFF);
-					}
-		        });
-				builder.create().show();
+				mWebView.loadUrl(JS_SET_SPOILER_ON);
+				mIsSpoilerAlertOn = !mIsSpoilerAlertOn;
+				mLeftDrawerAdapter.notifyDataSetChanged();
 			}
 			else if (id == R.id.left_drawer_group_hbo_item_com)
 				loadUrlIntent(URL_HBO_COM);
@@ -723,11 +720,19 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	
 	private boolean mIsLastSettingShown = false;
 	
-	public Boolean getIsSettingsReady() {
+	public boolean isSettingsReady() {
 		return  mWebviewLoadingFinished && 
 				mWebView != null && 
 				mWebView.getUrl().startsWith(URL_HOME) && 
 				mErrorWebview.getVisibility() != View.VISIBLE;
+	}
+	
+	public boolean isLanguageEn() {
+		return mIsLanguageEn;
+	}
+	
+	public boolean isSpoilerAlertOn() {
+		return mIsSpoilerAlertOn;
 	}
 	
 	protected JSONObject getCookie() {
@@ -758,7 +763,7 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			ep[1] = cookie.getInt("episode_number");
 		} catch (JSONException e) {
 			return null;
-		}		
+		}
 		return ep;
 	}
 	
