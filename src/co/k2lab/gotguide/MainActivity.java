@@ -507,7 +507,8 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			
 			@Override
 			public void onDrawerOpened(View arg0) {
-				if (arg0.getId() == R.id.left_drawer && mLeftDrawerAdapter != null && mIsLastSettingShown != isSettingsReady()) {
+				if (arg0.getId() == R.id.left_drawer) {
+					if (mLeftDrawerAdapter != null && mIsLastSettingShown != isSettingsReady()) {				
 						mLeftDrawerAdapter.notifyDataSetChanged();
 						mIsLastSettingShown = isSettingsReady();
 						//mLeftExpandableListView.requestLayout();
@@ -516,7 +517,14 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 					if (mLeftExpandableListView != null) {
 						mLeftExpandableListView.expandGroup(0, false);
 						mLeftExpandableListView.expandGroup(1, false);
-					}	
+					}
+				} else {
+					int currentSelected[] = getActiveEpisode();
+		        	if (currentSelected != null) {
+		        		mRightDrawerAdapter.setCurrentSelected(currentSelected[0]-1, currentSelected[1]-1);
+		        		mRightDrawerAdapter.notifyDataSetChanged();
+		        	}
+				}
 			}
 			
 			@Override
@@ -574,8 +582,6 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	        	mWebView.reload();
 	            return true;
 	        case R.id.action_episode:
-	        	int currentSelected[] = getActiveEpisode();
-	        	if (currentSelected)
 	        	toggleRightDrawer();
 	            return true;
 	        default:
@@ -672,8 +678,9 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 				loadUrlIntent(URL_YT);
 			else
 				loadUrlIntent(URL_IG);
-
-			mDrawerLayout.closeDrawers();
+			if (id != R.id.left_drawer_group_settings_item_spoiler) {
+				mDrawerLayout.closeDrawers();
+			}
 			return true;
 		}
 	}
