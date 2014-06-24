@@ -1,9 +1,15 @@
 package co.k2lab.gotguide;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
@@ -20,6 +26,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,6 +36,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
+import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ExpandableListView;
@@ -58,12 +66,15 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	private RightDrawerAdapter mRightDrawerAdapter;
 	private LeftDrawerAdapter mLeftDrawerAdapter;	
 	private DrawerLayout mDrawerLayout;
+	private ExpandableListView mRightExpandableListView;
+	private ExpandableListView mLeftExpandableListView;
 	
 	// const
 	private static final int SPLASH_TIME = 7000;
 	private static final String FIRST_TIME_KEY = "first_time";
 	
 	private static final String URL_HOME = "http://viewers-guide.hbo.com/";
+	private static final String URL_DEFAULT_EPISODE = "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-10/home/40";
 	private static final String URL_MAP = "http://viewers-guide.hbo.com/game-of-thrones/map";
 	private static final String URL_HOUSES = "http://viewers-guide.hbo.com/game-of-thrones/houses";
 	private static final String URL_PEOPLE = "http://viewers-guide.hbo.com/game-of-thrones/people";
@@ -93,9 +104,9 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	// flags
 	private static final int mFirstTimeCount = 5;
 	private boolean mShouldTriggerHint = false;
-	private ExpandableListView mRightExpandableListView;
-	private ExpandableListView mLeftExpandableListView;
-	boolean mWebviewLoadingFinished = false;
+	private boolean mWebviewLoadingFinished = false;
+	private boolean mIsSpoilerAlertOn = true;
+	private boolean mIsLanguageEn = true;
 	
 	// data
 	private ArrayList<Season> mSeasons;
@@ -109,7 +120,17 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			initActionBar();
 			initControlViews();
 			checkFirstTime();
-			mWebView.loadUrl(URL_HOME);
+			
+			JSONObject cookieJson = getCookie();
+			if (cookieJson != null) {
+				if (!cookieJson.optString("id").isEmpty())
+					mWebView.loadUrl(URL_HOME);
+				mIsSpoilerAlertOn = cookieJson.optBoolean("spoilerAlerts");
+				mIsLanguageEn = cookieJson.optString("lang", "en").equals("en");
+			} else {
+				mWebView.loadUrl(URL_DEFAULT_EPISODE);
+			}
+
 			// remove splash after xx seconds
 			mSplashImage.postDelayed(new Runnable() {
 
@@ -137,9 +158,9 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			@Override
 			public void onClick(View v) {				
 				if (!mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
-					if (mLeftDrawerAdapter != null && mIsLastSettingShown != getIsSettingsReady()) { 				
+					if (mLeftDrawerAdapter != null && mIsLastSettingShown != isSettingsReady()) { 				
 						mLeftDrawerAdapter.notifyDataSetChanged();
-						mIsLastSettingShown = getIsSettingsReady();
+						mIsLastSettingShown = isSettingsReady();
 						//mLeftExpandableListView.requestLayout();
 					}
 					
@@ -486,9 +507,9 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			
 			@Override
 			public void onDrawerOpened(View arg0) {
-				if (arg0.getId() == R.id.left_drawer && mLeftDrawerAdapter != null && mIsLastSettingShown != getIsSettingsReady()) {
+				if (arg0.getId() == R.id.left_drawer && mLeftDrawerAdapter != null && mIsLastSettingShown != isSettingsReady()) {
 						mLeftDrawerAdapter.notifyDataSetChanged();
-						mIsLastSettingShown = getIsSettingsReady();
+						mIsLastSettingShown = isSettingsReady();
 						//mLeftExpandableListView.requestLayout();
 					}
 					
@@ -611,31 +632,27 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 				mWebView.loadUrl(URL_APPENDIX);
 			else if (id == R.id.left_drawer_group_settings_item_language) {
 				CharSequence items[] = {"English", "Español"}; 
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, android.R.style.Theme_Holo_Dialog));
 				builder.setTitle(getResources().getString(R.string.language));
 				builder.setItems(items, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int item) {
-						if (item == 0)
+						if (item == 0) {
 							mWebView.loadUrl(JS_SET_LANG_EN);
-						else
+							mIsLanguageEn = true;
+						}
+						else {							
 							mWebView.loadUrl(JS_SET_LANG_ES);
+							mIsLanguageEn = false;
+						}
+						mLeftDrawerAdapter.notifyDataSetChanged();
 					}
 		        });
 				builder.create().show();
 			}
 			else if (id == R.id.left_drawer_group_settings_item_spoiler) {
-				CharSequence items[] = {getResources().getString(R.string.on), getResources().getString(R.string.off)}; 
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setTitle(getResources().getString(R.string.spoiler_alerts));
-				builder.setItems(items, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int item) {
-						if (item == 0)
-							mWebView.loadUrl(JS_SET_SPOILER_ON);
-						else
-							mWebView.loadUrl(JS_SET_SPOILER_OFF);
-					}
-		        });
-				builder.create().show();
+				mWebView.loadUrl(JS_SET_SPOILER_ON);
+				mIsSpoilerAlertOn = !mIsSpoilerAlertOn;
+				mLeftDrawerAdapter.notifyDataSetChanged();
 			}
 			else if (id == R.id.left_drawer_group_hbo_item_com)
 				loadUrlIntent(URL_HBO_COM);
@@ -705,11 +722,51 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	
 	private boolean mIsLastSettingShown = false;
 	
-	public Boolean getIsSettingsReady() {
+	public boolean isSettingsReady() {
 		return  mWebviewLoadingFinished && 
 				mWebView != null && 
 				mWebView.getUrl().startsWith(URL_HOME) && 
 				mErrorWebview.getVisibility() != View.VISIBLE;
+	}
+	
+	public boolean isLanguageEn() {
+		return mIsLanguageEn;
+	}
+	
+	public boolean isSpoilerAlertOn() {
+		return mIsSpoilerAlertOn;
+	}
+	
+	protected JSONObject getCookie() {
+		String s = CookieManager.getInstance().getCookie("http://viewers-guide.hbo.com");
+		if (s != null) {
+			int f = s.indexOf("got_episode_data=");
+			if (f != -1) {
+				try {
+					f += 17;
+					int l = s.indexOf(";", f);
+					String jsonStr = s.substring(f, l);
+					return new JSONObject(URLDecoder.decode(jsonStr, "UTF-8"));
+				} catch (Exception e) {
+					Log.e("getCookie", e.getMessage());
+				}
+			}
+		}
+		return null;
+	}
+	
+	protected int[] getActiveEpisode() {
+		JSONObject cookie = getCookie();
+		if (cookie == null)
+			return null;
+		int[] ep = new int[2];
+		try {
+			ep[0] = cookie.getInt("season_number");
+			ep[1] = cookie.getInt("episode_number");
+		} catch (JSONException e) {
+			return null;
+		}
+		return ep;
 	}
 	
 	/*
