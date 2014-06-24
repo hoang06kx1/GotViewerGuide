@@ -1,9 +1,15 @@
 package co.k2lab.gotguide;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
@@ -29,6 +35,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
+import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ExpandableListView;
@@ -58,12 +65,15 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	private RightDrawerAdapter mRightDrawerAdapter;
 	private LeftDrawerAdapter mLeftDrawerAdapter;	
 	private DrawerLayout mDrawerLayout;
+	private ExpandableListView mRightExpandableListView;
+	private ExpandableListView mLeftExpandableListView;
 	
 	// const
 	private static final int SPLASH_TIME = 7000;
 	private static final String FIRST_TIME_KEY = "first_time";
 	
 	private static final String URL_HOME = "http://viewers-guide.hbo.com/";
+	private static final String URL_DEFAULT_EPISODE = "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-10/home/40";
 	private static final String URL_MAP = "http://viewers-guide.hbo.com/game-of-thrones/map";
 	private static final String URL_HOUSES = "http://viewers-guide.hbo.com/game-of-thrones/houses";
 	private static final String URL_PEOPLE = "http://viewers-guide.hbo.com/game-of-thrones/people";
@@ -93,9 +103,9 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	// flags
 	private static final int mFirstTimeCount = 5;
 	private boolean mShouldTriggerHint = false;
-	private ExpandableListView mRightExpandableListView;
-	private ExpandableListView mLeftExpandableListView;
 	boolean mWebviewLoadingFinished = false;
+	boolean mIsSpoilerOn = true;
+	boolean mIsLanguageEn = true;
 	
 	// data
 	private ArrayList<Season> mSeasons;
@@ -109,7 +119,17 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 			initActionBar();
 			initControlViews();
 			checkFirstTime();
-			mWebView.loadUrl(URL_HOME);
+			
+			JSONObject cookieJson = getCookie();
+			if (cookieJson != null) {
+				if (!cookieJson.optString("id").isEmpty())
+					mWebView.loadUrl(URL_HOME);
+				mIsSpoilerOn = cookieJson.optBoolean("spoilerAlerts");
+				mIsLanguageEn = cookieJson.optString("lang", "en") == "en";
+			} else {
+				mWebView.loadUrl(URL_DEFAULT_EPISODE);
+			}
+
 			// remove splash after xx seconds
 			mSplashImage.postDelayed(new Runnable() {
 
@@ -708,6 +728,38 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 				mWebView != null && 
 				mWebView.getUrl().startsWith(URL_HOME) && 
 				mErrorWebview.getVisibility() != View.VISIBLE;
+	}
+	
+	protected JSONObject getCookie() {
+		String s = CookieManager.getInstance().getCookie("http://viewers-guide.hbo.com");
+		if (s != null) {
+			int f = s.indexOf("got_episode_data=");
+			if (f != -1) {
+				try {
+					f += 17;
+					int l = s.indexOf(";", f);
+					String jsonStr = s.substring(f, l);
+					return new JSONObject(URLDecoder.decode(jsonStr, "UTF-8"));
+				} catch (Exception e) {
+					Log.e("getCookie", e.getMessage());
+				}
+			}
+		}
+		return null;
+	}
+	
+	protected int[] getActiveEpisode() {
+		JSONObject cookie = getCookie();
+		if (cookie == null)
+			return null;
+		int[] ep = new int[2];
+		try {
+			ep[0] = cookie.getInt("season_number");
+			ep[1] = cookie.getInt("episode_number");
+		} catch (JSONException e) {
+			return null;
+		}		
+		return ep;
 	}
 	
 	/*
