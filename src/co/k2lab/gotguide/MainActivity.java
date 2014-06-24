@@ -553,6 +553,8 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	        	mWebView.reload();
 	            return true;
 	        case R.id.action_episode:
+	        	int currentSelected[] = getActiveEpisode();
+	        	if (currentSelected)
 	        	toggleRightDrawer();
 	            return true;
 	        default:
