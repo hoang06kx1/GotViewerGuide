@@ -15,7 +15,7 @@
         android:allowBackup="true"
         android:icon="@drawable/launcher_icon"
         android:label="@string/app_name"
-        android:theme="@style/GoTActionBarTheme" >
+        android:theme="@style/GoTActionBarTheme">
         <activity       
             android:configChanges="keyboardHidden|orientation|screenSize"     
             android:name="co.k2lab.gotguide.MainActivity"

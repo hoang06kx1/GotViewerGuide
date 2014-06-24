@@ -763,6 +763,11 @@ public class MainActivity extends BaseIabActivity implements OnChildClickListene
 	}
 	
 	protected int[] getActiveEpisode() {
+		// if content is loading, do not update active episode
+		if (!isSettingsReady())
+			return null;
+		
+		// get episode data from coookie
 		JSONObject cookie = getCookie();
 		if (cookie == null)
 			return null;
