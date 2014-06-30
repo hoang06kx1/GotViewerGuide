@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Game of Thrones Guia do Visualizador</string>
+	
+	<!-- first time dialog box -->
+	<string name="network_required_text">Todos os caminhos levam a King's Landing …\n\nNa verdade, não! Por favor, certifique-se de que você está em uma estrada que tem uma boa conexão com a internet. Tente novamente quando sua conexão à Internet está pronta.</string>
+	<string name="network_required_title">É necessário Internet</string>
+	<string name="hint_text">Às vezes, o aplicativo parece ser indiferente, como White Walker …\n\nSeja paciente, tente um duplo clique em vez de um clique.</string>
+	<string name="ok">OK</string>
+	<string name="got_it">Eu tê-lo!</string>
+	
+	<!-- donation dialog box -->
+	<string name="donation_title"> Muito obrigado!</string>
+	<string name="one_dollar_message"> Obrigado, K2 Lab te ama!</string>
+	<string name="two_dollars_message"> Obrigado, K2 Lab te ama!</string>
+	<string name="five_dollars_message"> Obrigado, K2 Lab te ama!</string>
+	<string name="donate_title">Compre-nos uma cerveja</string>
+	<string name="donate_subtitle">Qual é o seu tipo favorito de cerveja?</string>
+	<string name="donate_one">$1 • Saúde!</string>
+	<string name="donate_two">$2 • Estamos muito felizes!</string>
+	<string name="donate_five">$5 • Nós escrevemos uma carta de amor!</string>
+	
+	<!-- right drawer -->
+	<string name="feedback">FEEDBACK</string>
+	<string name="buy_us_a_beer">COMPRA UMA CERVEJA</string>
+	
+	<!-- left drawer -->
+	<string name="home">Casa</string>
+    <string name="map">Mapa</string>
+    <string name="houses">Casas</string>
+    <string name="people">Personagens</string>
+    <string name="appendix">Apêndice</string>
+    <string name="settings">ARQUITETURA</string>
+    <string name="HBO">HBO</string>
+    <string name="social">SOCIAL</string>   
+    <string name="in_this_episode">NESTE EPISÓDIO</string>
+    <string name="language">Língua</string>
+    <string name="spoiler_alerts">Alertas Spoiler</string>
+    <string name="waiting">esperar por conteúdo …</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+	
+	<!-- action bar -->
+	<string name="action_refresh">Refrescar</string>
+	<string name="action_episode">Episódio</string>
+	
+	<!-- episode -->
+	<string name="s1">Temporada 1</string>
+	<string name="s1_1">1. O inverno está chegando</string>
+	<string name="s1_2">2. El Camino Real</string>
+	<string name="s1_3">3. Lord Snow</string>
+	<string name="s1_4">4. Aleijados, bastardos e coisas quebradas</string>
+	<string name="s1_5">5. O Lobo eo Leão</string>
+	<string name="s1_6">6. A coroa de ouro</string>
+	<string name="s1_7">7. Vencer ou morrer</string>
+	<string name="s1_8">8. No lado da ponta</string>
+	<string name="s1_9">9. Baelor</string>
+	<string name="s1_10">10. Fogo e sangue</string>
+	
+	<string name="s2">Temporada 2</string>
+	<string name="s2_1">1. O Norte se lembra</string>
+	<string name="s2_2">2. A Noite Terra</string>
+	<string name="s2_3">3. O que nunca é morto morrer</string>
+	<string name="s2_4">4. Jardim de Ossos</string>
+	<string name="s2_5">5. O fantasma de Harrenhal</string>
+	<string name="s2_6">6. Deuses antigos e novos</string>
+	<string name="s2_7">7. Um homem sem honra</string>
+	<string name="s2_8">8. O Príncipe de Winterfell</string>
+	<string name="s2_9">9. Blackwater</string>
+	<string name="s2_10">10. Valar Morghulis</string>
+	
+	<string name="s3">Temporada 3</string>
+	<string name="s3_1">1. Valar Dohaeris</string>
+	<string name="s3_2">2. Asas negras, palavras preto</string>
+	<string name="s3_3">3. A forma de punição</string>
+	<string name="s3_4">4. E agora o relógio é mais</string>
+	<string name="s3_5">5. Beijada pelo fogo</string>
+	<string name="s3_6">6. Escalada</string>
+	<string name="s3_7">7. O urso ea donzela</string>
+	<string name="s3_8">8. A segunda criança</string>
+	<string name="s3_9">9. Chuvas Castamere</string>
+	<string name="s3_10">10. Mhysa</string>
+	
+	<string name="s4">Temporada 4</string>
+	<string name="s4_1">1. Duas Espadas</string>
+	<string name="s4_2">2. O Leão ea Rosa</string>
+	<string name="s4_3">3. Cadeia disjuntor</string>
+	<string name="s4_4">4. Guardajuramentos</string>
+	<string name="s4_5">5. O primeiro de seu nome</string>
+	<string name="s4_6">6. As leis dos Deuses e Homens</string>
+	<string name="s4_7">7. Rouxinol</string>
+	<string name="s4_8">8. A Montanha ea Serpente</string>
+	<string name="s4_9">9. Os Vigilantes na parede</string>
+	<string name="s4_10">10. As Crianças</string>
+</resources>
