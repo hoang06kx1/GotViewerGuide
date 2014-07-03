@@ -124,7 +124,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	// ads
 	// private StartAppAd startAppAd = new StartAppAd(this);
 	private Prm prm;
-	private long mAdDisplayTime = 0;
+	private long mAdDisplayTime = System.currentTimeMillis();
 	private boolean mAdDisplayed = false;
 
 	@Override
@@ -945,16 +945,17 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	public boolean onGroupClick(ExpandableListView parent, View v,
 			int groupPosition, long id) {
 		if (parent == mRightExpandableListView) { // right drawer clicked
-			if (groupPosition == mRightDrawerAdapter.getGroupCount() - 2) {
+			if (groupPosition == mRightDrawerAdapter.getGroupCount() - 1) {
 				feedbackToDev();
 				return true;
-			} else if (groupPosition == mRightDrawerAdapter.getGroupCount() - 1) {
+			}
+			/* else if (groupPosition == mRightDrawerAdapter.getGroupCount() - 1) {
 				/*
 				 * Dialog donateDialog = new DonateDialog(MainActivity.this,
 				 * true, null, MainActivity.this); donateDialog.show(); return
 				 * true;
 				 */// TODO: no more donation
-			}
+			// }
 			return false;
 
 		} else { // left drawer clicked
@@ -987,8 +988,8 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	private boolean mIsLastSettingShown = false;
 
 	public boolean isSettingsReady() {
-		return mWebviewLoadingFinished && mWebView != null
-				&& mWebView.getUrl().startsWith(URL_HOME)
+		return mWebView != null && mWebviewLoadingFinished 
+				&& mWebView.getUrl() != null && mWebView.getUrl().startsWith(URL_HOME)
 				&& mErrorWebview.getVisibility() != View.VISIBLE;
 	}
 
