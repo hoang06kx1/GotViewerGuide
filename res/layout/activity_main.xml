@@ -1,48 +1,84 @@
-<android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent" >
 
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black">
-        
+        android:background="@color/black" >
+
         <!-- wiew that will be shown while the fullscreen video loads -->
         <!-- (TODO maybe include a spinner and a "Loading..." message) -->
+
         <FrameLayout
-	        android:id="@+id/video_container"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        android:visibility="gone"/>
-		
-        <!-- main webview -->
-        <co.k2lab.gotguide.controls.VideoEnabledWebView
+            android:id="@+id/video_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <!-- main webview -->
+
+        <co.k2lab.gotguide.controls.VideoEnabledWebView
             android:id="@+id/main_webview"
-            />
-        
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
         <!-- view for progress bar, only shown when page is loading via loadUrl() -->
+
         <View
             android:id="@+id/progress_bar"
             android:layout_width="0dp"
             android:layout_height="3dp"
             android:background="@color/progress_bar"
             android:visibility="gone" />
-        
+
         <!-- error webview, only shown when there is something wrong with main webview -->
+
         <WebView
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:id="@+id/error_webview"
-             android:visibility="gone"
-            />
-        
+            android:id="@+id/error_webview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <!-- Ads -->
+
+        <RelativeLayout
+            android:id="@+id/ads_zone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <!-- AirPush ads -->
+            <!--
+            <com.xhydo.qfmoy192870.Adview
+                xmlns:ap="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/myAdView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                ap:animation="fade"
+                ap:banner_type="inappad"
+                ap:canShowMR="false"
+                ap:placementType="interstitial"
+                ap:test_mode="true" />
+            -->
+            <!-- StartApp ads -->
+            <!--
+                <com.startapp.android.publish.banner.Banner
+                    android:id="@+id/startAppBanner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true" 
+                    />
+            -->
+        </RelativeLayout>
+
         <!-- splash screen, only shown first time app loads -->
+
         <co.k2lab.gotguide.controls.FitWidthImage
             android:id="@+id/main_splash"
             android:layout_width="match_parent"
@@ -50,27 +86,57 @@
             android:src="@drawable/splash"
             android:visibility="visible" />
     </FrameLayout>
-	
-    <ExpandableListView
+
+    <RelativeLayout
         android:id="@+id/left_drawer"
         android:layout_width="@dimen/left_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="left"
-        android:choiceMode="singleChoice"
-        android:background="@color/left_list_bg"
-        android:childDivider="@android:color/transparent"
-        android:groupIndicator="@null"
-    	/>
-        
-    <ExpandableListView
-        android:id="@+id/right_drawer"
+        android:background="@color/left_list_bg" >
+
+        <ExpandableListView
+            android:id="@+id/left_drawer_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="50dp"
+            android:background="@color/left_list_bg"
+            android:childDivider="@android:color/transparent"
+            android:choiceMode="singleChoice"
+            android:groupIndicator="@null" />
+
+        <com.startapp.android.publish.banner.Banner
+            android:id="@+id/startAppBanner"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="@dimen/right_drawer_witdh"
         android:layout_height="match_parent"
         android:layout_gravity="right"
-        android:choiceMode="singleChoice"
-        android:background="@color/list_bg"
-        android:childDivider="@color/list_child_divider"        
-        android:groupIndicator="@null"
-        />
+        android:background="@color/list_bg" >
+
+        <ExpandableListView
+            android:id="@+id/right_drawer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="50dp"
+            android:background="@color/list_bg"
+            android:childDivider="@color/list_child_divider"
+            android:choiceMode="singleChoice"
+            android:groupIndicator="@null" />
+
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/admob_view"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            ads:adSize="BANNER"
+            ads:adUnitId="ca-app-pub-7553716895560169/3009279535"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
 
 </android.support.v4.widget.DrawerLayout>
