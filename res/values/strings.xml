@@ -5,7 +5,7 @@
 	<!-- first time dialog box -->
 	<string name="network_required_text">All roads lead to King\'s Landing…\n\nNot really, please check if you are on one with good Internet connection. Try again when your internet connection is ready!</string>
 	<string name="network_required_title">Internet required</string>
-	<string name="hint_text">Sometimes the app seems unresponsive, like a White Walker…\n\nBe patient, try a double tap instead of single tap.</string>
+	<string name="hint_text">Sometimes the app seems unresponsive, like a White Walker… Be patient.\n\nAnd this app works on Internet, so watch out your data usage.</string>
 	<string name="ok">OK</string>
 	<string name="got_it">GOT IT!</string>
 	

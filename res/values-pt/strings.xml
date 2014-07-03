@@ -3,9 +3,9 @@
 	<string name="app_name">Game of Thrones Guia do Visualizador</string>
 	
 	<!-- first time dialog box -->
-	<string name="network_required_text">Todos os caminhos levam a King's Landing …\n\nNa verdade, não! Por favor, certifique-se de que você está em uma estrada que tem uma boa conexão com a internet. Tente novamente quando sua conexão à Internet está pronta.</string>
+	<string name="network_required_text">Todos os caminhos levam a King\'s Landing …\n\nNa verdade, não! Por favor, certifique-se de que você está em uma estrada que tem uma boa conexão com a internet. Tente novamente quando sua conexão à Internet está pronta.</string>
 	<string name="network_required_title">É necessário Internet</string>
-	<string name="hint_text">Às vezes, o aplicativo parece ser indiferente, como White Walker …\n\nSeja paciente, tente um duplo clique em vez de um clique.</string>
+	<string name="hint_text">Às vezes, o aplicativo parece ser indiferente, como White Walker … Ser paciente.\n\nE este aplicativo precisa de Internet para funcionar, por isso esteja atento a sua utilização de dados.</string>
 	<string name="ok">OK</string>
 	<string name="got_it">Eu tê-lo!</string>
 	
