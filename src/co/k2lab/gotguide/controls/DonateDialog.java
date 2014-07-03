@@ -50,7 +50,7 @@ public class DonateDialog extends Dialog implements android.view.View.OnClickLis
 				productId = BaseIabActivity.SKU_FIVE_DOLLARS;
 			}
 			if (!productId.equals("")) {
-				mActivity.purchaseProduct(productId);
+				// mActivity.purchaseProduct(productId);
 			}
 		}
 		this.dismiss();
