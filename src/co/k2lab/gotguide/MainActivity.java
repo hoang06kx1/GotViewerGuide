@@ -124,7 +124,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	// ads
 	// private StartAppAd startAppAd = new StartAppAd(this);
 	private Prm prm;
-	private long mAdDisplayTime = System.currentTimeMillis();
+	private long mAdDisplayTime = 0;
 	private boolean mAdDisplayed = false;
 
 	@Override
