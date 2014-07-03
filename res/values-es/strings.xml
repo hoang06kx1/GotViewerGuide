@@ -3,7 +3,7 @@
 	<string name="app_name">Game of Thrones Guía del Visor</string>
 	
 	<!-- first time dialog box -->
-	<string name="network_required_text">Todos los caminos llevan a Desembarco del Rey …\n\nEn realidad, no! Por favor, asegúrese de que usted está en un camino que tiene una buena conexión a Internet. Inténtelo de nuevo cuando su conexión a Internet está lista.</string>
+	<string name="network_required_text">Todos los caminos llevan a King's Landing …\n\nEn realidad, no! Por favor, asegúrese de que usted está en un camino que tiene una buena conexión a Internet. Inténtelo de nuevo cuando su conexión a Internet está lista.</string>
 	<string name="network_required_title">Se requiere Internet</string>
 	<string name="hint_text">A veces, la aplicación parece no responder, como un White Walker …\n\nTenga paciencia, prueba un doble clic en lugar de un solo clic.</string>
 	<string name="ok">OK</string>
