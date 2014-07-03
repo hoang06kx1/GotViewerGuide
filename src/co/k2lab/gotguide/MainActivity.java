@@ -111,11 +111,12 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	private static final String URL_ERROR = "file:///android_asset/error/error-screen.html";
 
 	// flags
-	private static final int mFirstTimeCount = 5;
+	private static final int mFirstTimeCount = 3;
 	private boolean mShouldTriggerHint = false;
 	private boolean mWebviewLoadingFinished = false;
 	private boolean mIsSpoilerAlertOn = true;
 	private boolean mIsLanguageEn = true;
+	private boolean mEnableDrawer = false;
 	// private boolean mAppStart = true;
 
 	// data
@@ -136,9 +137,24 @@ public class MainActivity extends Activity implements OnChildClickListener,
 			// start StartApp banner ad
 			StartAppSDK.init(this, "106324371", "206307211");
 			setContentView(R.layout.activity_main);
-			initAds();
+			
+			// fix bug: drawer can be opened in Splash screen
+			mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+			mDrawerLayout.setOnTouchListener(new View.OnTouchListener() {
+				
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					if (!mEnableDrawer) {
+						return true;
+					} else {
+						return false;
+					}
+				}
+			});
+			
 			initActionBar();
 			initControlViews();
+			initAds();
 			checkFirstTime();
 
 			JSONObject cookieJson = getCookie();
@@ -155,13 +171,14 @@ public class MainActivity extends Activity implements OnChildClickListener,
 			mSplashImage.postDelayed(new Runnable() {
 
 				@Override
-				public void run() {
+				public void run() {					
 					if (mSplashImage != null) {
 						hideSplash();
 						if (mActionBar != null) {
 							mActionBar.show();
 						}
 					}
+					mEnableDrawer = true;
 				}
 			}, SPLASH_TIME);
 		}
@@ -209,6 +226,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 				@Override
 				public void onSmartWallAdShowing() {
 					Log.d("Ads", "onSmartWallAdShowing");
+					mAdDisplayTime = System.currentTimeMillis();
 					mAdDisplayed = true;
 				}
 
@@ -283,11 +301,14 @@ public class MainActivity extends Activity implements OnChildClickListener,
 			if (firstTime == 0) {
 				mShouldTriggerHint = true;
 			}
-			mSplashImage.setImageResource(R.drawable.splash_first_time);
-			preferences.edit().putInt(FIRST_TIME_KEY, ++firstTime).commit();
+			mSplashImage.setImageResource(R.drawable.splash_first_time);			
 		} else {
 			mSplashImage.setImageResource(R.drawable.splash);
+			if (firstTime > mFirstTimeCount + 1) {
+				showAds(); // show ads after 5 times app start
+			}
 		}
+		preferences.edit().putInt(FIRST_TIME_KEY, ++firstTime).commit();
 	}
 
 	private void hideSplash() {
@@ -544,7 +565,6 @@ public class MainActivity extends Activity implements OnChildClickListener,
 
 	private void initControlViews() {
 		// misc
-		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mSplashImage = (ImageView) findViewById(R.id.main_splash);
 		mProgressView = (View) findViewById(R.id.progress_bar);
 		mProgressBarLayoutParams = mProgressView.getLayoutParams();
@@ -690,7 +710,6 @@ public class MainActivity extends Activity implements OnChildClickListener,
 			public boolean onTouch(View v, MotionEvent event) {
 				if (System.currentTimeMillis() - mAdDisplayTime > LONG_AD_DURATION) {
 					showAds();
-					mAdDisplayTime = System.currentTimeMillis();
 				}
 				return false;
 			}
@@ -727,7 +746,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 					}
 				});
 
-		mLeftExpandableListView = (ExpandableListView) findViewById(R.id.left_drawer);
+		mLeftExpandableListView = (ExpandableListView) findViewById(R.id.left_drawer_list);
 		mLeftDrawerAdapter = new LeftDrawerAdapter(this);
 		mLeftExpandableListView.setAdapter(mLeftDrawerAdapter);
 		mLeftExpandableListView.setOnChildClickListener(this);
@@ -796,7 +815,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 		// startAppAd.onBackPressed();
 
 		// AirPush ad coming here
-		if (!mAdDisplayed) {
+		if (!mAdDisplayed || System.currentTimeMillis() - mAdDisplayTime > LONG_AD_DURATION) {
 			try {
 				prm.runCachedAd(this, AdType.smartwall); // This will display the ad
 															// but it wont close the
@@ -1044,7 +1063,6 @@ public class MainActivity extends Activity implements OnChildClickListener,
 		super.onResume();
 		if (System.currentTimeMillis() - mAdDisplayTime > AD_DURATION) {
 			showAds();
-			mAdDisplayTime = System.currentTimeMillis();
 		}
 		// startAppAd.onResume();
 	}
