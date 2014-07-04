@@ -133,12 +133,12 @@ public class MainActivity extends Activity implements OnChildClickListener,
 
 	// ads
 	private long mAdDisplayTime = System.currentTimeMillis();
-	private InterstitialAd mAdmobIad; 
+	private InterstitialAd mAdmobIad;
 	private AdRequest mAdmobIadRequest; //
-	private StartAppAd mStartAppAd; 
+	private StartAppAd mStartAppAd;
 	private ViewGroup mAdZone;
 	private View mAdCloseButton;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -148,11 +148,11 @@ public class MainActivity extends Activity implements OnChildClickListener,
 			// start StartApp banner ad
 			StartAppSDK.init(this, "106324371", "206307211");
 			setContentView(R.layout.activity_main);
-			
+
 			// fix bug: drawer can be opened in Splash screen
 			mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 			mDrawerLayout.setOnTouchListener(new View.OnTouchListener() {
-				
+
 				@Override
 				public boolean onTouch(View v, MotionEvent event) {
 					if (!mEnableDrawer) {
@@ -162,7 +162,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 					}
 				}
 			});
-			
+
 			initActionBar();
 			initControlViews();
 			initAds();
@@ -182,7 +182,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 			mSplashImage.postDelayed(new Runnable() {
 
 				@Override
-				public void run() {					
+				public void run() {
 					if (mSplashImage != null) {
 						hideSplash();
 						if (mActionBar != null) {
@@ -231,84 +231,68 @@ public class MainActivity extends Activity implements OnChildClickListener,
 
 	private void initAds() {
 		/*
-		if (prm == null)
-			prm = new Prm(this, new AdListener() {
-
-				@Override
-				public void onSmartWallAdShowing() {
-					Log.d("Ads", "onSmartWallAdShowing");
-					mAdDisplayTime = System.currentTimeMillis();
-					mAdDisplayed = true;
-				}
-
-				@Override
-				public void onSmartWallAdClosed() {
-					Log.d("Ads", "onSmartWallAdClosed");
-				}
-
-				@Override
-				public void onSDKIntegrationError(String arg0) {
-					// TODO Auto-generated method stub
-					Log.d("Ads", "SDK integration error");
-				}
-
-				@Override
-				public void onAdError(String arg0) {
-					Log.d("Ads", "AdError " + arg0 == null ? "" : arg0);
-				}
-
-				@Override
-				public void onAdCached(AdType arg0) {
-					Log.d("Ads", "AdCached");
-				}
-
-				@Override
-				public void noAdAvailableListener() {
-					Log.d("Ads", "noAdsAvailable");
-
-				}
-			}, true);
-		// cache ad
-		prm.runSmartWallAd();
-		*/
+		 * if (prm == null) prm = new Prm(this, new AdListener() {
+		 * 
+		 * @Override public void onSmartWallAdShowing() { Log.d("Ads",
+		 * "onSmartWallAdShowing"); mAdDisplayTime = System.currentTimeMillis();
+		 * mAdDisplayed = true; }
+		 * 
+		 * @Override public void onSmartWallAdClosed() { Log.d("Ads",
+		 * "onSmartWallAdClosed"); }
+		 * 
+		 * @Override public void onSDKIntegrationError(String arg0) { // TODO
+		 * Auto-generated method stub Log.d("Ads", "SDK integration error"); }
+		 * 
+		 * @Override public void onAdError(String arg0) { Log.d("Ads",
+		 * "AdError " + arg0 == null ? "" : arg0); }
+		 * 
+		 * @Override public void onAdCached(AdType arg0) { Log.d("Ads",
+		 * "AdCached"); }
+		 * 
+		 * @Override public void noAdAvailableListener() { Log.d("Ads",
+		 * "noAdsAvailable");
+		 * 
+		 * } }, true); // cache ad prm.runSmartWallAd();
+		 */
 
 		// ADMOB
-		
+
 		// Create the interstitial.
-	    mAdmobIad = new InterstitialAd(this);
-	    mAdmobIad.setAdUnitId("ca-app-pub-7553716895560169/4470836331");
+		mAdmobIad = new InterstitialAd(this);
+		mAdmobIad.setAdUnitId("ca-app-pub-7553716895560169/4470836331");
 
-	    // Create ad interstitial request.
-	    mAdmobIadRequest = new AdRequest.Builder().build();
+		// Create ad interstitial request.
+		mAdmobIadRequest = new AdRequest.Builder().build();
 
-	    // Begin loading your interstitial.
-	    mAdmobIad.loadAd(mAdmobIadRequest);
+		// Begin loading your interstitial.
+		mAdmobIad.loadAd(mAdmobIadRequest);
 
-	    // Banner
+		// Banner
 		com.google.android.gms.ads.AdView adView = (com.google.android.gms.ads.AdView) findViewById(R.id.admob_view);
 		// add device to test
 		if (adView != null) {
 			com.google.android.gms.ads.AdRequest adRequest = new com.google.android.gms.ads.AdRequest.Builder()
-					//.addTestDevice("248798ED195F56341EA0C23B2B76BBFB")
-					//.addTestDevice("2842078051443556C35681847AD817A9")
+					// .addTestDevice("248798ED195F56341EA0C23B2B76BBFB")
+					// .addTestDevice("2842078051443556C35681847AD817A9")
 					.addTestDevice(
 							com.google.android.gms.ads.AdRequest.DEVICE_ID_EMULATOR)
 					.build();
 			adView.loadAd(adRequest);
 		}
-		
+
 		// MOBILE CORE
-		
-		MobileCore.init(this, "64C2DHLQ89BMID0FOL2Q0RDEOH9B4", LOG_TYPE.DEBUG, AD_UNITS.OFFERWALL);
-		
+
+		MobileCore.init(this, "64C2DHLQ89BMID0FOL2Q0RDEOH9B4", LOG_TYPE.DEBUG,
+				AD_UNITS.OFFERWALL);
+
 		// STARTAPP
-		
 		mStartAppAd = new StartAppAd(this);
-		
+		mStartAppAd.loadAd();
+
 		// close button
 		mAdCloseButton = findViewById(R.id.ad_close_button);
 		mAdCloseButton.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				if (mAdZone == null) {
@@ -317,7 +301,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 				mAdZone.setVisibility(View.GONE);
 				Handler handler = new Handler();
 				handler.postDelayed(new Runnable() {
-					
+
 					@Override
 					public void run() {
 						mAdZone.setVisibility(View.VISIBLE);
@@ -353,14 +337,13 @@ public class MainActivity extends Activity implements OnChildClickListener,
 			if (firstTime == 0) {
 				mShouldTriggerHint = true;
 			}
-			mSplashImage.setImageResource(R.drawable.splash_first_time);			
+			mSplashImage.setImageResource(R.drawable.splash_first_time);
 		} else {
 			mSplashImage.setImageResource(R.drawable.splash);
 			/*
-			if (firstTime > mFirstTimeCount + 1) {
-				showAds(); // show ads after 5 times app start
-			}
-			*/
+			 * if (firstTime > mFirstTimeCount + 1) { showAds(); // show ads
+			 * after 5 times app start }
+			 */
 		}
 		preferences.edit().putInt(FIRST_TIME_KEY, ++firstTime).commit();
 	}
@@ -620,7 +603,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	private void initControlViews() {
 		// misc
 		mSplashImage = (ImageView) findViewById(R.id.main_splash);
-		mAdZone = (ViewGroup)findViewById(R.id.ads_zone);
+		mAdZone = (ViewGroup) findViewById(R.id.ads_zone);
 		mAdCloseButton = findViewById(R.id.ad_close_button);
 		mProgressView = (View) findViewById(R.id.progress_bar);
 		mProgressBarLayoutParams = mProgressView.getLayoutParams();
@@ -758,8 +741,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 				}
 			}
 		});
-		
-		
+
 		// long duration ads
 		mWebView.setOnTouchListener(new View.OnTouchListener() {
 			@Override
@@ -770,7 +752,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 				return false;
 			}
 		});
-			
+
 		// data
 		mSeasons = initSeasonData();
 		mRightExpandableListView = (ExpandableListView) findViewById(R.id.right_drawer);
@@ -872,17 +854,12 @@ public class MainActivity extends Activity implements OnChildClickListener,
 
 		// AirPush ad coming here
 		/*
-		if (!mAdDisplayed || System.currentTimeMillis() - mAdDisplayTime > LONG_AD_DURATION) {
-			try {
-				prm.runCachedAd(this, AdType.smartwall); // This will display the ad
-															// but it wont close the
-															// app.
-			} catch (Exception e) {
-				finish();
-			}
-		}
-		*/
-		
+		 * if (!mAdDisplayed || System.currentTimeMillis() - mAdDisplayTime >
+		 * LONG_AD_DURATION) { try { prm.runCachedAd(this, AdType.smartwall); //
+		 * This will display the ad // but it wont close the // app. } catch
+		 * (Exception e) { finish(); } }
+		 */
+
 		super.onBackPressed();
 	}
 
@@ -1026,13 +1003,12 @@ public class MainActivity extends Activity implements OnChildClickListener,
 				feedbackToDev();
 				return true;
 			}
-			/* else if (groupPosition == mRightDrawerAdapter.getGroupCount() - 1) {
-				/*
-				 * Dialog donateDialog = new DonateDialog(MainActivity.this,
-				 * true, null, MainActivity.this); donateDialog.show(); return
-				 * true;
-				 */// TODO: no more donation
-			// }
+			/*
+			 * else if (groupPosition == mRightDrawerAdapter.getGroupCount() -
+			 * 1) { /* Dialog donateDialog = new DonateDialog(MainActivity.this,
+			 * true, null, MainActivity.this); donateDialog.show(); return true;
+			 */// TODO: no more donation
+				// }
 			return false;
 
 		} else { // left drawer clicked
@@ -1065,8 +1041,9 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	private boolean mIsLastSettingShown = false;
 
 	public boolean isSettingsReady() {
-		return mWebView != null && mWebviewLoadingFinished 
-				&& mWebView.getUrl() != null && mWebView.getUrl().startsWith(URL_HOME)
+		return mWebView != null && mWebviewLoadingFinished
+				&& mWebView.getUrl() != null
+				&& mWebView.getUrl().startsWith(URL_HOME)
 				&& mErrorWebview.getVisibility() != View.VISIBLE;
 	}
 
@@ -1119,7 +1096,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (System.currentTimeMillis() - mAdDisplayTime > AD_DURATION) { 
+		if (System.currentTimeMillis() - mAdDisplayTime > AD_DURATION) {
 			showAds();
 		}
 		// startAppAd.onResume();
@@ -1130,32 +1107,36 @@ public class MainActivity extends Activity implements OnChildClickListener,
 		super.onPause();
 		// startAppAd.onPause();
 	}
-	
+
 	private void showAds() {
 		Random r = new Random();
 		int luckyNumber = r.nextInt(4);
-		if (luckyNumber == 0) {
-			if (mStartAppAd != null) {
-				mStartAppAd.showAd();
-				mStartAppAd.loadAd();
-			}
-		} else if (luckyNumber == 1) {
+		if (luckyNumber == 0 && mStartAppAd != null && mStartAppAd.isReady()) {
+			mStartAppAd.showAd();
+			mStartAppAd.loadAd();
+		} else if (luckyNumber == 1 && MobileCore.isOfferwallReady()) {
 			MobileCore.showOfferWall(this, null);
 		} else {
 			if (mAdmobIad != null && mAdmobIad.isLoaded()) {
 				mAdmobIad.show();
 				mAdmobIad.loadAd(mAdmobIadRequest);
-			} else if (mStartAppAd != null) {
-				mStartAppAd.showAd();
-				mStartAppAd.loadAd();
+			} else {
+				try {
+					mStartAppAd.loadAd();
+					mAdmobIad.loadAd(mAdmobIadRequest);
+					Log.d("Ads Error", "No ads loaded!");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
-		mAdDisplayTime = System.currentTimeMillis(); 
+		mAdDisplayTime = System.currentTimeMillis();
 	}
+
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		//mAdZoneView.invalidate();		
+		// mAdZoneView.invalidate();
 	}
 	/*
 	 * public void setLocate(String lang) { Locale myLocale = new Locale(lang);
