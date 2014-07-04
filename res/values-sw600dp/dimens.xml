@@ -1,6 +1,5 @@
 <resources>
     <dimen name="right_drawer_witdh">420dp</dimen>
-    <dimen name="left_drawer_width">320dp</dimen>
 	<dimen name="drawer_item_avatar_text_padding">16dp</dimen>
 	<dimen name="drawer_item_episode_text_size">18dp</dimen>
 </resources>
