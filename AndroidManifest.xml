@@ -97,5 +97,4 @@
             android:enabled="true"
             android:process=":installationTracker" />
     </application>
-
 </manifest>
