@@ -1109,26 +1109,26 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	}
 
 	private void showAds() {
+		// Playing dime on our income...
 		Random r = new Random();
 		int luckyNumber = r.nextInt(4);
 		if (luckyNumber == 0 && mStartAppAd != null && mStartAppAd.isReady()) {
 			mStartAppAd.showAd();
-			mStartAppAd.loadAd();
 		} else if (luckyNumber == 1 && MobileCore.isOfferwallReady()) {
 			MobileCore.showOfferWall(this, null);
 		} else {
 			if (mAdmobIad != null && mAdmobIad.isLoaded()) {
 				mAdmobIad.show();
-				mAdmobIad.loadAd(mAdmobIadRequest);
 			} else {
-				try {
-					mStartAppAd.loadAd();
-					mAdmobIad.loadAd(mAdmobIadRequest);
-					Log.d("Ads Error", "No ads loaded!");
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				Log.d("Ads Error", "No ads loaded!");
 			}
+		}
+		// Reload all ads
+		try {
+			mStartAppAd.loadAd();
+			mAdmobIad.loadAd(mAdmobIadRequest);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		mAdDisplayTime = System.currentTimeMillis();
 	}
