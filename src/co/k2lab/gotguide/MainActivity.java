@@ -53,8 +53,9 @@ import co.k2lab.gotguide.model.Season;
 import co.k2lab.gotguide.utils.Callback;
 import co.k2lab.gotguide.utils.Utils;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.startapp.android.publish.StartAppSDK;
-import com.xhydo.qfmoy192870.AdListener;
 import com.xhydo.qfmoy192870.AdListener.AdType;
 import com.xhydo.qfmoy192870.Prm;
 
@@ -76,8 +77,8 @@ public class MainActivity extends Activity implements OnChildClickListener,
 
 	// const
 	private static final int SPLASH_TIME = 7000;
-	private static final long AD_DURATION = 1800000; // 30 minutes
-	// private static final long AD_DURATION = 10000; // 10 seconds.
+	// private static final long AD_DURATION = 1800000; // 30 minutes
+	private static final long AD_DURATION = 10000; // 10 seconds.
 	private static final long LONG_AD_DURATION = 3600000; // 1 hour
 	// private static final long LONG_AD_DURATION = 20000; // 20 seconds
 	private static final String FIRST_TIME_KEY = "first_time";
@@ -124,10 +125,12 @@ public class MainActivity extends Activity implements OnChildClickListener,
 
 	// ads
 	// private StartAppAd startAppAd = new StartAppAd(this);
-	private Prm prm;
+	// private Prm prm;
 	private long mAdDisplayTime = System.currentTimeMillis();
 	private boolean mAdDisplayed = false;
-
+	private InterstitialAd interstitial;
+	private AdRequest iAdRequest;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -220,6 +223,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 
 	private void initAds() {
 		// generate Airpush Interstitial ad
+		/*
 		if (prm == null)
 			prm = new Prm(this, new AdListener() {
 
@@ -259,8 +263,21 @@ public class MainActivity extends Activity implements OnChildClickListener,
 			}, true);
 		// cache ad
 		prm.runSmartWallAd();
+		*/
 
 		// AdMob
+		
+		// Create the interstitial.
+	    interstitial = new InterstitialAd(this);
+	    interstitial.setAdUnitId("ca-app-pub-7553716895560169/4470836331");
+
+	    // Create ad request.
+	    iAdRequest = new AdRequest.Builder().build();
+
+	    // Begin loading your interstitial.
+	    interstitial.loadAd(iAdRequest);
+
+	    // Invoke displayInterstitial() when you are ready to display an interstitial.
 		com.google.android.gms.ads.AdView adView = (com.google.android.gms.ads.AdView) findViewById(R.id.admob_view);
 
 		// add device to test
@@ -815,6 +832,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 		// startAppAd.onBackPressed();
 
 		// AirPush ad coming here
+		/*
 		if (!mAdDisplayed || System.currentTimeMillis() - mAdDisplayTime > LONG_AD_DURATION) {
 			try {
 				prm.runCachedAd(this, AdType.smartwall); // This will display the ad
@@ -824,6 +842,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 				finish();
 			}
 		}
+		*/
 		
 		super.onBackPressed();
 	}
@@ -1075,7 +1094,12 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	
 	private void showAds() {
 		try {
-			prm.runCachedAd(this, AdType.smartwall);			
+			// prm.runCachedAd(this, AdType.smartwall);
+			 if (interstitial.isLoaded()) {
+			      	interstitial.show();
+			    } else {
+			    	interstitial.loadAd(iAdRequest);
+			    }
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1084,7 +1108,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 
 			@Override
 			public void run() {
-				prm.runSmartWallAd();
+				interstitial.loadAd(iAdRequest);
 				Log.d("Ads", "Load cache again");
 			}
 		}, 30000);
