@@ -62,7 +62,7 @@
                 android:layout_gravity="top"
                 android:adjustViewBounds="true"
                 android:background="#66000000"
-                android:src="@drawable/close_ad_button" />
+                android:src="@drawable/ic_action_remove" />
         </LinearLayout>
         <!-- StartApp ads -->
         <!--
