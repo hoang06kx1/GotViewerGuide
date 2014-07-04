@@ -286,8 +286,8 @@ public class MainActivity extends Activity implements OnChildClickListener,
 				AD_UNITS.OFFERWALL);
 
 		// STARTAPP
-
 		mStartAppAd = new StartAppAd(this);
+		mStartAppAd.loadAd();
 
 		// close button
 		mAdCloseButton = findViewById(R.id.ad_close_button);
@@ -1122,7 +1122,6 @@ public class MainActivity extends Activity implements OnChildClickListener,
 				mAdmobIad.loadAd(mAdmobIadRequest);
 			} else {
 				try {
-					mStartAppAd.showAd();
 					mStartAppAd.loadAd();
 					mAdmobIad.loadAd(mAdmobIadRequest);
 					Log.d("Ads Error", "No ads loaded!");
