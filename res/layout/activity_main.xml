@@ -58,9 +58,10 @@
                 android:id="@+id/ad_close_button"
                 android:layout_width="@dimen/ad_close_button_size"
                 android:layout_height="@dimen/ad_close_button_size"
-                android:layout_gravity="top"
                 android:layout_marginLeft="@dimen/ad_close_button_size_negative"
+                android:layout_gravity="top"
                 android:adjustViewBounds="true"
+                android:background="#66000000"
                 android:src="@drawable/close_ad_button" />
         </LinearLayout>
         <!-- StartApp ads -->
