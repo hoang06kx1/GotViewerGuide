@@ -44,13 +44,11 @@
             android:visibility="gone" />
 
         <!-- Ads -->
-
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/ads_zone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:orientation="horizontal" >
+            android:layout_width="320dp"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom|center_horizontal">
 
             <include layout="@layout/ad_bottom_banner" />
 
@@ -58,12 +56,10 @@
                 android:id="@+id/ad_close_button"
                 android:layout_width="@dimen/ad_close_button_size"
                 android:layout_height="@dimen/ad_close_button_size"
-                android:layout_marginLeft="@dimen/ad_close_button_size_negative"
-                android:layout_gravity="top"
-                android:adjustViewBounds="true"
-                android:background="#66000000"
+                android:layout_gravity="top|right"
+                android:background="#66000000"                
                 android:src="@drawable/ic_action_remove" />
-        </LinearLayout>
+        </FrameLayout>
         <!-- StartApp ads -->
         <!--
                 <com.startapp.android.publish.banner.Banner
@@ -75,7 +71,6 @@
                     />
 
         -->
-
 
         <!-- splash screen, only shown first time app loads -->
 
@@ -98,7 +93,6 @@
             android:id="@+id/left_drawer_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="50dp"
             android:background="@color/left_list_bg"
             android:childDivider="@android:color/transparent"
             android:choiceMode="singleChoice"
@@ -124,7 +118,6 @@
             android:id="@+id/right_drawer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="50dp"
             android:background="@color/list_bg"
             android:childDivider="@color/list_child_divider"
             android:choiceMode="singleChoice"
@@ -140,7 +133,6 @@
             ads:adUnitId="ca-app-pub-7553716895560169/3009279535"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true" />
-
         -->
     </RelativeLayout>
 
