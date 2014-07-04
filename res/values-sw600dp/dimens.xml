@@ -2,4 +2,6 @@
     <dimen name="right_drawer_witdh">420dp</dimen>
 	<dimen name="drawer_item_avatar_text_padding">16dp</dimen>
 	<dimen name="drawer_item_episode_text_size">18dp</dimen>
+	<dimen name="ad_close_button_size">26dp</dimen>
+	<dimen name="ad_close_button_size_negative">-26dp</dimen>
 </resources>

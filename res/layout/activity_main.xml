@@ -45,28 +45,26 @@
 
         <!-- Ads -->
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/ads_zone"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:orientation="horizontal" >
 
-            <!-- AirPush ads -->
-            <!--
-            <com.xhydo.qfmoy192870.Adview
-                xmlns:ap="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/myAdView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                ap:animation="fade"
-                ap:banner_type="inappad"
-                ap:canShowMR="false"
-                ap:placementType="interstitial"
-                ap:test_mode="true" />
-            -->
-            <!-- StartApp ads -->
-            <!--
+            <include layout="@layout/ad_bottom_banner" />
+
+            <ImageView
+                android:id="@+id/ad_close_button"
+                android:layout_width="@dimen/ad_close_button_size"
+                android:layout_height="@dimen/ad_close_button_size"
+                android:layout_gravity="top"
+                android:layout_marginLeft="@dimen/ad_close_button_size_negative"
+                android:adjustViewBounds="true"
+                android:src="@drawable/close_ad_button" />
+        </LinearLayout>
+        <!-- StartApp ads -->
+        <!--
                 <com.startapp.android.publish.banner.Banner
                     android:id="@+id/startAppBanner"
                     android:layout_width="wrap_content"
@@ -74,8 +72,9 @@
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true" 
                     />
-            -->
-        </RelativeLayout>
+
+        -->
+
 
         <!-- splash screen, only shown first time app loads -->
 
@@ -103,13 +102,15 @@
             android:childDivider="@android:color/transparent"
             android:choiceMode="singleChoice"
             android:groupIndicator="@null" />
-
+        <!--
         <com.startapp.android.publish.banner.Banner
             android:id="@+id/startAppBanner"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true" />
+
+        -->
     </RelativeLayout>
 
     <RelativeLayout
@@ -128,6 +129,7 @@
             android:choiceMode="singleChoice"
             android:groupIndicator="@null" />
 
+        <!--
         <com.google.android.gms.ads.AdView
             xmlns:ads="http://schemas.android.com/apk/res-auto"
             android:id="@+id/admob_view"
@@ -137,6 +139,8 @@
             ads:adUnitId="ca-app-pub-7553716895560169/3009279535"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true" />
+
+        -->
     </RelativeLayout>
 
 </android.support.v4.widget.DrawerLayout>

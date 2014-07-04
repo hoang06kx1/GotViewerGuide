@@ -4,7 +4,10 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Random;
 import java.util.TimeZone;
+
+import javax.security.auth.PrivateCredentialPermission;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,10 +18,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
@@ -40,6 +45,8 @@ import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ExpandableListView;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
@@ -55,9 +62,11 @@ import co.k2lab.gotguide.utils.Utils;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+import com.ironsource.mobilcore.MobileCore;
+import com.ironsource.mobilcore.MobileCore.AD_UNITS;
+import com.ironsource.mobilcore.MobileCore.LOG_TYPE;
+import com.startapp.android.publish.StartAppAd;
 import com.startapp.android.publish.StartAppSDK;
-import com.xhydo.qfmoy192870.AdListener.AdType;
-import com.xhydo.qfmoy192870.Prm;
 
 public class MainActivity extends Activity implements OnChildClickListener,
 		OnGroupClickListener {
@@ -77,10 +86,10 @@ public class MainActivity extends Activity implements OnChildClickListener,
 
 	// const
 	private static final int SPLASH_TIME = 7000;
-	// private static final long AD_DURATION = 1800000; // 30 minutes
-	private static final long AD_DURATION = 10000; // 10 seconds.
-	private static final long LONG_AD_DURATION = 3600000; // 1 hour
-	// private static final long LONG_AD_DURATION = 20000; // 20 seconds
+	// private static final long AD_DURATION = 900000; // 15 minutes
+	private static final long AD_DURATION = 30000; // 10 seconds.
+	// private static final long LONG_AD_DURATION = 1800000; // 30 minutes
+	private static final long LONG_AD_DURATION = 20000; // 20 seconds
 	private static final String FIRST_TIME_KEY = "first_time";
 
 	private static final String URL_HOME = "http://viewers-guide.hbo.com/";
@@ -118,18 +127,17 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	private boolean mIsSpoilerAlertOn = true;
 	private boolean mIsLanguageEn = true;
 	private boolean mEnableDrawer = false;
-	// private boolean mAppStart = true;
 
 	// data
 	private ArrayList<Season> mSeasons;
 
 	// ads
-	// private StartAppAd startAppAd = new StartAppAd(this);
-	// private Prm prm;
 	private long mAdDisplayTime = System.currentTimeMillis();
-	private boolean mAdDisplayed = false;
-	private InterstitialAd interstitial;
-	private AdRequest iAdRequest;
+	private InterstitialAd mAdmobIad; 
+	private AdRequest mAdmobIadRequest; //
+	private StartAppAd mStartAppAd; 
+	private ViewGroup mAdZone;
+	private View mAdCloseButton;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -222,7 +230,6 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	}
 
 	private void initAds() {
-		// generate Airpush Interstitial ad
 		/*
 		if (prm == null)
 			prm = new Prm(this, new AdListener() {
@@ -265,31 +272,59 @@ public class MainActivity extends Activity implements OnChildClickListener,
 		prm.runSmartWallAd();
 		*/
 
-		// AdMob
+		// ADMOB
 		
 		// Create the interstitial.
-	    interstitial = new InterstitialAd(this);
-	    interstitial.setAdUnitId("ca-app-pub-7553716895560169/4470836331");
+	    mAdmobIad = new InterstitialAd(this);
+	    mAdmobIad.setAdUnitId("ca-app-pub-7553716895560169/4470836331");
 
-	    // Create ad request.
-	    iAdRequest = new AdRequest.Builder().build();
+	    // Create ad interstitial request.
+	    mAdmobIadRequest = new AdRequest.Builder().build();
 
 	    // Begin loading your interstitial.
-	    interstitial.loadAd(iAdRequest);
+	    mAdmobIad.loadAd(mAdmobIadRequest);
 
-	    // Invoke displayInterstitial() when you are ready to display an interstitial.
+	    // Banner
 		com.google.android.gms.ads.AdView adView = (com.google.android.gms.ads.AdView) findViewById(R.id.admob_view);
-
 		// add device to test
 		if (adView != null) {
 			com.google.android.gms.ads.AdRequest adRequest = new com.google.android.gms.ads.AdRequest.Builder()
-					.addTestDevice("248798ED195F56341EA0C23B2B76BBFB")
-					.addTestDevice("2842078051443556C35681847AD817A9")
+					//.addTestDevice("248798ED195F56341EA0C23B2B76BBFB")
+					//.addTestDevice("2842078051443556C35681847AD817A9")
 					.addTestDevice(
 							com.google.android.gms.ads.AdRequest.DEVICE_ID_EMULATOR)
 					.build();
 			adView.loadAd(adRequest);
 		}
+		
+		// MOBILE CORE
+		
+		MobileCore.init(this, "64C2DHLQ89BMID0FOL2Q0RDEOH9B4", LOG_TYPE.DEBUG, AD_UNITS.OFFERWALL);
+		
+		// STARTAPP
+		
+		mStartAppAd = new StartAppAd(this);
+		
+		// close button
+		mAdCloseButton = findViewById(R.id.ad_close_button);
+		mAdCloseButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if (mAdZone == null) {
+					mAdZone = (ViewGroup) findViewById(R.id.ads_zone);
+				}
+				mAdZone.setVisibility(View.GONE);
+				Handler handler = new Handler();
+				handler.postDelayed(new Runnable() {
+					
+					@Override
+					public void run() {
+						mAdZone.setVisibility(View.VISIBLE);
+					}
+				}, AD_DURATION);
+			}
+		});
 	}
 
 	private boolean isNetWorkAvailable() {
@@ -321,9 +356,11 @@ public class MainActivity extends Activity implements OnChildClickListener,
 			mSplashImage.setImageResource(R.drawable.splash_first_time);			
 		} else {
 			mSplashImage.setImageResource(R.drawable.splash);
+			/*
 			if (firstTime > mFirstTimeCount + 1) {
 				showAds(); // show ads after 5 times app start
 			}
+			*/
 		}
 		preferences.edit().putInt(FIRST_TIME_KEY, ++firstTime).commit();
 	}
@@ -583,6 +620,8 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	private void initControlViews() {
 		// misc
 		mSplashImage = (ImageView) findViewById(R.id.main_splash);
+		mAdZone = (ViewGroup)findViewById(R.id.ads_zone);
+		mAdCloseButton = findViewById(R.id.ad_close_button);
 		mProgressView = (View) findViewById(R.id.progress_bar);
 		mProgressBarLayoutParams = mProgressView.getLayoutParams();
 		mErrorWebview = (WebView) findViewById(R.id.error_webview);
@@ -1080,7 +1119,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (System.currentTimeMillis() - mAdDisplayTime > AD_DURATION) {
+		if (System.currentTimeMillis() - mAdDisplayTime > AD_DURATION) { 
 			showAds();
 		}
 		// startAppAd.onResume();
@@ -1093,25 +1132,30 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	}
 	
 	private void showAds() {
-		try {
-			// prm.runCachedAd(this, AdType.smartwall);
-			 if (interstitial.isLoaded()) {
-			      	interstitial.show();
-			    } else {
-			    	interstitial.loadAd(iAdRequest);
-			    }
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		Handler handler = new Handler();
-		handler.postDelayed(new Runnable() {
-
-			@Override
-			public void run() {
-				interstitial.loadAd(iAdRequest);
-				Log.d("Ads", "Load cache again");
+		Random r = new Random();
+		int luckyNumber = r.nextInt(4);
+		if (luckyNumber == 0) {
+			if (mStartAppAd != null) {
+				mStartAppAd.showAd();
+				mStartAppAd.loadAd();
 			}
-		}, 30000);
+		} else if (luckyNumber == 1) {
+			MobileCore.showOfferWall(this, null);
+		} else {
+			if (mAdmobIad != null && mAdmobIad.isLoaded()) {
+				mAdmobIad.show();
+				mAdmobIad.loadAd(mAdmobIadRequest);
+			} else if (mStartAppAd != null) {
+				mStartAppAd.showAd();
+				mStartAppAd.loadAd();
+			}
+		}
+		mAdDisplayTime = System.currentTimeMillis(); 
+	}
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		//mAdZoneView.invalidate();		
 	}
 	/*
 	 * public void setLocate(String lang) { Locale myLocale = new Locale(lang);
