@@ -9,6 +9,9 @@
 	<string name="ok">OK</string>
 	<string name="got_it">¡LO TENGO!</string>
 	
+	<!-- review reminder dialog box -->
+	<string name="review_reminder_text">¿Nos guiamos también por el mundo de Westeros? Disfrute del viaje hasta el momento?\n\nEn caso afirmativo, ¿le importaría dar esta aplicación una buena calificación?</string>
+	
 	<!-- donation dialog box -->
 	<string name="donation_title"> Gracias por su amabilidad!</string>
 	<string name="one_dollar_message"> Gracias, K2 Lab te ama!</string>
