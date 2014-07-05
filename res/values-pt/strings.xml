@@ -8,6 +8,7 @@
 	<string name="hint_text">Às vezes, o aplicativo parece ser indiferente, como White Walker … Ser paciente.\n\nE este aplicativo precisa de Internet para funcionar, por isso esteja atento a sua utilização de dados.</string>
 	<string name="ok">OK</string>
 	<string name="got_it">Eu tê-lo!</string>
+	<string name="later">mais tarde</string>
 	
 	<!-- review reminder dialog box -->
 	<string name="review_reminder_text">Será que vamos guiá-lo bem através do mundo de Westeros? Aproveite a viagem até agora?\n\nSe sim, você se importaria de dar este aplicativo uma boa classificação?</string>
