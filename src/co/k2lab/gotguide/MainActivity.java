@@ -7,8 +7,6 @@ import java.util.Calendar;
 import java.util.Random;
 import java.util.TimeZone;
 
-import javax.security.auth.PrivateCredentialPermission;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,7 +21,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
@@ -45,8 +42,6 @@ import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ExpandableListView;
-import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
@@ -83,14 +78,23 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	private DrawerLayout mDrawerLayout;
 	private ExpandableListView mRightExpandableListView;
 	private ExpandableListView mLeftExpandableListView;
+	private CustomDialog mReviewDialog;
 
-	// const
+	// Const
 	private static final int SPLASH_TIME = 7000;
-	// private static final long AD_DURATION = 900000; // 15 minutes
-	private static final long AD_DURATION = 30000; // 10 seconds.
-	// private static final long LONG_AD_DURATION = 1800000; // 30 minutes
-	private static final long LONG_AD_DURATION = 20000; // 20 seconds
+	private static final long AD_DURATION = 900000; // 15 minutes
+	private static final long AD_BANNER_DURATION = 600000; // 10 minutes 
+	private static final long AD_LONG_DURATION = 1800000; // 30 minutes
 	private static final String FIRST_TIME_KEY = "first_time";
+	private static final String REVIEW_NOTIFICATION_TIME = "review_notification_time";
+	private static final String REVIEW_STATUS = "review_status";
+	private static final long REVIEW_DURATION = 864000000; // 10 days
+
+	// Only for test
+	// private static final long REVIEW_DURATION = 30000; // 10 days
+	// private static final long AD_DURATION = 30000; // 10 seconds.
+	// private static final long LONG_AD_DURATION = 20000; // 20 seconds
+
 
 	private static final String URL_HOME = "http://viewers-guide.hbo.com/";
 	private static final String URL_DEFAULT_EPISODE = "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-10/home/40";
@@ -192,6 +196,16 @@ public class MainActivity extends Activity implements OnChildClickListener,
 					mEnableDrawer = true;
 				}
 			}, SPLASH_TIME);
+
+			// notify about review
+			final Handler handler = new Handler();
+			handler.postDelayed(new Runnable() {
+
+				@Override
+				public void run() {
+					notifyReview();
+				}
+			}, 10000);
 		}
 	}
 
@@ -306,7 +320,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 					public void run() {
 						mAdZone.setVisibility(View.VISIBLE);
 					}
-				}, AD_DURATION);
+				}, AD_BANNER_DURATION);
 			}
 		});
 	}
@@ -346,6 +360,49 @@ public class MainActivity extends Activity implements OnChildClickListener,
 			 */
 		}
 		preferences.edit().putInt(FIRST_TIME_KEY, ++firstTime).commit();
+	}
+
+	private void notifyReview() {
+		final SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+		long time = preferences.getLong(REVIEW_NOTIFICATION_TIME, 0);
+		boolean isReview = preferences.getBoolean(REVIEW_STATUS, false);
+		if (time == 0) {
+			preferences
+					.edit()
+					.putLong(REVIEW_NOTIFICATION_TIME,
+							System.currentTimeMillis()).commit();
+			return;
+		} else {
+			if (!isReview
+					&& System.currentTimeMillis() - time > REVIEW_DURATION) {
+				preferences
+						.edit()
+						.putLong(REVIEW_NOTIFICATION_TIME,
+								System.currentTimeMillis()).commit();
+				mReviewDialog = new CustomDialog(
+						this,
+						getResources().getString(R.string.review_reminder_text),
+						R.drawable.hint_pop_up_bg,
+						new Callback.AlertCallback() {
+
+							@Override
+							public void onPressButton() {
+								feedbackToDev();
+								preferences.edit()
+										.putBoolean(REVIEW_STATUS, true)
+										.commit();
+								dismissReviewDialog();
+							}
+						}, true);
+				mReviewDialog.show();
+			}
+		}
+	}
+
+	private void dismissReviewDialog() {  // damn eclipse!
+		if (mReviewDialog != null) {
+			mReviewDialog.dismiss();
+		}
 	}
 
 	private void hideSplash() {
@@ -746,7 +803,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 		mWebView.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				if (System.currentTimeMillis() - mAdDisplayTime > LONG_AD_DURATION) {
+				if (System.currentTimeMillis() - mAdDisplayTime > AD_LONG_DURATION) {
 					showAds();
 				}
 				return false;
@@ -1138,6 +1195,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 		super.onConfigurationChanged(newConfig);
 		// mAdZoneView.invalidate();
 	}
+
 	/*
 	 * public void setLocate(String lang) { Locale myLocale = new Locale(lang);
 	 * Resources res = getResources(); DisplayMetrics dm =

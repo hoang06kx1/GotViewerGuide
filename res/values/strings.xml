@@ -8,6 +8,7 @@
 	<string name="hint_text">Sometimes the app seems unresponsive, like a White Walker… Be patient.\n\nAnd this app works on Internet, so watch out your data usage.</string>
 	<string name="ok">OK</string>
 	<string name="got_it">GOT IT!</string>
+	<string name="later">Later</string>
 	
 	<!-- review reminder dialog box -->
 	<string name="review_reminder_text">Did we guide you well throughout the world of Westeros? Enjoy the journey so far?\n\nIf yes, would you mind giving this app a good rating?</string>
