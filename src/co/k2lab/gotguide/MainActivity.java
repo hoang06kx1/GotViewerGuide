@@ -55,11 +55,9 @@ import co.k2lab.gotguide.model.Season;
 import co.k2lab.gotguide.utils.Callback;
 import co.k2lab.gotguide.utils.Utils;
 
+import com.appflood.AppFlood;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
-import com.ironsource.mobilcore.MobileCore;
-import com.ironsource.mobilcore.MobileCore.AD_UNITS;
-import com.ironsource.mobilcore.MobileCore.LOG_TYPE;
 import com.startapp.android.publish.StartAppAd;
 import com.startapp.android.publish.StartAppSDK;
 
@@ -82,7 +80,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 
 	// Const
 	private static final int SPLASH_TIME = 7000;
-	private static final long AD_DURATION = 900000; // 15 minutes
+	// private static final long AD_DURATION = 900000; // 15 minutes
 	private static final long AD_BANNER_DURATION = 600000; // 10 minutes 
 	private static final long AD_LONG_DURATION = 1800000; // 30 minutes
 	private static final String FIRST_TIME_KEY = "first_time";
@@ -92,7 +90,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 
 	// Only for test
 	// private static final long REVIEW_DURATION = 30000; // 10 days
-	// private static final long AD_DURATION = 30000; // 10 seconds.
+	private static final long AD_DURATION = 20000; // 10 seconds.
 	// private static final long LONG_AD_DURATION = 20000; // 20 seconds
 
 
@@ -267,8 +265,8 @@ public class MainActivity extends Activity implements OnChildClickListener,
 		 * "noAdsAvailable");
 		 * 
 		 * } }, true); // cache ad prm.runSmartWallAd();
-		 */
-
+		 */				
+		
 		// ADMOB
 
 		// Create the interstitial.
@@ -276,7 +274,11 @@ public class MainActivity extends Activity implements OnChildClickListener,
 		mAdmobIad.setAdUnitId("ca-app-pub-7553716895560169/4470836331");
 
 		// Create ad interstitial request.
-		mAdmobIadRequest = new AdRequest.Builder().build();
+		mAdmobIadRequest = new AdRequest.Builder()
+			.addTestDevice("248798ED195F56341EA0C23B2B76BBFB")
+			.addTestDevice("2842078051443556C35681847AD817A9")
+			.addTestDevice(com.google.android.gms.ads.AdRequest.DEVICE_ID_EMULATOR)
+			.build();
 
 		// Begin loading your interstitial.
 		mAdmobIad.loadAd(mAdmobIadRequest);
@@ -293,11 +295,6 @@ public class MainActivity extends Activity implements OnChildClickListener,
 					.build();
 			adView.loadAd(adRequest);
 		}
-
-		// MOBILE CORE
-
-		MobileCore.init(this, "64C2DHLQ89BMID0FOL2Q0RDEOH9B4", LOG_TYPE.DEBUG,
-				AD_UNITS.OFFERWALL);
 
 		// STARTAPP
 		mStartAppAd = new StartAppAd(this);
@@ -323,6 +320,9 @@ public class MainActivity extends Activity implements OnChildClickListener,
 				}, AD_BANNER_DURATION);
 			}
 		});
+		
+		// APPFLOOD
+		AppFlood.initialize(this, "B6hLvqjSghRCwNUP", "RqLXGvnb47e6L53b963ab", AppFlood.AD_FULLSCREEN);				
 	}
 
 	private boolean isNetWorkAvailable() {
@@ -1153,9 +1153,9 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (System.currentTimeMillis() - mAdDisplayTime > AD_DURATION) {
+		// if (System.currentTimeMillis() - mAdDisplayTime > AD_DURATION) { TODO: uncomment this
 			showAds();
-		}
+		// }
 		// startAppAd.onResume();
 	}
 
@@ -1171,8 +1171,8 @@ public class MainActivity extends Activity implements OnChildClickListener,
 		int luckyNumber = r.nextInt(4);
 		if (luckyNumber == 0 && mStartAppAd != null && mStartAppAd.isReady()) {
 			mStartAppAd.showAd();
-		} else if (luckyNumber == 1 && MobileCore.isOfferwallReady()) {
-			MobileCore.showOfferWall(this, null);
+		} else if (luckyNumber == 1 ) {
+			AppFlood.showFullScreen(this);
 		} else {
 			if (mAdmobIad != null && mAdmobIad.isLoaded()) {
 				mAdmobIad.show();

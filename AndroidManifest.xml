@@ -67,7 +67,7 @@
             android:configChanges="orientation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
-        </activity>
+        </activity>
         -->
 
 
@@ -78,10 +78,11 @@
 
         <activity
             android:name="com.google.android.gms.ads.AdActivity"
-            android:theme="@android:style/Theme.Translucent"            
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:theme="@android:style/Theme.Translucent" />
 
         <!-- MobileCore -->
+        <!--
         <service
             android:name="com.ironsource.mobilcore.MobileCoreReport"
             android:enabled="true"
@@ -95,6 +96,54 @@
         <receiver
             android:name="com.ironsource.mobilcore.InstallationTracker"
             android:enabled="true"
-            android:process=":installationTracker" />
+            android:process=":installationTracker" />
+        -->
+
+
+        <!-- Appflood -->
+        <!-- App key: B6hLvqjSghRCwNUP  Secret Key: RqLXGvnb47e6L53b963ab -->
+        <activity
+            android:name="com.appflood.mraid.MraidBrowserActivity"
+            android:configChanges="keyboardHidden"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Translucent" >
+        </activity>
+        <activity
+            android:name="com.appflood.AFPanelActivity"
+            android:configChanges="keyboardHidden"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Translucent" >
+        </activity>
+        <activity
+            android:name="com.appflood.AFFullScreenActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen">
+        </activity>
+        <activity
+            android:name="com.appflood.AFListActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Translucent" >
+            <intent-filter>
+                <action android:name="" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.appflood.AFInterstitialActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent" >
+        </activity>
+
+        <receiver
+            android:name="com.appflood.AFReferralReceiver"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
     </application>
+
 </manifest>
