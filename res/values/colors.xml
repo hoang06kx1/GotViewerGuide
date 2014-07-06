@@ -32,7 +32,7 @@
     
     <!-- misc -->
     <color name="progress_bar">#5bc8ff</color>
-    
     <color name="green_color">#96aa39</color>
+    <color name="splash_bg">#0b0b0b</color>
     
 </resources>

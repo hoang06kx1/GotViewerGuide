@@ -2,6 +2,13 @@
 <resources>
 	<string name="app_name">Game of Thrones Viewer\'s Guide</string>
 	
+	<!-- splash -->
+	<string name="splash_text_first_time_1">When you play a game of thrones you win or you die.</string>
+	<string name="splash_text_first_time_2">When you use this app, it connects to Westeros to fetch data, so be patient… or you die.</string>
+	<string name="splash_text_1">WINTER is COMING</string>
+	<string name="splash_text_2">image source: melaamory.deviantart.com</string>
+	<string name="splash_text_3">LOADING…</string>
+	
 	<!-- first time dialog box -->
 	<string name="network_required_text">All roads lead to King\'s Landing…\n\nNot really, please check if you are on one with good Internet connection. Try again when your internet connection is ready!</string>
 	<string name="network_required_title">Internet required</string>

@@ -19,6 +19,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -47,6 +49,7 @@ import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.ImageView;
+import android.widget.TextView;
 import co.k2lab.gotguide.controls.CustomDialog;
 import co.k2lab.gotguide.controls.VideoEnabledWebChromeClient;
 import co.k2lab.gotguide.controls.VideoEnabledWebView;
@@ -67,7 +70,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	private VideoEnabledWebView mWebView;
 	private VideoEnabledWebChromeClient mWebChromeClient;
 	private WebView mErrorWebview;
-	private ImageView mSplashImage;
+	private View mSplashView;
 	private ActionBar mActionBar;
 	private View mProgressView;
 	private LayoutParams mProgressBarLayoutParams;
@@ -79,21 +82,15 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	private CustomDialog mReviewDialog;
 
 	// Const
-	private static final int SPLASH_TIME = 7000;
-	// private static final long AD_DURATION = 900000; // 15 minutes
-	private static final long AD_BANNER_DURATION = 600000; // 10 minutes 
-	private static final long AD_LONG_DURATION = 1800000; // 30 minutes
-	private static final String FIRST_TIME_KEY = "first_time";
-	private static final String REVIEW_NOTIFICATION_TIME = "review_notification_time";
-	private static final String REVIEW_STATUS = "review_status";
-	private static final long REVIEW_DURATION = 864000000; // 10 days
-
-	// Only for test
-	// private static final long REVIEW_DURATION = 30000; // 10 days
-	private static final long AD_DURATION = 20000; // 10 seconds.
-	// private static final long LONG_AD_DURATION = 20000; // 20 seconds
-
-
+	private static final int SPLASH_DURATION = 7000;
+	private static final long BANNER_AD_DURATION = 600000; // 10 minutes 
+	private static final long INTER_AD_DURATION = 1800000; // 30 minutes
+	private static final long REVIEW_INTERVAL = 864000000; // 10 days
+	
+	private static final String FIRST_TIME_KEY = "got.first";
+	private static final String REVIEW_NOTIFICATION_TIME = "got.notif";
+	private static final String REVIEW_STATUS = "got.review";
+	
 	private static final String URL_HOME = "http://viewers-guide.hbo.com/";
 	private static final String URL_DEFAULT_EPISODE = "http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-10/home/40";
 	private static final String URL_MAP = "http://viewers-guide.hbo.com/game-of-thrones/map";
@@ -181,11 +178,11 @@ public class MainActivity extends Activity implements OnChildClickListener,
 			}
 
 			// remove splash after xx seconds
-			mSplashImage.postDelayed(new Runnable() {
+			mSplashView.postDelayed(new Runnable() {
 
 				@Override
 				public void run() {
-					if (mSplashImage != null) {
+					if (mSplashView != null) {
 						hideSplash();
 						if (mActionBar != null) {
 							mActionBar.show();
@@ -193,7 +190,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 					}
 					mEnableDrawer = true;
 				}
-			}, SPLASH_TIME);
+			}, SPLASH_DURATION);
 
 			// notify about review
 			final Handler handler = new Handler();
@@ -296,7 +293,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 			adView.loadAd(adRequest);
 		}
 
-		// STARTAPP
+		// startApp
 		mStartAppAd = new StartAppAd(this);
 		mStartAppAd.loadAd();
 
@@ -317,11 +314,11 @@ public class MainActivity extends Activity implements OnChildClickListener,
 					public void run() {
 						mAdZone.setVisibility(View.VISIBLE);
 					}
-				}, AD_BANNER_DURATION);
+				}, BANNER_AD_DURATION);
 			}
 		});
 		
-		// APPFLOOD
+		// appFlood
 		AppFlood.initialize(this, "B6hLvqjSghRCwNUP", "RqLXGvnb47e6L53b963ab", AppFlood.AD_FULLSCREEN);				
 	}
 
@@ -347,13 +344,23 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	private void checkFirstTime() {
 		SharedPreferences preferences = getPreferences(MODE_PRIVATE);
 		int firstTime = preferences.getInt(FIRST_TIME_KEY, 0);
+		
+		TextView t1 = (TextView) mSplashView.findViewById(R.id.splash_text_1); 
+		TextView t2 = (TextView) mSplashView.findViewById(R.id.splash_text_2);
+		TextView t3 = (TextView) mSplashView.findViewById(R.id.splash_text_3);
+		Typeface trajanFont = Typeface.createFromAsset(getAssets(), "fonts/trajan.otf");
+		t1.setTypeface(trajanFont);
+		t2.setTypeface(trajanFont);
+		t3.setTypeface(trajanFont);		
+		
 		if (firstTime < mFirstTimeCount) {
-			if (firstTime == 0) {
+			if (firstTime == 0)
 				mShouldTriggerHint = true;
-			}
-			mSplashImage.setImageResource(R.drawable.splash_first_time);
-		} else {
-			mSplashImage.setImageResource(R.drawable.splash);
+			
+			t1.setText(getResources().getString(R.string.splash_text_first_time_1));
+			t2.setText(getResources().getString(R.string.splash_text_first_time_2));
+			t2.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.splash_text_size_normal));
+		} else {			
 			/*
 			 * if (firstTime > mFirstTimeCount + 1) { showAds(); // show ads
 			 * after 5 times app start }
@@ -374,7 +381,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 			return;
 		} else {
 			if (!isReview
-					&& System.currentTimeMillis() - time > REVIEW_DURATION) {
+					&& System.currentTimeMillis() - time > REVIEW_INTERVAL) {
 				preferences
 						.edit()
 						.putLong(REVIEW_NOTIFICATION_TIME,
@@ -407,10 +414,9 @@ public class MainActivity extends Activity implements OnChildClickListener,
 
 	private void hideSplash() {
 		// remove splash
-		mSplashImage.setVisibility(View.GONE);
-		((BitmapDrawable) mSplashImage.getDrawable()).getBitmap().recycle();
-		mDrawerLayout.removeView(mSplashImage);
-		mSplashImage = null;
+		mSplashView.setVisibility(View.GONE);
+		mDrawerLayout.removeView(mSplashView);
+		mSplashView = null;
 
 		if (mShouldTriggerHint) {
 			mWebView.postDelayed(new Runnable() {
@@ -659,7 +665,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 
 	private void initControlViews() {
 		// misc
-		mSplashImage = (ImageView) findViewById(R.id.main_splash);
+		mSplashView = (View) findViewById(R.id.splash_view);
 		mAdZone = (ViewGroup) findViewById(R.id.ads_zone);
 		mAdCloseButton = findViewById(R.id.ad_close_button);
 		mProgressView = (View) findViewById(R.id.progress_bar);
@@ -803,7 +809,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 		mWebView.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				if (System.currentTimeMillis() - mAdDisplayTime > AD_LONG_DURATION) {
+				if (System.currentTimeMillis() - mAdDisplayTime > INTER_AD_DURATION) {
 					showAds();
 				}
 				return false;
@@ -1000,7 +1006,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 			else if (id == R.id.left_drawer_group_tab_item_appendix)
 				mWebView.loadUrl(URL_APPENDIX);
 			else if (id == R.id.left_drawer_group_settings_item_language) {
-				CharSequence items[] = { "English", "Español" };
+				CharSequence items[] = { "English", "EspaÃ±ol" };
 				AlertDialog.Builder builder = new AlertDialog.Builder(
 						new ContextThemeWrapper(this,
 								android.R.style.Theme_Holo_Dialog));
@@ -1060,12 +1066,11 @@ public class MainActivity extends Activity implements OnChildClickListener,
 				feedbackToDev();
 				return true;
 			}
-			/*
-			 * else if (groupPosition == mRightDrawerAdapter.getGroupCount() -
-			 * 1) { /* Dialog donateDialog = new DonateDialog(MainActivity.this,
-			 * true, null, MainActivity.this); donateDialog.show(); return true;
-			 */// TODO: no more donation
-				// }
+			// TODO donate = remove ad
+			// else if (groupPosition == mRightDrawerAdapter.getGroupCount() - 1) {
+			//	Dialog donateDialog = new DonateDialog(MainActivity.this, true, null, MainActivity.this);
+			//	donateDialog.show(); return true;
+			//}
 			return false;
 
 		} else { // left drawer clicked
@@ -1153,9 +1158,10 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	@Override
 	protected void onResume() {
 		super.onResume();
-		// if (System.currentTimeMillis() - mAdDisplayTime > AD_DURATION) { TODO: uncomment this
+		// TODO remove true
+		if (System.currentTimeMillis() - mAdDisplayTime > INTER_AD_DURATION) { 
 			showAds();
-		// }
+		}
 		// startAppAd.onResume();
 	}
 
@@ -1164,11 +1170,12 @@ public class MainActivity extends Activity implements OnChildClickListener,
 		super.onPause();
 		// startAppAd.onPause();
 	}
+	
+	private static Random randomizer = new Random();
 
 	private void showAds() {
 		// Playing dime on our income...
-		Random r = new Random();
-		int luckyNumber = r.nextInt(4);
+		int luckyNumber = randomizer.nextInt(4);
 		if (luckyNumber == 0 && mStartAppAd != null && mStartAppAd.isReady()) {
 			mStartAppAd.showAd();
 		} else if (luckyNumber == 1 ) {

@@ -2,13 +2,20 @@
 <resources>
 	<string name="app_name">Game of Thrones Guía del Visor</string>
 	
+	<!-- splash -->
+	<string name="splash_text_first_time_1">Cuando juegas un juego de tronos ganas o mueres.</string>
+	<string name="splash_text_first_time_2">Al utilizar esta aplicación, se conecta a Westeros para obtener los datos, así que tenga paciencia … o morir.</string>
+	<string name="splash_text_1">SE ACERCA el INVIERNO</string>
+	<string name="splash_text_2">fuente de la imagen: melaamory.deviantart.com</string>
+	<string name="splash_text_3">CARGANDO …</string>
+	
 	<!-- first time dialog box -->
 	<string name="network_required_text">Todos los caminos llevan a King\'s Landing …\n\nEn realidad, no! Por favor, asegúrese de que usted está en un camino que tiene una buena conexión a Internet. Inténtelo de nuevo cuando su conexión a Internet está lista.</string>
 	<string name="network_required_title">Se requiere Internet</string>
 	<string name="hint_text">A veces, la aplicación parece no responder, como un White Walker … Ser paciente.\n\nY esta aplicación necesita Internet para trabajar, así que ten cuidado con el uso de datos.</string>
 	<string name="ok">OK</string>
 	<string name="got_it">¡LO TENGO!</string>
-	<string name="later">más tarde</string>
+	<string name="later">MÁS TARDE</string>
 	
 	<!-- review reminder dialog box -->
 	<string name="review_reminder_text">¿Nos guiamos también por el mundo de Westeros? Disfrute del viaje hasta el momento?\n\nEn caso afirmativo, ¿le importaría dar esta aplicación una buena calificación?</string>
