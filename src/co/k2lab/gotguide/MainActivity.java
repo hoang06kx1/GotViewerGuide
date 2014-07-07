@@ -84,18 +84,18 @@ public class MainActivity extends Activity implements OnChildClickListener,
 
 	// Const
 	private static final int SPLASH_DURATION = 7000;
-	// private static final long BANNER_AD_DURATION = 60000; // 1 minute
-	private static final long INTER_AD_DURATION = 1800000; // 30 minutes
-	// private static final long INTER_AD_ON_RESUME_DURATION = 600000; // 10 minutes
+	private static final long BANNER_AD_DURATION = 60000; // 1 minute
+	private static final long INTER_AD_DURATION = 1200000; // 20 minutes
+	private static final long INTER_AD_ON_RESUME_DURATION = 300000; // 5 minutes
 	private static final long REVIEW_INTERVAL = 864000000; // 10 days
 	// private static final long BANNER_AD_START_DELAY = 30000; // 30 seconds 
 	
 	// Only for testing
 	// private static final int SPLASH_DURATION = 7000;
-	private static final long BANNER_AD_DURATION = 5000; // 10 minutes 
+	// private static final long BANNER_AD_DURATION = 5000; // 10 minutes 
 	// private static final long INTER_AD_DURATION = 1800000; // 30 minutes
 	// private static final long REVIEW_INTERVAL = 864000000; // 10 days
-	private static final long INTER_AD_ON_RESUME_DURATION = 10000; // 10 minutes
+	//private static final long INTER_AD_ON_RESUME_DURATION = 10000; // 10 minutes
 	
 	private static final String FIRST_TIME_KEY = "got.first";
 	private static final String REVIEW_NOTIFICATION_TIME = "got.notif";
@@ -317,7 +317,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 				mAdZone.setVisibility(View.GONE);
 				switchAdBanners();
 				mAdmobBannerAd.loadAd(mAdmobBannerAdRequest);
-				
+				// StartAppSDK.init(MainActivity.this, "106324371", "206307211");
 				mAdBannerShowing = false;
 				Handler handler = new Handler();
 				handler.postDelayed(new Runnable() {
