@@ -5,7 +5,10 @@
 	<!-- splash -->
 	<string name="splash_text_first_time_1">Cuando juegas un juego de tronos ganas o mueres.</string>
 	<string name="splash_text_first_time_2">Al utilizar esta aplicación, se conecta a Westeros para obtener los datos, así que tenga paciencia … o morir.</string>
-	<string name="splash_text_1">SE ACERCA el INVIERNO</string>
+	<string name="splash_text_1_1">SE ACERCA el INVIERNO</string>
+	<string name="splash_text_1_2">FUEGO y SANGRE</string>
+	<string name="splash_text_1_3">ÓIGAME RUGIR</string>
+	<string name="splash_text_1_4">LA NUESTRA es la FURIA</string>
 	<string name="splash_text_2">fuente de la imagen: melaamory.deviantart.com</string>
 	<string name="splash_text_3">CARGANDO …</string>
 	
