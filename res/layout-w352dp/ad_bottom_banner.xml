@@ -9,16 +9,6 @@
     android:orientation="horizontal"
     android:visibility="gone">
     
-    <com.google.android.gms.ads.AdView
-	    xmlns:ads="http://schemas.android.com/apk/res-auto"
-	    android:id="@+id/admob_view"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_gravity="top|right"
-	    ads:adSize="BANNER"
-	    ads:adUnitId="ca-app-pub-7553716895560169/3009279535"
-	    />
-    
     <ImageView
         android:id="@+id/ad_close_button"
         android:layout_width="@dimen/ad_close_button_size"
@@ -27,4 +17,14 @@
         android:background="#66000000"
         android:src="@drawable/ic_action_remove" 
         android:visibility="gone"/>
+    
+    <com.google.android.gms.ads.AdView
+	    xmlns:ads="http://schemas.android.com/apk/res-auto"
+	    android:id="@+id/admob_view"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="top|left"
+	    ads:adSize="BANNER"
+	    ads:adUnitId="ca-app-pub-7553716895560169/3009279535"
+	    />
 </LinearLayout>

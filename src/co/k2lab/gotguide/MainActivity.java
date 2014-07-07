@@ -21,7 +21,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
@@ -48,6 +47,7 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 import co.k2lab.gotguide.controls.CustomDialog;
 import co.k2lab.gotguide.controls.VideoEnabledWebChromeClient;
@@ -84,7 +84,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 
 	// Const
 	private static final int SPLASH_DURATION = 7000;
-	private static final long BANNER_AD_DURATION = 600000; // 10 minutes 
+	private static final long BANNER_AD_DURATION = 60000; // 1 minute
 	private static final long INTER_AD_DURATION = 1800000; // 30 minutes
 	private static final long INTER_AD_ON_RESUME_DURATION = 600000; // 10 minutes
 	private static final long REVIEW_INTERVAL = 864000000; // 10 days
