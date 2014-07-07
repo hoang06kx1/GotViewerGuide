@@ -57,13 +57,13 @@ import co.k2lab.gotguide.model.Season;
 import co.k2lab.gotguide.utils.Callback;
 import co.k2lab.gotguide.utils.Utils;
 
-import com.appflood.AppFlood;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.startapp.android.publish.StartAppAd;
 import com.startapp.android.publish.StartAppSDK;
+import com.startapp.android.publish.banner.Banner;
 
 public class MainActivity extends Activity implements OnChildClickListener,
 		OnGroupClickListener {
@@ -84,17 +84,18 @@ public class MainActivity extends Activity implements OnChildClickListener,
 
 	// Const
 	private static final int SPLASH_DURATION = 7000;
-	private static final long BANNER_AD_DURATION = 60000; // 1 minute
+	// private static final long BANNER_AD_DURATION = 60000; // 1 minute
 	private static final long INTER_AD_DURATION = 1800000; // 30 minutes
-	private static final long INTER_AD_ON_RESUME_DURATION = 600000; // 10 minutes
+	// private static final long INTER_AD_ON_RESUME_DURATION = 600000; // 10 minutes
 	private static final long REVIEW_INTERVAL = 864000000; // 10 days
 	// private static final long BANNER_AD_START_DELAY = 30000; // 30 seconds 
 	
 	// Only for testing
 	// private static final int SPLASH_DURATION = 7000;
-	// private static final long BANNER_AD_DURATION = 600000; // 10 minutes 
+	private static final long BANNER_AD_DURATION = 5000; // 10 minutes 
 	// private static final long INTER_AD_DURATION = 1800000; // 30 minutes
 	// private static final long REVIEW_INTERVAL = 864000000; // 10 days
+	private static final long INTER_AD_ON_RESUME_DURATION = 10000; // 10 minutes
 	
 	private static final String FIRST_TIME_KEY = "got.first";
 	private static final String REVIEW_NOTIFICATION_TIME = "got.notif";
@@ -144,12 +145,14 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	private InterstitialAd mAdmobIad;
 	private AdRequest mAdmobIadRequest; //
 	private AdView mAdmobBannerAd;
+	private Banner mStartAppBannerAd;
 	private AdRequest mAdmobBannerAdRequest;
 	private StartAppAd mStartAppAd;
 	private ViewGroup mAdZone;
 	private View mAdCloseButton;
 	// private boolean mFirstAdReceived;
 	private boolean mAdBannerShowing = true;
+	private int mAdBannerFlag = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -158,7 +161,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 			// getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 
 			// start StartApp banner ad
-			StartAppSDK.init(this, "106324371", "206307211");
+			StartAppSDK.init(this, "106324371", "206307211");			
 			setContentView(R.layout.activity_main);
 
 			// fix bug: drawer can be opened in Splash screen
@@ -301,7 +304,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 		// startApp
 		mStartAppAd = new StartAppAd(this);
 		mStartAppAd.loadAd();
-
+		
 		// close button
 		mAdCloseButton = findViewById(R.id.ad_close_button);
 		mAdCloseButton.setOnClickListener(new View.OnClickListener() {
@@ -312,6 +315,9 @@ public class MainActivity extends Activity implements OnChildClickListener,
 					mAdZone = (ViewGroup) findViewById(R.id.ads_zone);
 				}
 				mAdZone.setVisibility(View.GONE);
+				switchAdBanners();
+				mAdmobBannerAd.loadAd(mAdmobBannerAdRequest);
+				
 				mAdBannerShowing = false;
 				Handler handler = new Handler();
 				handler.postDelayed(new Runnable() {
@@ -325,10 +331,32 @@ public class MainActivity extends Activity implements OnChildClickListener,
 			}
 		});
 		
+		
+		// Show only 1 banner ads
+		mStartAppBannerAd = (Banner) findViewById(R.id.startAppBanner);
+		mAdBannerFlag = randomizer.nextInt(2);
+		if (mAdBannerFlag == 0) {
+			mAdmobBannerAd.setVisibility(View.INVISIBLE);
+		} else {
+			mStartAppBannerAd.hideBanner();
+		}
 		// appFlood
-		AppFlood.initialize(this, "B6hLvqjSghRCwNUP", "RqLXGvnb47e6L53b963ab", AppFlood.AD_FULLSCREEN);				
+		// AppFlood.initialize(this, "B6hLvqjSghRCwNUP", "RqLXGvnb47e6L53b963ab", AppFlood.AD_FULLSCREEN);				
 	}
 
+	private void switchAdBanners() {		
+		if (mAdmobBannerAd != null && mStartAppBannerAd != null) {
+			mAdBannerFlag = Math.abs(mAdBannerFlag - 1);
+			if (mAdBannerFlag == 0) {
+				mAdmobBannerAd.setVisibility(View.INVISIBLE);
+				mStartAppBannerAd.showBanner();
+			} else {
+				mAdmobBannerAd.setVisibility(View.VISIBLE);
+				mStartAppBannerAd.hideBanner();
+			}
+		}
+	}
+	
 	private boolean isNetWorkAvailable() {
 		boolean canLoadUrl = Utils.isNetworkEnabled(getApplicationContext());
 		if (!canLoadUrl) {
@@ -966,7 +994,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 		/*
 		 * if (mWebView != null) { mWebView.clearCache(true); }
 		 */
-		AppFlood.destroy();
+		// AppFlood.destroy();
 	}
 
 	@Override
@@ -1210,11 +1238,9 @@ public class MainActivity extends Activity implements OnChildClickListener,
 
 	private void showAds() {
 		// Playing dime on our income...
-		int luckyNumber = randomizer.nextInt(4);
+		int luckyNumber = randomizer.nextInt(3);
 		if (luckyNumber == 0 && mStartAppAd != null && mStartAppAd.isReady()) {
-			mStartAppAd.showAd();
-		} else if (luckyNumber == 1 ) {
-			AppFlood.showFullScreen(this);
+			mStartAppAd.showAd();		
 		} else {
 			if (mAdmobIad != null && mAdmobIad.isLoaded()) {
 				mAdmobIad.show();
@@ -1249,8 +1275,8 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	public class MyAdmobListener extends AdListener {
 		@Override
 		public void onAdClosed() {
+			Log.d("AdmobBanner", "Ad close");
 			super.onAdClosed();
-			
 		}
 		@Override
 		public void onAdLoaded() {

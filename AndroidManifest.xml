@@ -38,12 +38,12 @@
         <activity
             android:name="com.startapp.android.publish.list3d.List3DActivity"
             android:taskAffinity="co.k2lab.gotguide.AppWall"
-            android:theme="@android:style/Theme" />
+            android:theme="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen" />
         <activity
             android:name="com.startapp.android.publish.AppWallActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:taskAffinity="co.k2lab.gotguide.AppWall"
-            android:theme="@android:style/Theme.Translucent" />
+            android:theme="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen" />
 
         <!-- Airpush Ads -->
         <!--

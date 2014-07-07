@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- on phone with width < 352dp, we display close button above the ad -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ads_zone"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom|center_horizontal"
-    android:orientation="vertical" 
-    android:visibility="gone">
+    android:orientation="vertical"
+    android:visibility="gone" >
+
     <ImageView
         android:id="@+id/ad_close_button"
         android:layout_width="@dimen/ad_close_button_size"
         android:layout_height="@dimen/ad_close_button_size"
-        android:layout_gravity="left"
+        android:layout_gravity="right"
         android:background="#66000000"
-        android:src="@drawable/ic_action_remove" 
-        android:visibility="gone"/>
-    <com.google.android.gms.ads.AdView
-	    xmlns:ads="http://schemas.android.com/apk/res-auto"
-	    android:id="@+id/admob_view"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:gravity="top|right"
-	    ads:adSize="BANNER"
-	    ads:adUnitId="ca-app-pub-7553716895560169/3009279535"
-	    />
+        android:src="@drawable/ic_action_remove"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/admob_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            ads:adSize="BANNER"
+            ads:adUnitId="ca-app-pub-7553716895560169/3009279535"
+            android:gravity="top|right" />
+
+        <com.startapp.android.publish.banner.Banner
+            android:id="@+id/startAppBanner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="top|right" />
+    </FrameLayout>
+
 </LinearLayout>
