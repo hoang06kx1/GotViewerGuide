@@ -184,6 +184,8 @@ public class MainActivity extends Activity implements OnChildClickListener,
 			if (cookieJson != null) {
 				if (!cookieJson.optString("id").isEmpty())
 					mWebView.loadUrl(URL_HOME);
+				else
+					mWebView.loadUrl(URL_DEFAULT_EPISODE);
 				mIsSpoilerAlertOn = cookieJson.optBoolean("spoilerAlerts");
 				mIsLanguageEn = cookieJson.optString("lang", "en").equals("en");
 			} else {
