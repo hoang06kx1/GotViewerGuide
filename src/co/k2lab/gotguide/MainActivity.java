@@ -345,7 +345,8 @@ public class MainActivity extends Activity implements OnChildClickListener,
 		SharedPreferences preferences = getPreferences(MODE_PRIVATE);
 		int firstTime = preferences.getInt(FIRST_TIME_KEY, 0);
 		
-		TextView t1 = (TextView) mSplashView.findViewById(R.id.splash_text_1); 
+		ImageView logo = (ImageView) mSplashView.findViewById(R.id.splash_logo);
+		TextView t1 = (TextView) mSplashView.findViewById(R.id.splash_text_1);
 		TextView t2 = (TextView) mSplashView.findViewById(R.id.splash_text_2);
 		TextView t3 = (TextView) mSplashView.findViewById(R.id.splash_text_3);
 		Typeface trajanFont = Typeface.createFromAsset(getAssets(), "fonts/trajan.otf");
@@ -360,11 +361,37 @@ public class MainActivity extends Activity implements OnChildClickListener,
 			t1.setText(getResources().getString(R.string.splash_text_first_time_1));
 			t2.setText(getResources().getString(R.string.splash_text_first_time_2));
 			t2.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.splash_text_size_normal));
+			
+			switch (randomizer.nextInt(4) + 1) {
+			case 2:
+				logo.setImageResource(R.drawable.splash_2);
+				break;
+			case 3:
+				logo.setImageResource(R.drawable.splash_3);
+				break;
+			case 4:
+				logo.setImageResource(R.drawable.splash_4);
+				break;
+			}
 		} else {			
 			/*
 			 * if (firstTime > mFirstTimeCount + 1) { showAds(); // show ads
 			 * after 5 times app start }
 			 */
+			switch (randomizer.nextInt(4) + 1) {
+			case 2:
+				logo.setImageResource(R.drawable.splash_2);
+				t1.setText(getResources().getString(R.string.splash_text_1_2));
+				break;
+			case 3:
+				logo.setImageResource(R.drawable.splash_3);
+				t1.setText(getResources().getString(R.string.splash_text_1_3));
+				break;
+			case 4:
+				logo.setImageResource(R.drawable.splash_4);
+				t1.setText(getResources().getString(R.string.splash_text_1_4));
+				break;
+			}
 		}
 		preferences.edit().putInt(FIRST_TIME_KEY, ++firstTime).commit();
 	}

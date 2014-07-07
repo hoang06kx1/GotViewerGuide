@@ -9,14 +9,14 @@
     
     <ImageView
         android:id="@+id/splash_logo"
-        android:src="@drawable/splash"
+        android:src="@drawable/splash_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
     
     <TextView
         android:id="@+id/splash_text_1"
-        android:text="@string/splash_text_1"
+        android:text="@string/splash_text_1_1"
         android:layout_width="@dimen/splash_content_width"
         android:layout_height="wrap_content"
         android:gravity="center"

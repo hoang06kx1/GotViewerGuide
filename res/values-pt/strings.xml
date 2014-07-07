@@ -5,7 +5,10 @@
 	<!-- splash -->
 	<string name="splash_text_first_time_1">Quando você joga um jogo de tronos você ganha ou você morre.</string>
 	<string name="splash_text_first_time_2">Quando você usar este aplicativo, ele se conecta a Westeros para buscar dados, por isso seja paciente … ou você morre.</string>
-	<string name="splash_text_1">O INVERNO está CHEGANDO</string>
+	<string name="splash_text_1_1">O INVERNO está CHEGANDO</string>
+	<string name="splash_text_1_2">FOGO e SANGUE</string>
+	<string name="splash_text_1_3">OUÇA-ME RUGIR</string>
+	<string name="splash_text_1_4">A NOSSA é a FÚRIA</string>
 	<string name="splash_text_2">fonte da imagem: melaamory.deviantart.com</string>
 	<string name="splash_text_3">LOADING…</string>
 	
