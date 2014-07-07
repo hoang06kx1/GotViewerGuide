@@ -105,7 +105,7 @@
 
     <!-- Location client code resources (prefix with location_client) -->
 
-    <string name="location_client_powered_by_google">Powered by Google</string>
+    <!-- Lots of packages seem to assume this file will exist, easier to just leave it for now. -->
 
     <!-- End location client resources -->
 </resources>

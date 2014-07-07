@@ -20,8 +20,8 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
@@ -48,7 +48,6 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
-import android.widget.ImageView;
 import android.widget.TextView;
 import co.k2lab.gotguide.controls.CustomDialog;
 import co.k2lab.gotguide.controls.VideoEnabledWebChromeClient;
@@ -59,7 +58,9 @@ import co.k2lab.gotguide.utils.Callback;
 import co.k2lab.gotguide.utils.Utils;
 
 import com.appflood.AppFlood;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.startapp.android.publish.StartAppAd;
 import com.startapp.android.publish.StartAppSDK;
@@ -85,7 +86,15 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	private static final int SPLASH_DURATION = 7000;
 	private static final long BANNER_AD_DURATION = 600000; // 10 minutes 
 	private static final long INTER_AD_DURATION = 1800000; // 30 minutes
+	private static final long INTER_AD_ON_RESUME_DURATION = 600000; // 10 minutes
 	private static final long REVIEW_INTERVAL = 864000000; // 10 days
+	// private static final long BANNER_AD_START_DELAY = 30000; // 30 seconds 
+	
+	// Only for testing
+	// private static final int SPLASH_DURATION = 7000;
+	// private static final long BANNER_AD_DURATION = 600000; // 10 minutes 
+	// private static final long INTER_AD_DURATION = 1800000; // 30 minutes
+	// private static final long REVIEW_INTERVAL = 864000000; // 10 days
 	
 	private static final String FIRST_TIME_KEY = "got.first";
 	private static final String REVIEW_NOTIFICATION_TIME = "got.notif";
@@ -134,9 +143,13 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	private long mAdDisplayTime = System.currentTimeMillis();
 	private InterstitialAd mAdmobIad;
 	private AdRequest mAdmobIadRequest; //
+	private AdView mAdmobBannerAd;
+	private AdRequest mAdmobBannerAdRequest;
 	private StartAppAd mStartAppAd;
 	private ViewGroup mAdZone;
 	private View mAdCloseButton;
+	// private boolean mFirstAdReceived;
+	private boolean mAdBannerShowing = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -239,31 +252,20 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	}
 
 	private void initAds() {
+		// Show ad banner
+		if (mAdZone == null) {
+			mAdZone = (ViewGroup) findViewById(R.id.ads_zone); 
+		}
+		mAdZone.setVisibility(View.VISIBLE);
 		/*
-		 * if (prm == null) prm = new Prm(this, new AdListener() {
-		 * 
-		 * @Override public void onSmartWallAdShowing() { Log.d("Ads",
-		 * "onSmartWallAdShowing"); mAdDisplayTime = System.currentTimeMillis();
-		 * mAdDisplayed = true; }
-		 * 
-		 * @Override public void onSmartWallAdClosed() { Log.d("Ads",
-		 * "onSmartWallAdClosed"); }
-		 * 
-		 * @Override public void onSDKIntegrationError(String arg0) { // TODO
-		 * Auto-generated method stub Log.d("Ads", "SDK integration error"); }
-		 * 
-		 * @Override public void onAdError(String arg0) { Log.d("Ads",
-		 * "AdError " + arg0 == null ? "" : arg0); }
-		 * 
-		 * @Override public void onAdCached(AdType arg0) { Log.d("Ads",
-		 * "AdCached"); }
-		 * 
-		 * @Override public void noAdAvailableListener() { Log.d("Ads",
-		 * "noAdsAvailable");
-		 * 
-		 * } }, true); // cache ad prm.runSmartWallAd();
-		 */				
-		
+		mAdZone.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				mAdZone.setVisibility(View.VISIBLE);
+			}
+		}, BANNER_AD_START_DELAY);
+		*/
 		// ADMOB
 
 		// Create the interstitial.
@@ -281,16 +283,17 @@ public class MainActivity extends Activity implements OnChildClickListener,
 		mAdmobIad.loadAd(mAdmobIadRequest);
 
 		// Banner
-		com.google.android.gms.ads.AdView adView = (com.google.android.gms.ads.AdView) findViewById(R.id.admob_view);
-		// add device to test
-		if (adView != null) {
-			com.google.android.gms.ads.AdRequest adRequest = new com.google.android.gms.ads.AdRequest.Builder()
+		mAdmobBannerAd = (com.google.android.gms.ads.AdView) findViewById(R.id.admob_view);
+		if (mAdmobBannerAd != null) {
+			mAdmobBannerAd.setAdListener(new MyAdmobListener());
+			mAdmobBannerAdRequest = new com.google.android.gms.ads.AdRequest.Builder()
 					// .addTestDevice("248798ED195F56341EA0C23B2B76BBFB")
 					// .addTestDevice("2842078051443556C35681847AD817A9")
 					.addTestDevice(
 							com.google.android.gms.ads.AdRequest.DEVICE_ID_EMULATOR)
 					.build();
-			adView.loadAd(adRequest);
+			mAdmobBannerAd.loadAd(mAdmobBannerAdRequest);
+			
 		}
 
 		// startApp
@@ -307,12 +310,14 @@ public class MainActivity extends Activity implements OnChildClickListener,
 					mAdZone = (ViewGroup) findViewById(R.id.ads_zone);
 				}
 				mAdZone.setVisibility(View.GONE);
+				mAdBannerShowing = false;
 				Handler handler = new Handler();
 				handler.postDelayed(new Runnable() {
 
 					@Override
 					public void run() {
 						mAdZone.setVisibility(View.VISIBLE);
+						mAdBannerShowing = true;
 					}
 				}, BANNER_AD_DURATION);
 			}
@@ -1160,7 +1165,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	protected void onResume() {
 		super.onResume();
 		// TODO remove true
-		if (System.currentTimeMillis() - mAdDisplayTime > INTER_AD_DURATION) { 
+		if (System.currentTimeMillis() - mAdDisplayTime > INTER_AD_ON_RESUME_DURATION) { 
 			showAds();
 		}
 		// startAppAd.onResume();
@@ -1211,4 +1216,49 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	 * conf.locale = myLocale; res.updateConfiguration(conf, dm); Intent refresh
 	 * = new Intent(this, MainActivity.class); startActivity(refresh); }
 	 */
+	
+	public class MyAdmobListener extends AdListener {
+		@Override
+		public void onAdClosed() {
+			super.onAdClosed();
+			
+		}
+		@Override
+		public void onAdLoaded() {
+			Log.d("AdmobBanner", "Ad load");
+			super.onAdLoaded();
+			if (mAdBannerShowing) {
+				mAdCloseButton.postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						mAdCloseButton.setVisibility(View.VISIBLE);
+					}
+				}, 10000);
+			}
+		}
+		
+		@Override
+		public void onAdOpened() {
+			Log.d("AdmobBanner", "Ad opened");
+			super.onAdOpened();
+		}
+		
+		@Override
+		public void onAdFailedToLoad(int errorCode) {
+			super.onAdFailedToLoad(errorCode);
+			Log.d("AdmobBanner", "Load fail:" + String.valueOf(errorCode));
+			if (mAdCloseButton != null) {
+				mAdCloseButton.setVisibility(View.GONE);
+			} 
+			if (mAdmobBannerAd != null && mAdmobBannerAdRequest!= null) {
+				mAdmobBannerAd.postDelayed(new Runnable() {
+					
+					@Override
+					public void run() {
+						mAdmobBannerAd.loadAd(mAdmobBannerAdRequest);
+					}
+				}, 3000);
+			}
+		}
+	}
 }
