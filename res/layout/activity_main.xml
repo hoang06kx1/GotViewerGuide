@@ -42,13 +42,8 @@
         <!-- Ads -->
         <include layout="@layout/ad_bottom_banner" />        
       
-        <!-- splash screen, only shown first time app loads -->
-        <co.k2lab.gotguide.controls.FitWidthImage
-            android:id="@+id/main_splash"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/splash"
-            android:visibility="visible" />
+        <!-- splash screen -->
+        <include layout="@layout/splash" />
     </FrameLayout>
 
     <RelativeLayout

@@ -1,9 +1,18 @@
 <resources>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    
     <dimen name="left_drawer_width">320dp</dimen>
     <dimen name="right_drawer_witdh">320dp</dimen>
     <dimen name="drawer_item_avatar_text_padding">10dp</dimen>
 	<dimen name="drawer_item_episode_text_size">15dp</dimen>
+	
 	<dimen name="ad_close_button_size">32dp</dimen>
+	
+	<dimen name="splash_content_width">310dp</dimen>
+	<dimen name="splash_margin_h1">32dp</dimen>
+	<dimen name="splash_margin_h2">24dp</dimen>
+	<dimen name="splash_margin_h3">24dp</dimen>
+	<dimen name="splash_text_size_normal">18sp</dimen>
+	<dimen name="splash_text_size_small">10sp</dimen>
 </resources>

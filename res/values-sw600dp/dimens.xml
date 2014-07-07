@@ -2,4 +2,11 @@
     <dimen name="right_drawer_witdh">420dp</dimen>
 	<dimen name="drawer_item_avatar_text_padding">16dp</dimen>
 	<dimen name="drawer_item_episode_text_size">18dp</dimen>
+	
+	<dimen name="splash_content_width">500dp</dimen>
+	<dimen name="splash_margin_h1">64dp</dimen>
+	<dimen name="splash_margin_h2">36dp</dimen>
+	<dimen name="splash_margin_h3">36dp</dimen>
+	<dimen name="splash_text_size_normal">24sp</dimen>
+	<dimen name="splash_text_size_small">14sp</dimen>
 </resources>
