@@ -926,6 +926,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 		/*
 		 * if (mWebView != null) { mWebView.clearCache(true); }
 		 */
+		AppFlood.destroy();
 	}
 
 	@Override
