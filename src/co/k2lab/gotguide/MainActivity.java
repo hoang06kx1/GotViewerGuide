@@ -3,9 +3,7 @@ package co.k2lab.gotguide;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Random;
-import java.util.TimeZone;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -699,23 +697,10 @@ public class MainActivity extends Activity implements OnChildClickListener,
 								res.getString(R.string.s4_9),
 								"http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-9/home/39",
 								R.drawable.s4_e9, false, true));
-
-						// check for newly aired episodes
-						Calendar airTime = Calendar.getInstance(TimeZone
-								.getTimeZone("EST"));
-						Calendar currentTime = Calendar.getInstance(TimeZone
-								.getTimeZone("EST"));
-						airTime.set(2014, Calendar.JUNE, 30, 21, 0, 0);
-						if (currentTime.compareTo(airTime) == 1)
-							add(new Episode(
-									res.getString(R.string.s4_10),
-									"http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-10/home/40",
-									R.drawable.s4_e10, false, true));
-						else
-							add(new Episode(
-									res.getString(R.string.s4_10),
-									"http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-10/home/40",
-									R.drawable.s4_e10, true, true));
+						add(new Episode(
+								res.getString(R.string.s4_10),
+								"http://viewers-guide.hbo.com/game-of-thrones/season-4/episode-10/home/40",
+								R.drawable.s4_e10, false, true));
 					}
 				}, R.drawable.bg_season_4);
 
