@@ -157,6 +157,11 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		// Fix bug https://code.google.com/p/android/issues/detail?id=26658 
+		if (!isTaskRoot()) {
+			finish();
+			return;
+		}
 		if (isNetWorkAvailable()) {
 			// getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 
