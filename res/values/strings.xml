@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">Game of Thrones Viewer\'s Guide</string>
+	<string name="app_name">Game of Thrones Guide (Premium)</string>
 	
 	<!-- splash -->
 	<string name="splash_text_first_time_1">When you play a game of thrones you win or you die.</string>

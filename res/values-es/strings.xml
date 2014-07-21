@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">Game of Thrones Guía del Visor</string>
+	<string name="app_name">Game of Thrones Guía (Prima)</string>
 	
 	<!-- splash -->
 	<string name="splash_text_first_time_1">Cuando juegas un juego de tronos ganas o mueres.</string>
