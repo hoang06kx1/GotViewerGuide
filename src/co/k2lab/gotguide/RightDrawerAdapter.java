@@ -113,7 +113,7 @@ public class RightDrawerAdapter extends BaseExpandableListAdapter {
 				tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f);
 				tv.setText(context.getResources().getString(R.string.remove_ads));
 				tv.setCompoundDrawablesWithIntrinsicBounds(
-						R.drawable.ic_drawer_beer, 0, 0, 0);
+						R.drawable.ic_drawer_remove_ad, 0, 0, 0);
 			}
 		}
 		return convertView;

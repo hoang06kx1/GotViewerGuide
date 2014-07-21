@@ -36,7 +36,7 @@
 	
 	<!-- right drawer -->
 	<string name="feedback">FEEDBACK</string>
-	<string name="buy_us_a_beer">COMPRA UMA CERVEJA</string>
+	<string name="remove_ads">REMOVER OS ANÚNCIOS</string>
 	
 	<!-- left drawer -->
 	<string name="home">Casa</string>
