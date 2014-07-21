@@ -99,7 +99,7 @@
 
 
         <!-- Appflood -->
-        <!-- App key: B6hLvqjSghRCwNUP  Secret Key: RqLXGvnb47e6L53b963ab -->
+        <!-- App key: B6hLvqjSghRCwNUP  Secret Key: RqLXGvnb47e6L53b963ab 
         <activity
             android:name="com.appflood.mraid.MraidBrowserActivity"
             android:configChanges="keyboardHidden"
@@ -142,6 +142,7 @@
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
+        -->
     </application>
 
 </manifest>

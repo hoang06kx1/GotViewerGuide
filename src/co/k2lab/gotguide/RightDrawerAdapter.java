@@ -36,12 +36,12 @@ public class RightDrawerAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public int getGroupCount() {
-		return seasons.size() + 1;
+		return seasons.size() + 2;
 	}
 
 	@Override
 	public int getChildrenCount(int groupPosition) {
-		if (groupPosition < getGroupCount() - 1) {
+		if (groupPosition < getGroupCount() - 2) {
 			return seasons.get(groupPosition).AiredEpisodesCount();
 		} else {
 			return 0;
@@ -81,7 +81,7 @@ public class RightDrawerAdapter extends BaseExpandableListAdapter {
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		convertView = inflater.inflate(R.layout.right_list_group, null);
 
-		if (groupPosition < getGroupCount() - 1) {
+		if (groupPosition < getGroupCount() - 2) {
 			((TextView) convertView.findViewById(R.id.group_textview))
 					.setText(seasons.get(groupPosition).getName());
 			if (((Season) getGroup(groupPosition)).isExpanded()) {
@@ -109,13 +109,12 @@ public class RightDrawerAdapter extends BaseExpandableListAdapter {
 				tv.setText(context.getResources().getString(R.string.feedback));
 				tv.setCompoundDrawablesWithIntrinsicBounds(
 						R.drawable.ic_drawer_mail, 0, 0, 0);
-			} 
-			/* else {
+			} else {
 				tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f);
-				tv.setText(context.getResources().getString(R.string.buy_us_a_beer));
+				tv.setText(context.getResources().getString(R.string.remove_ads));
 				tv.setCompoundDrawablesWithIntrinsicBounds(
 						R.drawable.ic_drawer_beer, 0, 0, 0);
-			}*/
+			}
 		}
 		return convertView;
 	}

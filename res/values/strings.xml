@@ -37,6 +37,7 @@
 	<!-- right drawer -->
 	<string name="feedback">FEEDBACK</string>
 	<string name="buy_us_a_beer">BUY US A BEER</string>
+	<string name="remove_ads">REMOVE ADS</string>
 	
 	<!-- left drawer -->
 	<string name="home">Home</string>
