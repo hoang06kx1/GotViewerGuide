@@ -1,4 +1,4 @@
-package co.k2lab.gotguide;
+package co.k2lab.gotguide.noads;
 
 import android.content.Context;
 import android.view.LayoutInflater;

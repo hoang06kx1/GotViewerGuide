@@ -39,9 +39,10 @@
             android:layout_height="match_parent"
             android:visibility="gone" />
 
-        <!-- Ads -->
+        <!-- Ads 
         <include layout="@layout/ad_bottom_banner" />        
-      
+      	-->
+      	
         <!-- splash screen -->
         <include layout="@layout/splash" />
     </FrameLayout>

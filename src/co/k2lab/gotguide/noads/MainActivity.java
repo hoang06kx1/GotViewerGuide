@@ -1,4 +1,4 @@
-package co.k2lab.gotguide;
+package co.k2lab.gotguide.noads;
 
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -61,7 +61,6 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.startapp.android.publish.StartAppAd;
 import com.startapp.android.publish.StartAppSDK;
-import com.startapp.android.publish.banner.Banner;
 
 public class MainActivity extends Activity implements OnChildClickListener,
 		OnGroupClickListener {
@@ -1120,10 +1119,10 @@ public class MainActivity extends Activity implements OnChildClickListener,
 			if (groupPosition == mRightDrawerAdapter.getGroupCount() - 1) {
 				feedbackToDev();
 				return true;
-			} else if (groupPosition == mRightDrawerAdapter.getGroupCount() - 2) {
+			} /*else if (groupPosition == mRightDrawerAdapter.getGroupCount() - 2) {
 				buyNoAdsVersion();
 				return true;
-			}
+			}*/
 			// TODO donate = remove ad
 			// else if (groupPosition == mRightDrawerAdapter.getGroupCount() - 1) {
 			//	Dialog donateDialog = new DonateDialog(MainActivity.this, true, null, MainActivity.this);
@@ -1156,7 +1155,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 					Uri.parse("http://play.google.com/store/apps/details?id="
 							+ getPackageName())));
 		}
-	}
+	}	
 	
 	private void buyNoAdsVersion() {
 		/* redirect user to play store for buying no ads version */
@@ -1173,7 +1172,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 					Uri.parse("http://play.google.com/store/apps/details?id="
 							+ getPackageName() + "noads")));
 		}
-	}
+	} 
 
 	private boolean mIsLastSettingShown = false;
 

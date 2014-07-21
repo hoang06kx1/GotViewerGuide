@@ -8,7 +8,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import co.k2lab.gotguide.R;
+import co.k2lab.gotguide.noads.R;
 import co.k2lab.gotguide.utils.Callback;
 
 public class CustomDialog extends Dialog {

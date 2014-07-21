@@ -1,4 +1,4 @@
-package co.k2lab.gotguide;
+package co.k2lab.gotguide.noads;
 
 import java.util.ArrayList;
 
@@ -36,12 +36,12 @@ public class RightDrawerAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public int getGroupCount() {
-		return seasons.size() + 2;
+		return seasons.size() + 1;
 	}
 
 	@Override
 	public int getChildrenCount(int groupPosition) {
-		if (groupPosition < getGroupCount() - 2) {
+		if (groupPosition < getGroupCount() - 1) {
 			return seasons.get(groupPosition).AiredEpisodesCount();
 		} else {
 			return 0;
@@ -109,12 +109,13 @@ public class RightDrawerAdapter extends BaseExpandableListAdapter {
 				tv.setText(context.getResources().getString(R.string.feedback));
 				tv.setCompoundDrawablesWithIntrinsicBounds(
 						R.drawable.ic_drawer_mail, 0, 0, 0);
-			} else {
+			}
+			/* else {
 				tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f);
 				tv.setText(context.getResources().getString(R.string.remove_ads));
 				tv.setCompoundDrawablesWithIntrinsicBounds(
 						R.drawable.ic_drawer_beer, 0, 0, 0);
-			}
+			}*/
 		}
 		return convertView;
 	}
