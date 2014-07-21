@@ -81,7 +81,7 @@ public class RightDrawerAdapter extends BaseExpandableListAdapter {
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		convertView = inflater.inflate(R.layout.right_list_group, null);
 
-		if (groupPosition < getGroupCount() - 2) {
+		if (groupPosition < getGroupCount() - 1) {
 			((TextView) convertView.findViewById(R.id.group_textview))
 					.setText(seasons.get(groupPosition).getName());
 			if (((Season) getGroup(groupPosition)).isExpanded()) {

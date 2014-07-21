@@ -1019,8 +1019,10 @@ public class MainActivity extends Activity implements OnChildClickListener,
 		}
 	}	
 	
+	/* redirect user to play store for buying no ads version */
+	/*
 	private void buyNoAdsVersion() {
-		/* redirect user to play store for buying no ads version */
+	
 		Uri uri = Uri.parse("market://details?id=" + getPackageName()+ ".noads");
 		Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
 		goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY
@@ -1035,7 +1037,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 							+ getPackageName() + "noads")));
 		}
 	} 
-
+	*/
 	private boolean mIsLastSettingShown = false;
 
 	public boolean isSettingsReady() {
