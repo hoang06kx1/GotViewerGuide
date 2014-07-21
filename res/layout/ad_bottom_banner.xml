@@ -30,11 +30,13 @@
             ads:adUnitId="ca-app-pub-7553716895560169/3009279535"
             android:gravity="top|right" />
 
+        <!-- 
         <com.startapp.android.publish.banner.Banner
             android:id="@+id/startAppBanner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="top|right" />
+             -->
     </FrameLayout>
 
 </LinearLayout>

@@ -83,7 +83,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	// Const
 	private static final int SPLASH_DURATION = 7000;
 	private static final long BANNER_AD_DURATION = 60000; // 1 minute
-	private static final long INTER_AD_DURATION = 1200000; // 20 minutes
+	private static final long INTER_AD_DURATION = 900000; // 10 minutes
 	private static final long INTER_AD_ON_RESUME_DURATION = 300000; // 5 minutes
 	private static final long REVIEW_INTERVAL = 864000000; // 10 days
 	// private static final long BANNER_AD_START_DELAY = 30000; // 30 seconds 
@@ -143,7 +143,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	private InterstitialAd mAdmobIad;
 	private AdRequest mAdmobIadRequest; //
 	private AdView mAdmobBannerAd;
-	private Banner mStartAppBannerAd;
+	// private Banner mStartAppBannerAd;
 	private AdRequest mAdmobBannerAdRequest;
 	private StartAppAd mStartAppAd;
 	private ViewGroup mAdZone;
@@ -318,7 +318,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 					mAdZone = (ViewGroup) findViewById(R.id.ads_zone);
 				}
 				mAdZone.setVisibility(View.GONE);
-				switchAdBanners();
+				// switchAdBanners();
 				mAdmobBannerAd.loadAd(mAdmobBannerAdRequest);
 				// StartAppSDK.init(MainActivity.this, "106324371", "206307211");
 				mAdBannerShowing = false;
@@ -336,17 +336,18 @@ public class MainActivity extends Activity implements OnChildClickListener,
 		
 		
 		// Show only 1 banner ads
-		mStartAppBannerAd = (Banner) findViewById(R.id.startAppBanner);
-		mAdBannerFlag = randomizer.nextInt(2);
-		if (mAdBannerFlag == 0) {
-			mAdmobBannerAd.setVisibility(View.INVISIBLE);
-		} else {
-			mStartAppBannerAd.hideBanner();
-		}
+		// mStartAppBannerAd = (Banner) findViewById(R.id.startAppBanner);
+		// mAdBannerFlag = randomizer.nextInt(2);
+		// if (mAdBannerFlag == 0) {
+		mAdmobBannerAd.setVisibility(View.VISIBLE);
+		// } else {
+		// mStartAppBannerAd.hideBanner();
+		// }
 		// appFlood
 		// AppFlood.initialize(this, "B6hLvqjSghRCwNUP", "RqLXGvnb47e6L53b963ab", AppFlood.AD_FULLSCREEN);				
 	}
 
+	/*
 	private void switchAdBanners() {		
 		if (mAdmobBannerAd != null && mStartAppBannerAd != null) {
 			mAdBannerFlag = Math.abs(mAdBannerFlag - 1);
@@ -359,6 +360,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 			}
 		}
 	}
+	*/
 	
 	private boolean isNetWorkAvailable() {
 		boolean canLoadUrl = Utils.isNetworkEnabled(getApplicationContext());
@@ -964,8 +966,8 @@ public class MainActivity extends Activity implements OnChildClickListener,
 		// TODO go back in webview (url history stack)
 		// WebBackForwardList history = mWebView.copyBackForwardList();
 
-		// startApp ads comming here
-		// startAppAd.onBackPressed();
+		// StartApp ads comming here
+		mStartAppAd.onBackPressed();
 
 		// AirPush ad coming here
 		/*
@@ -1229,7 +1231,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	private void showAds() {
 		// Playing dime on our income...
 		int luckyNumber = randomizer.nextInt(3);
-		if (luckyNumber == 0 && mStartAppAd != null && mStartAppAd.isReady()) {
+		if ((luckyNumber == 0 || luckyNumber == 1) && mStartAppAd != null && mStartAppAd.isReady()) {
 			mStartAppAd.showAd();		
 		} else {
 			if (mAdmobIad != null && mAdmobIad.isLoaded()) {
