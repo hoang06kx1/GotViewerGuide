@@ -1171,7 +1171,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 			// if Play Store is not installed, open web link
 			startActivity(new Intent(Intent.ACTION_VIEW,
 					Uri.parse("http://play.google.com/store/apps/details?id="
-							+ getPackageName() + "noads")));
+							+ getPackageName() + ".noads")));
 		}
 	}
 
