@@ -55,11 +55,6 @@ import co.k2lab.gotguide.model.Season;
 import co.k2lab.gotguide.utils.Callback;
 import co.k2lab.gotguide.utils.Utils;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
-
 public class MainActivity extends Activity implements OnChildClickListener,
 		OnGroupClickListener {
 	// controls
