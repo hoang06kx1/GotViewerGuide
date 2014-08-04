@@ -967,7 +967,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 		// WebBackForwardList history = mWebView.copyBackForwardList();
 
 		// StartApp ads comming here
-		mStartAppAd.onBackPressed();
+		// mStartAppAd.onBackPressed();
 
 		// AirPush ad coming here
 		/*
@@ -1120,10 +1120,11 @@ public class MainActivity extends Activity implements OnChildClickListener,
 			if (groupPosition == mRightDrawerAdapter.getGroupCount() - 1) {
 				feedbackToDev();
 				return true;
-			} else if (groupPosition == mRightDrawerAdapter.getGroupCount() - 2) {
+			} 
+			/* else if (groupPosition == mRightDrawerAdapter.getGroupCount() - 2) {
 				buyNoAdsVersion();
 				return true;
-			}
+			}*/
 			// TODO donate = remove ad
 			// else if (groupPosition == mRightDrawerAdapter.getGroupCount() - 1) {
 			//	Dialog donateDialog = new DonateDialog(MainActivity.this, true, null, MainActivity.this);
@@ -1158,8 +1159,9 @@ public class MainActivity extends Activity implements OnChildClickListener,
 		}
 	}
 	
+	/*
 	private void buyNoAdsVersion() {
-		/* redirect user to play store for buying no ads version */
+		// redirect user to play store for buying no ads version 
 		Uri uri = Uri.parse("market://details?id=" + getPackageName()+ ".noads");
 		Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
 		goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY
@@ -1174,7 +1176,8 @@ public class MainActivity extends Activity implements OnChildClickListener,
 							+ getPackageName() + ".noads")));
 		}
 	}
-
+	*/
+	
 	private boolean mIsLastSettingShown = false;
 
 	public boolean isSettingsReady() {
@@ -1251,7 +1254,7 @@ public class MainActivity extends Activity implements OnChildClickListener,
 	private void showAds() {
 		// Playing dime on our income...
 		int luckyNumber = randomizer.nextInt(3);
-		if ((luckyNumber == 0 || luckyNumber == 1) && mStartAppAd != null && mStartAppAd.isReady()) {
+		if ((luckyNumber == 0) && mStartAppAd != null && mStartAppAd.isReady()) {
 			mStartAppAd.showAd();		
 		} else {
 			if (mAdmobIad != null && mAdmobIad.isLoaded()) {
